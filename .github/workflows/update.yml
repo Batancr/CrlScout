@@ -1,8 +1,15 @@
 name: Update CRL data & dashboard
 
-# Fetches fresh Clash Royale battle logs, rebuilds the workbook + dashboard, and commits the
-# results back to the repo. The large dashboard HTML is published as a build artifact instead
-# of being committed, to keep the repo from bloating.
+# Fetches fresh Clash Royale battle logs, rebuilds the workbook + dashboard, publishes the
+# dashboard to Netlify, posts a "what changed" summary to Discord, and commits the data back.
+# The large dashboard HTML is NOT committed (kept out of git to avoid bloat) -- it lives on
+# Netlify and as a build artifact instead.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   CR_API_TOKEN         - Clash Royale API token (proxy IP 45.79.218.79 whitelisted)
+#   NETLIFY_AUTH_TOKEN   - Netlify personal access token   (optional; deploy skipped if unset)
+#   NETLIFY_SITE_ID      - Netlify site's API/Site ID       (optional; deploy skipped if unset)
+#   DISCORD_WEBHOOK_URL  - Discord channel webhook URL       (optional; notify skipped if unset)
 
 on:
   schedule:
@@ -41,7 +48,7 @@ jobs:
           CR_API_BASE: https://proxy.royaleapi.dev/v1
         run: python fetch_cr_battlelogs.py
 
-      - name: Rebuild workbook + dashboard
+      - name: Rebuild workbook + dashboard + change summary
         env:
           CRL_HOME: ${{ github.workspace }}
         run: |
@@ -55,13 +62,37 @@ jobs:
           python add_group_a_matchup_prep.py
           python recalc.py CRL_Duel_Decks.xlsx 300
           python build_dashboard.py
+          python compute_run_diff.py
 
-      - name: Commit refreshed data (dashboard HTML kept out of git; see artifact below)
+      - name: Prepare dashboard for Netlify
+        run: |
+          mkdir -p _site
+          cp crl_opponent_scout.html _site/index.html
+
+      - name: Deploy dashboard to Netlify
+        continue-on-error: true          # a missing/invalid Netlify secret must not fail the whole run
+        uses: netlify/actions/cli@master
+        with:
+          args: deploy --dir=_site --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Notify Discord (what changed since last run)
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then echo "No DISCORD_WEBHOOK_URL secret set; skipping."; exit 0; fi
+          if [ ! -f run_summary.txt ]; then echo "No run_summary.txt produced; skipping."; exit 0; fi
+          jq -n --rawfile msg run_summary.txt '{content: $msg}' > discord_payload.json
+          curl -sS -H "Content-Type: application/json" -X POST -d @discord_payload.json "$DISCORD_WEBHOOK_URL"
+
+      - name: Commit refreshed data (dashboard HTML kept out of git; see Netlify / artifact)
         run: |
           git config user.name  "crl-bot"
           git config user.email "actions@users.noreply.github.com"
           # Keep the large (~47MB) dashboard OUT of git history so the repo doesn't bloat.
-          # It's still produced every run and published as the build artifact below.
           git rm --cached --ignore-unmatch crl_opponent_scout.html
           git add -A
           if git diff --cached --quiet; then

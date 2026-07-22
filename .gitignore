@@ -3,8 +3,12 @@ raw_*.json
 __pycache__/
 *.pyc
 .DS_Store
-# Large generated dashboard -- kept out of git to avoid repo bloat; get it from the build artifact
+# Large generated dashboard -- kept out of git to avoid repo bloat; served via Netlify + artifact
 crl_opponent_scout.html
+# Transient build outputs (regenerated every run; NOT the persistent run_state.json)
+run_summary.txt
+discord_payload.json
+_site/
 # staging archive used to seed the repo (safe to delete)
 code_update.tar.gz
 code_update.zip
