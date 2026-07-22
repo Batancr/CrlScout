@@ -1,9 +1,10 @@
-# Debug snapshots regenerated on every fetch (the master_*.json archive is the source of truth)
+# Debug snapshots regenerated on every fetch (master_*.json is the source of truth)
 raw_*.json
 __pycache__/
 *.pyc
 .DS_Store
-
+# Large generated dashboard -- kept out of git to avoid repo bloat; get it from the build artifact
+crl_opponent_scout.html
 # staging archive used to seed the repo (safe to delete)
 code_update.tar.gz
 code_update.zip
