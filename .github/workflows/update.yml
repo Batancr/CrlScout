@@ -1,0 +1,87 @@
+name: Update CRL data & dashboard
+
+# Runs on a schedule (and on-demand) to fetch fresh Clash Royale battle logs, rebuild the
+# workbook + dashboard, and commit the results back to the repo -- fully replacing the
+# manual "run fetch on the Mac -> send files back -> rebuild" loop.
+#
+# ONE-TIME SETUP (see README.md for click-by-click):
+#   1. Repo Settings -> Secrets and variables -> Actions -> New repository secret:
+#        name  = CR_API_TOKEN     value = <your Clash Royale API token>
+#   2. On developer.clashroyale.com, edit that token's allowed IPs and add  45.79.218.79
+#      (RoyaleAPI's fixed proxy IP -- this is what lets a no-fixed-IP runner reach the API).
+#   3. Settings -> Actions -> General -> Workflow permissions -> "Read and write permissions".
+
+on:
+  schedule:
+    - cron: '0 * * * *'        # top of every hour (UTC). Dial up during active play; see README.
+  workflow_dispatch: {}          # adds a manual "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write                # lets the job commit the refreshed data/dashboard back
+
+concurrency:
+  group: crl-update              # never let two runs overlap and race the git push
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # LibreOffice is needed to recalc the workbook's formula cells (two dashboard
+          # tables read those cached values). ~1-2 min; headless, no display required.
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends libreoffice-calc
+
+      - name: Fetch latest battle logs (via RoyaleAPI proxy)
+        env:
+          CR_API_TOKEN: ${{ secrets.CR_API_TOKEN }}
+          CR_API_BASE: https://proxy.royaleapi.dev/v1
+        run: python fetch_cr_battlelogs.py
+
+      - name: Rebuild workbook + dashboard
+        env:
+          CRL_HOME: ${{ github.workspace }}   # run the whole pipeline out of the repo root
+        run: |
+          set -e
+          python build_duel_workbook.py
+          python recalc.py CRL_Duel_Decks.xlsx 300
+          python add_ronin_analysis.py
+          python add_group_a_analysis.py
+          python add_batan_matchup_analysis.py
+          python add_group_a_sequencing_analysis.py
+          python add_group_a_matchup_prep.py
+          python recalc.py CRL_Duel_Decks.xlsx 300
+          python build_dashboard.py
+
+      - name: Commit refreshed data + dashboard
+        run: |
+          git config user.name  "crl-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes this run."
+          else
+            git commit -m "Auto update $(date -u +'%Y-%m-%dT%H:%MZ')"
+            git push
+          fi
+
+      # OPTIONAL: also make the dashboard downloadable as a build artifact (retained 14 days),
+      # handy if you don't want to open the committed 9MB HTML from the repo each time.
+      - name: Upload dashboard artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: crl-dashboard
+          path: crl_opponent_scout.html
+          retention-days: 14

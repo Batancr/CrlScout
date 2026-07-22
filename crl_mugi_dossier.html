@@ -1,0 +1,725 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mugi — Scouting Dossier</title>
+<style>
+  :root {
+    --bg:#0f1420; --plane:#161d2e; --plane2:#1d2740; --line:#2a3550;
+    --txt:#e6ebf5; --muted:#93a1c0; --accent:#ffd23f; --you:#5db0ff; --opp:#ff7a7a;
+    --good:#37c871; --mid:#5db0ff; --bad:#ff7a7a;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5; }
+  .wrap { max-width:1080px; margin:0 auto; padding:22px 18px 80px; }
+  header.top { border-bottom:1px solid var(--line); padding-bottom:16px; margin-bottom:8px; }
+  h1 { margin:0 0 4px; font-size:30px; letter-spacing:-.02em; }
+  h1 .tag { color:var(--muted); font-size:16px; font-weight:500; }
+  .sub { color:var(--muted); font-size:14px; }
+  .kpis { display:flex; flex-wrap:wrap; gap:10px; margin:16px 0; }
+  .kpi { background:var(--plane); border:1px solid var(--line); border-radius:12px;
+    padding:12px 16px; min-width:130px; flex:1; }
+  .kpi .n { font-size:24px; font-weight:800; }
+  .kpi .k { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+  .kpi.warn .n { color:var(--accent); }
+  section { background:var(--plane); border:1px solid var(--line); border-radius:14px;
+    padding:18px 20px; margin:16px 0; }
+  section h2 { margin:0 0 4px; font-size:19px; }
+  section .lead { color:var(--muted); font-size:13.5px; margin:0 0 14px; }
+  .icon-strip { display:flex; gap:3px; flex-wrap:wrap; margin:4px 0; }
+  .ci { width:var(--ci,34px); height:calc(var(--ci,34px)*1.2); flex-shrink:0; }
+  .ci img { width:100%; height:100%; object-fit:contain; }
+  .ci-fallback { display:flex; align-items:center; justify-content:center; width:var(--ci,34px);
+    height:calc(var(--ci,34px)*1.2); background:var(--plane2); border:1px solid var(--line);
+    border-radius:4px; font-size:12px; color:var(--muted); }
+  .wc { color:var(--accent); font-weight:600; font-size:13px; }
+  .tag { color:var(--muted); font-size:11.5px; }
+  /* threat box */
+  .threat { background:linear-gradient(135deg,#2a1d1d,#1d2740); border:1px solid #4a2d2d; }
+  .threat ul { margin:8px 0 0; padding-left:20px; }
+  .threat li { margin:6px 0; }
+  /* h2h */
+  .h2h-game { background:var(--plane2); border:1px solid var(--line); border-radius:10px;
+    padding:12px 14px; margin:10px 0; }
+  .h2h-meta { font-size:12.5px; color:var(--muted); margin-bottom:8px; }
+  .h2h-side { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:4px 0; }
+  .side-label { font-weight:700; font-size:12px; padding:2px 8px; border-radius:6px; }
+  .side-you { background:rgba(93,176,255,.18); color:var(--you); }
+  .side-opp { background:rgba(255,122,122,.18); color:var(--opp); }
+  .rescell { display:inline-block; width:20px; height:20px; line-height:20px; text-align:center;
+    border-radius:5px; font-weight:800; font-size:12px; }
+  .rescell.win { background:rgba(55,200,113,.2); color:var(--good); }
+  .rescell.loss { background:rgba(255,122,122,.2); color:var(--opp); }
+  .rescell.tie { background:var(--plane); color:var(--muted); }
+  /* lost sets */
+  .lostset { background:var(--plane2); border:1px solid #3a4a2d; border-left:4px solid var(--good);
+    border-radius:10px; padding:12px 14px; margin:10px 0; }
+  .lostset-head { font-size:14px; margin-bottom:8px; }
+  .mini-game { display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:12.5px;
+    color:var(--muted); margin:5px 0; }
+  /* arsenal */
+  .arch { border-top:1px solid var(--line); padding:12px 0; }
+  .arch:first-child { border-top:none; }
+  .arch-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    margin-bottom:6px; flex-wrap:wrap; }
+  .arch-name { font-weight:700; font-size:15px; color:var(--accent); }
+  .arch-stat { font-size:12.5px; color:var(--muted); }
+  .deckrow { display:flex; align-items:center; gap:12px; padding:5px 0; flex-wrap:wrap; }
+  .deckrow-stat { min-width:150px; font-size:12.5px; }
+  .deckrow-stat .wl { color:var(--muted); }
+  .deckrow-stat .split { display:block; font-size:11px; color:var(--muted); }
+  /* card freq */
+  .cardgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:8px; }
+  .cardfreq { display:flex; align-items:center; gap:8px; background:var(--plane2);
+    border:1px solid var(--line); border-radius:8px; padding:6px 8px; }
+  .cardfreq .ci { width:26px; height:32px; }
+  .cardfreq-name { font-size:12px; flex:1; min-width:0; }
+  .cardfreq-bar { width:44px; height:6px; background:var(--plane); border-radius:3px; overflow:hidden; }
+  .cardfreq-fill { height:100%; background:var(--accent); }
+  .cardfreq-pct { font-size:11px; color:var(--muted); white-space:nowrap; }
+  /* sequencing */
+  .seq-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .seq-col { background:var(--plane2); border:1px solid var(--line); border-radius:10px; padding:12px; }
+  .seq-head { font-weight:700; font-size:13px; margin-bottom:8px; color:var(--you); }
+  .seq-item { font-size:13px; padding:3px 0; }
+  .seq-n { color:var(--accent); font-weight:700; }
+  /* bars */
+  .awr-row,.comm-row { display:flex; align-items:center; gap:10px; padding:4px 0; }
+  .awr-bar,.comm-bar { width:120px; height:9px; background:var(--plane2); border-radius:5px; overflow:hidden; flex-shrink:0; }
+  .awr-fill,.comm-fill { height:100%; }
+  .awr-fill.good,.comm-fill.good { background:var(--good); }
+  .awr-fill.mid,.comm-fill.mid { background:var(--mid); }
+  .awr-fill.bad,.comm-fill.bad { background:var(--bad); }
+  .awr-pct,.comm-pct { width:42px; font-weight:700; font-size:13px; }
+  .awr-lab,.comm-lab { font-size:13px; }
+  .awr-n,.comm-n { color:var(--muted); font-size:12px; }
+  .comm-row.small-sample { opacity:.6; }
+  /* empirical */
+  .emp-row { border-top:1px solid var(--line); padding:8px 0; }
+  .emp-row:first-child { border-top:none; }
+  .emp-lab { font-size:13.5px; margin-bottom:4px; }
+  .emp-ex { display:flex; align-items:center; gap:8px; margin:3px 0; }
+  .emp-who { font-size:11.5px; color:var(--muted); min-width:120px; }
+  /* gameplan */
+  .plan { background:linear-gradient(135deg,#1d2a20,#1d2740); border:1px solid #2d4a37; }
+  .plan h3 { margin:14px 0 6px; font-size:15px; color:var(--good); }
+  .plan p { margin:6px 0; font-size:14px; }
+  .plan .adjust h3 { color:var(--opp); }
+  .foot { color:var(--muted); font-size:12px; margin-top:20px; text-align:center; }
+</style></head><body><div class="wrap">
+
+<header class="top">
+  <h1>Mugi <span class="tag">#2CLV2RP0</span></h1>
+  <div class="sub">Scouting dossier · projected Monthly Finals opponent · data through Jul 19 2026 (47 tracked games vs our field)</div>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><div class="n">26–11</div><div class="k">Official CRL (games)</div></div>
+  <div class="kpi"><div class="n">14–9</div><div class="k">Practice (games)</div></div>
+  <div class="kpi warn"><div class="n">46</div><div class="k">distinct decks / 60g</div></div>
+  <div class="kpi"><div class="n">3</div><div class="k">CRL sets lost (of 16)</div></div>
+  <div class="kpi"><div class="n">18/47</div><div class="k">our field's wins vs him</div></div>
+</div>
+
+<section class="threat">
+  <h2>⚠️ Threat read</h2>
+  <ul>
+    <li><b>He is a pure flex player.</b> 46 different decks in just 60 tracked games — he plays essentially the entire meta and hard-targets what he expects you to bring. You can't archetype-counter <i>him</i>; you counter the field and punish the specific deck he shows.</li>
+    <li><b>He's strong.</b> 26–11 in Official CRL (70% of games), only <b>3 set losses</b> across both tournament days — to Batan (you), Coco, and 40k Oker.</li>
+    <li><b>You already have his number once.</b> You beat him <b>2–0</b> with Graveyard + Goblin-Barrel bait. The data below is about not letting him adjust his way out of it.</li>
+    <li><b>His shakiest decks:</b> Royal Giant (40% win) and his Royal Hogs / Balloon-Miner lists (57%) — see the archetype win-rate chart. His Mortar and Hog Rider decks are where he's undefeated.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Your 2–0 over him (Day 1)</h2>
+  <p class="lead">The exact games. Note the duel card-lock: he had to bring two entirely different decks, and both lacked a clean answer to what you led with.</p>
+  <div class="h2h-game">
+      <div class="h2h-meta"><span class="rescell win">W</span> Jul 18 17:22 · 1–0 crowns · <span class="tag">Official CRL</span></div>
+      <div class="h2h-side"><span class="side-label side-you">Batan</span> <span class="wc">Graveyard</span><div class="icon-strip" style="--ci:30px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div></div></div>
+      <div class="h2h-side"><span class="side-label side-opp">Mugi</span> <span class="wc">Royal Hogs</span><div class="icon-strip" style="--ci:30px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div></div></div>
+    </div><div class="h2h-game">
+      <div class="h2h-meta"><span class="rescell win">W</span> Jul 18 17:32 · 1–0 crowns · <span class="tag">Official CRL</span></div>
+      <div class="h2h-side"><span class="side-label side-you">Batan</span> <span class="wc">Goblin Barrel, Wall Breakers</span><div class="icon-strip" style="--ci:30px"><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div></div>
+      <div class="h2h-side"><span class="side-label side-opp">Mugi</span> <span class="wc">Balloon, Miner</span><div class="icon-strip" style="--ci:30px"><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div><div class="ci" title="Giant Skeleton"><img src="https://api-assets.clashroyale.com/cards/300/0p0gd0XaVRu1Hb1iSG1hTYbz2AN6aEiZnhaAib5O8Z8.png" alt="Giant Skeleton"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div></div></div>
+    </div>
+</section>
+
+<section>
+  <h2>Every set he's actually lost — and to what</h2>
+  <p class="lead">Only three players have taken a set off Mugi in tracked CRL play. Here's exactly which decks did it.</p>
+  <div class="lostset">
+      <div class="lostset-head">2026-07-18 · Mugi <b>lost</b> the set to <b>老板 Ι Batan’宙斯</b> (0–2)</div>
+      <div class="mini-game">
+              <span class="rescell loss">L</span> Mugi's <span class="wc">Royal Hogs</span> lost to:
+              <span class="wc">Graveyard</span><div class="icon-strip" style="--ci:28px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div></div></div><div class="mini-game">
+              <span class="rescell loss">L</span> Mugi's <span class="wc">Balloon, Miner</span> lost to:
+              <span class="wc">Goblin Barrel, Wall Breakers</span><div class="icon-strip" style="--ci:28px"><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div></div>
+    </div><div class="lostset">
+      <div class="lostset-head">2026-07-19 · Mugi <b>lost</b> the set to <b>40k Oker</b> (0–2)</div>
+      <div class="mini-game">
+              <span class="rescell loss">L</span> Mugi's <span class="wc">Goblin Drill</span> lost to:
+              <span class="wc">Lava Hound</span><div class="icon-strip" style="--ci:28px"><div class="ci" title="Valkyrie"><img src="https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png" alt="Valkyrie"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div><div class="ci" title="Lava Hound"><img src="https://api-assets.clashroyale.com/cards/300/unicRQ975sBY2oLtfgZbAI56ZvaWz7azj-vXTLxc0r8.png" alt="Lava Hound"></div><div class="ci" title="Spirit Empress"><img src="https://api-assets.clashroyale.com/cards/300/MWWBZqiQeRBXSqEITVMj46nO_uCIUsqBidvUw9K2twY.png" alt="Spirit Empress"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div></div></div><div class="mini-game">
+              <span class="rescell loss">L</span> Mugi's <span class="wc">Royal Giant</span> lost to:
+              <span class="wc">Graveyard</span><div class="icon-strip" style="--ci:28px"><div class="ci" title="Mega Knight"><img src="https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png" alt="Mega Knight"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Furnace"><img src="https://api-assets.clashroyale.com/cards/300/iqbDiG7yYRIzvCPXdt9zPb3IvMt7F7Gi4wIPnh2x4aI.png" alt="Furnace"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Goblin Hut"><img src="https://api-assets.clashroyale.com/cards/300/l8ZdzzNLcwB4u7ihGgxNFQOjCT_njFuAhZr7D6PRF7E.png" alt="Goblin Hut"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div></div></div>
+    </div><div class="lostset">
+      <div class="lostset-head">2026-07-19 · Mugi <b>lost</b> the set to <b>Coco</b> (1–2)</div>
+      <div class="mini-game">
+              <span class="rescell loss">L</span> Mugi's <span class="wc">Mortar</span> lost to:
+              <span class="wc">Royal Hogs</span><div class="icon-strip" style="--ci:28px"><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Baby Dragon"><img src="https://api-assets.clashroyale.com/cards/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png" alt="Baby Dragon"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div></div></div><div class="mini-game">
+              <span class="rescell loss">L</span> Mugi's <span class="wc">Balloon, Miner</span> lost to:
+              <span class="wc">Balloon, Miner</span><div class="icon-strip" style="--ci:28px"><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Giant Skeleton"><img src="https://api-assets.clashroyale.com/cards/300/0p0gd0XaVRu1Hb1iSG1hTYbz2AN6aEiZnhaAib5O8Z8.png" alt="Giant Skeleton"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div></div></div>
+    </div>
+</section>
+
+<section>
+  <h2>His full arsenal (46 decks, by archetype)</h2>
+  <p class="lead">Every deck he's brought, grouped by win condition, with his record on each and the Official-CRL / Practice split. This is his whole hand — expect any of these.</p>
+  <div class="arch">
+      <div class="arch-head"><span class="arch-name">Graveyard</span>
+        <span class="arch-stat">8 games · 6W-2L · 75% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>2g</b> <span class="wl">2W-0L</span>
+            <span class="split">CRL 1 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Furnace"><img src="https://api-assets.clashroyale.com/cards/300/iqbDiG7yYRIzvCPXdt9zPb3IvMt7F7Gi4wIPnh2x4aI.png" alt="Furnace"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>2g</b> <span class="wl">1W-1L</span>
+            <span class="split">CRL 1 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Bowler"><img src="https://api-assets.clashroyale.com/cards/300/SU4qFXmbQXWjvASxVI6z9IJuTYolx4A0MKK90sTIE88.png" alt="Bowler"></div><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Freeze"><img src="https://api-assets.clashroyale.com/cards/300/I1M20_Zs_p_BS1NaNIVQjuMJkYI_1-ePtwYZahn0JXQ.png" alt="Freeze"></div><div class="ci" title="Golden Knight"><img src="https://api-assets.clashroyale.com/cards/300/WJd207D0O1sN-l1FTb8P9KhYL2oF5jY26vRUfTUW3FQ.png" alt="Golden Knight"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Inferno Dragon"><img src="https://api-assets.clashroyale.com/cards/300/y5HDbKtTbWG6En6TGWU0xoVIGs1-iQpIP4HC-VM7u8A.png" alt="Inferno Dragon"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>2g</b> <span class="wl">1W-1L</span>
+            <span class="split">CRL 1 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Demolisher"><img src="https://api-assets.clashroyale.com/cards/300/KVVOgdn40xasFLYuQv8Go_U_LCV7wSG9q9eE1H7f3Qk.png" alt="Goblin Demolisher"></div><div class="ci" title="Goblin Hut"><img src="https://api-assets.clashroyale.com/cards/300/l8ZdzzNLcwB4u7ihGgxNFQOjCT_njFuAhZr7D6PRF7E.png" alt="Goblin Hut"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Demolisher"><img src="https://api-assets.clashroyale.com/cards/300/KVVOgdn40xasFLYuQv8Go_U_LCV7wSG9q9eE1H7f3Qk.png" alt="Goblin Demolisher"></div><div class="ci" title="Goblin Hut"><img src="https://api-assets.clashroyale.com/cards/300/l8ZdzzNLcwB4u7ihGgxNFQOjCT_njFuAhZr7D6PRF7E.png" alt="Goblin Hut"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Goblin Drill</span>
+        <span class="arch-stat">8 games · 6W-2L · 75% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>3g</b> <span class="wl">2W-1L</span>
+            <span class="split">CRL 2 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Bomber"><img src="https://api-assets.clashroyale.com/cards/300/12n1CesxKIcqVYntjxcF36EFA-ONw7Z-DoL0_rQrbdo.png" alt="Bomber"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Drill"><img src="https://api-assets.clashroyale.com/cards/300/eN2TKUYbih-26yBi0xy5LVFOA0zDftgDqxxnVfdIg1o.png" alt="Goblin Drill"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Bomber"><img src="https://api-assets.clashroyale.com/cards/300/12n1CesxKIcqVYntjxcF36EFA-ONw7Z-DoL0_rQrbdo.png" alt="Bomber"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Drill"><img src="https://api-assets.clashroyale.com/cards/300/eN2TKUYbih-26yBi0xy5LVFOA0zDftgDqxxnVfdIg1o.png" alt="Goblin Drill"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Rocket"><img src="https://api-assets.clashroyale.com/cards/300/Ie07nQNK9CjhKOa4-arFAewi4EroqaA-86Xo7r5tx94.png" alt="Rocket"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div><div class="ci" title="Goblin Demolisher"><img src="https://api-assets.clashroyale.com/cards/300/KVVOgdn40xasFLYuQv8Go_U_LCV7wSG9q9eE1H7f3Qk.png" alt="Goblin Demolisher"></div><div class="ci" title="Goblin Drill"><img src="https://api-assets.clashroyale.com/cards/300/eN2TKUYbih-26yBi0xy5LVFOA0zDftgDqxxnVfdIg1o.png" alt="Goblin Drill"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Bomber"><img src="https://api-assets.clashroyale.com/cards/300/12n1CesxKIcqVYntjxcF36EFA-ONw7Z-DoL0_rQrbdo.png" alt="Bomber"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Drill"><img src="https://api-assets.clashroyale.com/cards/300/eN2TKUYbih-26yBi0xy5LVFOA0zDftgDqxxnVfdIg1o.png" alt="Goblin Drill"></div><div class="ci" title="Goblins"><img src="https://api-assets.clashroyale.com/cards/300/X_DQUye_OaS3QN6VC9CPw05Fit7wvSm3XegXIXKP--0.png" alt="Goblins"></div><div class="ci" title="Golden Knight"><img src="https://api-assets.clashroyale.com/cards/300/WJd207D0O1sN-l1FTb8P9KhYL2oF5jY26vRUfTUW3FQ.png" alt="Golden Knight"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Drill"><img src="https://api-assets.clashroyale.com/cards/300/eN2TKUYbih-26yBi0xy5LVFOA0zDftgDqxxnVfdIg1o.png" alt="Goblin Drill"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Bomber"><img src="https://api-assets.clashroyale.com/cards/300/12n1CesxKIcqVYntjxcF36EFA-ONw7Z-DoL0_rQrbdo.png" alt="Bomber"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Drill"><img src="https://api-assets.clashroyale.com/cards/300/eN2TKUYbih-26yBi0xy5LVFOA0zDftgDqxxnVfdIg1o.png" alt="Goblin Drill"></div><div class="ci" title="Goblins"><img src="https://api-assets.clashroyale.com/cards/300/X_DQUye_OaS3QN6VC9CPw05Fit7wvSm3XegXIXKP--0.png" alt="Goblins"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Ronin"><img src="https://api-assets.clashroyale.com/cards/300/X0dTFs7OGUavreDEzOtYd_YNZ8Zly6qgAE-dd-bNfWU.png" alt="Ronin"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Goblin Barrel, Wall Breakers</span>
+        <span class="arch-stat">7 games · 5W-2L · 71% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>2g</b> <span class="wl">1W-1L</span>
+            <span class="split">CRL 2 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div><div class="ci" title="Valkyrie"><img src="https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png" alt="Valkyrie"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Ronin"><img src="https://api-assets.clashroyale.com/cards/300/X0dTFs7OGUavreDEzOtYd_YNZ8Zly6qgAE-dd-bNfWU.png" alt="Ronin"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div><div class="ci" title="Valkyrie"><img src="https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png" alt="Valkyrie"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Dart Goblin"><img src="https://api-assets.clashroyale.com/cards/300/BmpK3bqEAviflqHCdxxnfm-_l3pRPJw3qxHkwS55nCY.png" alt="Dart Goblin"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Mighty Miner"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Royal Hogs</span>
+        <span class="arch-stat">7 games · 4W-3L · 57% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>4g</b> <span class="wl">2W-2L</span>
+            <span class="split">CRL 3 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Baby Dragon"><img src="https://api-assets.clashroyale.com/cards/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png" alt="Baby Dragon"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Mighty Miner"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>2g</b> <span class="wl">2W-0L</span>
+            <span class="split">CRL 2 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Baby Dragon"><img src="https://api-assets.clashroyale.com/cards/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png" alt="Baby Dragon"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Mighty Miner"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Balloon, Miner</span>
+        <span class="arch-stat">7 games · 4W-3L · 57% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>3g</b> <span class="wl">1W-2L</span>
+            <span class="split">CRL 3 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Giant Skeleton"><img src="https://api-assets.clashroyale.com/cards/300/0p0gd0XaVRu1Hb1iSG1hTYbz2AN6aEiZnhaAib5O8Z8.png" alt="Giant Skeleton"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Giant Skeleton"><img src="https://api-assets.clashroyale.com/cards/300/0p0gd0XaVRu1Hb1iSG1hTYbz2AN6aEiZnhaAib5O8Z8.png" alt="Giant Skeleton"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Giant Skeleton"><img src="https://api-assets.clashroyale.com/cards/300/0p0gd0XaVRu1Hb1iSG1hTYbz2AN6aEiZnhaAib5O8Z8.png" alt="Giant Skeleton"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Royal Giant</span>
+        <span class="arch-stat">5 games · 2W-3L · 40% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Fisherman"><img src="https://api-assets.clashroyale.com/cards/300/U2KZ3g0wyufcuA5P2Xrn3Z3lr1WiJmc5S0IWOZHgizQ.png" alt="Fisherman"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Royal Giant"><img src="https://api-assets.clashroyale.com/cards/300/mnlRaNtmfpQx2e6mp70sLd0ND-pKPF70Cf87_agEKg4.png" alt="Royal Giant"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Arrows"><img src="https://api-assets.clashroyale.com/cards/300/Flsoci-Y6y8ZFVi5uRFTmgkPnCmMyMVrU7YmmuPvSBo.png" alt="Arrows"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Fisherman"><img src="https://api-assets.clashroyale.com/cards/300/U2KZ3g0wyufcuA5P2Xrn3Z3lr1WiJmc5S0IWOZHgizQ.png" alt="Fisherman"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Mother Witch"><img src="https://api-assets.clashroyale.com/cards/300/fO-Xah8XZkYKaSK9SCp3wnzwxtvIhun9NVY-zzte1Ng.png" alt="Mother Witch"></div><div class="ci" title="Royal Ghost"><img src="https://api-assets.clashroyale.com/cards/300/3En2cz0ISQAaMTHY3hj3rTveFN2kJYq-H4VxvdJNvCM.png" alt="Royal Ghost"></div><div class="ci" title="Royal Giant"><img src="https://api-assets.clashroyale.com/cards/300/mnlRaNtmfpQx2e6mp70sLd0ND-pKPF70Cf87_agEKg4.png" alt="Royal Giant"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Fisherman"><img src="https://api-assets.clashroyale.com/cards/300/U2KZ3g0wyufcuA5P2Xrn3Z3lr1WiJmc5S0IWOZHgizQ.png" alt="Fisherman"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Royal Giant"><img src="https://api-assets.clashroyale.com/cards/300/mnlRaNtmfpQx2e6mp70sLd0ND-pKPF70Cf87_agEKg4.png" alt="Royal Giant"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Wizard"><img src="https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png" alt="Wizard"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Fisherman"><img src="https://api-assets.clashroyale.com/cards/300/U2KZ3g0wyufcuA5P2Xrn3Z3lr1WiJmc5S0IWOZHgizQ.png" alt="Fisherman"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Royal Giant"><img src="https://api-assets.clashroyale.com/cards/300/mnlRaNtmfpQx2e6mp70sLd0ND-pKPF70Cf87_agEKg4.png" alt="Royal Giant"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Wizard"><img src="https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png" alt="Wizard"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Fisherman"><img src="https://api-assets.clashroyale.com/cards/300/U2KZ3g0wyufcuA5P2Xrn3Z3lr1WiJmc5S0IWOZHgizQ.png" alt="Fisherman"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Royal Giant"><img src="https://api-assets.clashroyale.com/cards/300/mnlRaNtmfpQx2e6mp70sLd0ND-pKPF70Cf87_agEKg4.png" alt="Royal Giant"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Mortar, Skeleton Barrel</span>
+        <span class="arch-stat">5 games · 5W-0L · 100% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>2g</b> <span class="wl">2W-0L</span>
+            <span class="split">CRL 2 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Goblins"><img src="https://api-assets.clashroyale.com/cards/300/X_DQUye_OaS3QN6VC9CPw05Fit7wvSm3XegXIXKP--0.png" alt="Goblins"></div><div class="ci" title="Minions"><img src="https://api-assets.clashroyale.com/cards/300/yHGpoEnmUWPGV_hBbhn-Kk-Bs838OjGzWzJJlQpQKQA.png" alt="Minions"></div><div class="ci" title="Mortar"><img src="https://api-assets.clashroyale.com/cards/300/lPOSw6H7YOHq2miSCrf7ZDL3ANjhJdPPDYOTujdNrVE.png" alt="Mortar"></div><div class="ci" title="Rascals"><img src="https://api-assets.clashroyale.com/cards/300/KV48DfwVHKx9XCjzBdk3daT_Eb52Me4VgjVO7WctRc4.png" alt="Rascals"></div><div class="ci" title="Ronin"><img src="https://api-assets.clashroyale.com/cards/300/X0dTFs7OGUavreDEzOtYd_YNZ8Zly6qgAE-dd-bNfWU.png" alt="Ronin"></div><div class="ci" title="Skeleton Barrel"><img src="https://api-assets.clashroyale.com/cards/300/vCB4DWCcrGbTkarjcOiVz4aNDx6GWLm0yUepg9E1MGo.png" alt="Skeleton Barrel"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Cannon Cart"><img src="https://api-assets.clashroyale.com/cards/300/aqwxRz8HXzqlMCO4WMXNA1txynjXTsLinknqsgZLbok.png" alt="Cannon Cart"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Goblins"><img src="https://api-assets.clashroyale.com/cards/300/X_DQUye_OaS3QN6VC9CPw05Fit7wvSm3XegXIXKP--0.png" alt="Goblins"></div><div class="ci" title="Minions"><img src="https://api-assets.clashroyale.com/cards/300/yHGpoEnmUWPGV_hBbhn-Kk-Bs838OjGzWzJJlQpQKQA.png" alt="Minions"></div><div class="ci" title="Mortar"><img src="https://api-assets.clashroyale.com/cards/300/lPOSw6H7YOHq2miSCrf7ZDL3ANjhJdPPDYOTujdNrVE.png" alt="Mortar"></div><div class="ci" title="Rascals"><img src="https://api-assets.clashroyale.com/cards/300/KV48DfwVHKx9XCjzBdk3daT_Eb52Me4VgjVO7WctRc4.png" alt="Rascals"></div><div class="ci" title="Skeleton Barrel"><img src="https://api-assets.clashroyale.com/cards/300/vCB4DWCcrGbTkarjcOiVz4aNDx6GWLm0yUepg9E1MGo.png" alt="Skeleton Barrel"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Goblins"><img src="https://api-assets.clashroyale.com/cards/300/X_DQUye_OaS3QN6VC9CPw05Fit7wvSm3XegXIXKP--0.png" alt="Goblins"></div><div class="ci" title="Minions"><img src="https://api-assets.clashroyale.com/cards/300/yHGpoEnmUWPGV_hBbhn-Kk-Bs838OjGzWzJJlQpQKQA.png" alt="Minions"></div><div class="ci" title="Mortar"><img src="https://api-assets.clashroyale.com/cards/300/lPOSw6H7YOHq2miSCrf7ZDL3ANjhJdPPDYOTujdNrVE.png" alt="Mortar"></div><div class="ci" title="Rascals"><img src="https://api-assets.clashroyale.com/cards/300/KV48DfwVHKx9XCjzBdk3daT_Eb52Me4VgjVO7WctRc4.png" alt="Rascals"></div><div class="ci" title="Ronin"><img src="https://api-assets.clashroyale.com/cards/300/X0dTFs7OGUavreDEzOtYd_YNZ8Zly6qgAE-dd-bNfWU.png" alt="Ronin"></div><div class="ci" title="Skeleton Barrel"><img src="https://api-assets.clashroyale.com/cards/300/vCB4DWCcrGbTkarjcOiVz4aNDx6GWLm0yUepg9E1MGo.png" alt="Skeleton Barrel"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Goblins"><img src="https://api-assets.clashroyale.com/cards/300/X_DQUye_OaS3QN6VC9CPw05Fit7wvSm3XegXIXKP--0.png" alt="Goblins"></div><div class="ci" title="Minions"><img src="https://api-assets.clashroyale.com/cards/300/yHGpoEnmUWPGV_hBbhn-Kk-Bs838OjGzWzJJlQpQKQA.png" alt="Minions"></div><div class="ci" title="Mortar"><img src="https://api-assets.clashroyale.com/cards/300/lPOSw6H7YOHq2miSCrf7ZDL3ANjhJdPPDYOTujdNrVE.png" alt="Mortar"></div><div class="ci" title="Rascals"><img src="https://api-assets.clashroyale.com/cards/300/KV48DfwVHKx9XCjzBdk3daT_Eb52Me4VgjVO7WctRc4.png" alt="Rascals"></div><div class="ci" title="Ronin"><img src="https://api-assets.clashroyale.com/cards/300/X0dTFs7OGUavreDEzOtYd_YNZ8Zly6qgAE-dd-bNfWU.png" alt="Ronin"></div><div class="ci" title="Skeleton Barrel"><img src="https://api-assets.clashroyale.com/cards/300/vCB4DWCcrGbTkarjcOiVz4aNDx6GWLm0yUepg9E1MGo.png" alt="Skeleton Barrel"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Hog Rider</span>
+        <span class="arch-stat">3 games · 3W-0L · 100% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Hog Rider"><img src="https://api-assets.clashroyale.com/cards/300/Ubu0oUl8tZkusnkZf8Xv9Vno5IO29Y-jbZ4fhoNJ5oc.png" alt="Hog Rider"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div><div class="ci" title="Wizard"><img src="https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png" alt="Wizard"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Hog Rider"><img src="https://api-assets.clashroyale.com/cards/300/Ubu0oUl8tZkusnkZf8Xv9Vno5IO29Y-jbZ4fhoNJ5oc.png" alt="Hog Rider"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div><div class="ci" title="Wizard"><img src="https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png" alt="Wizard"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Furnace"><img src="https://api-assets.clashroyale.com/cards/300/iqbDiG7yYRIzvCPXdt9zPb3IvMt7F7Gi4wIPnh2x4aI.png" alt="Furnace"></div><div class="ci" title="Hog Rider"><img src="https://api-assets.clashroyale.com/cards/300/Ubu0oUl8tZkusnkZf8Xv9Vno5IO29Y-jbZ4fhoNJ5oc.png" alt="Hog Rider"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Mighty Miner"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Battle Ram</span>
+        <span class="arch-stat">2 games · 1W-1L · 50% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Arrows"><img src="https://api-assets.clashroyale.com/cards/300/Flsoci-Y6y8ZFVi5uRFTmgkPnCmMyMVrU7YmmuPvSBo.png" alt="Arrows"></div><div class="ci" title="Bandit"><img src="https://api-assets.clashroyale.com/cards/300/QWDdXMKJNpv0go-HYaWQWP6p8uIOHjqn-zX7G0p3DyM.png" alt="Bandit"></div><div class="ci" title="Battle Ram"><img src="https://api-assets.clashroyale.com/cards/300/dyc50V2cplKi4H7pq1B3I36pl_sEH5DQrNHboS_dbbM.png" alt="Battle Ram"></div><div class="ci" title="Golden Knight"><img src="https://api-assets.clashroyale.com/cards/300/WJd207D0O1sN-l1FTb8P9KhYL2oF5jY26vRUfTUW3FQ.png" alt="Golden Knight"></div><div class="ci" title="Mega Knight"><img src="https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png" alt="Mega Knight"></div><div class="ci" title="Mother Witch"><img src="https://api-assets.clashroyale.com/cards/300/fO-Xah8XZkYKaSK9SCp3wnzwxtvIhun9NVY-zzte1Ng.png" alt="Mother Witch"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Battle Ram"><img src="https://api-assets.clashroyale.com/cards/300/dyc50V2cplKi4H7pq1B3I36pl_sEH5DQrNHboS_dbbM.png" alt="Battle Ram"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Giant Skeleton"><img src="https://api-assets.clashroyale.com/cards/300/0p0gd0XaVRu1Hb1iSG1hTYbz2AN6aEiZnhaAib5O8Z8.png" alt="Giant Skeleton"></div><div class="ci" title="Lumberjack"><img src="https://api-assets.clashroyale.com/cards/300/E6RWrnCuk13xMX5OE1EQtLEKTZQV6B78d00y8PlXt6Q.png" alt="Lumberjack"></div><div class="ci" title="Mother Witch"><img src="https://api-assets.clashroyale.com/cards/300/fO-Xah8XZkYKaSK9SCp3wnzwxtvIhun9NVY-zzte1Ng.png" alt="Mother Witch"></div><div class="ci" title="Wizard"><img src="https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png" alt="Wizard"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Goblin Barrel</span>
+        <span class="arch-stat">2 games · 1W-1L · 50% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div><div class="ci" title="Dart Goblin"><img src="https://api-assets.clashroyale.com/cards/300/BmpK3bqEAviflqHCdxxnfm-_l3pRPJw3qxHkwS55nCY.png" alt="Dart Goblin"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Mighty Miner"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div></div>
+        </div><div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 1 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div><div class="ci" title="Dart Goblin"><img src="https://api-assets.clashroyale.com/cards/300/BmpK3bqEAviflqHCdxxnfm-_l3pRPJw3qxHkwS55nCY.png" alt="Dart Goblin"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Mighty Miner"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Mortar</span>
+        <span class="arch-stat">2 games · 1W-1L · 50% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>2g</b> <span class="wl">1W-1L</span>
+            <span class="split">CRL 2 · Prac 0</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Cannon Cart"><img src="https://api-assets.clashroyale.com/cards/300/aqwxRz8HXzqlMCO4WMXNA1txynjXTsLinknqsgZLbok.png" alt="Cannon Cart"></div><div class="ci" title="Goblinstein"><img src="https://api-assets.clashroyale.com/cards/300/mQ20B49dXdk7Nv0lMdLw175M3YvkSpN6KNnho8UKBd8.png" alt="Goblinstein"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Minions"><img src="https://api-assets.clashroyale.com/cards/300/yHGpoEnmUWPGV_hBbhn-Kk-Bs838OjGzWzJJlQpQKQA.png" alt="Minions"></div><div class="ci" title="Mortar"><img src="https://api-assets.clashroyale.com/cards/300/lPOSw6H7YOHq2miSCrf7ZDL3ANjhJdPPDYOTujdNrVE.png" alt="Mortar"></div><div class="ci" title="Royal Ghost"><img src="https://api-assets.clashroyale.com/cards/300/3En2cz0ISQAaMTHY3hj3rTveFN2kJYq-H4VxvdJNvCM.png" alt="Royal Ghost"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Miner, Wall Breakers</span>
+        <span class="arch-stat">1 games · 0W-1L · 0% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Bats"><img src="https://api-assets.clashroyale.com/cards/300/EnIcvO21hxiNpoI-zO6MDjLmzwPbq8Z4JPo2OKoVUjU.png" alt="Bats"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Lava Hound, Miner</span>
+        <span class="arch-stat">1 games · 1W-0L · 100% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Goblin Cage"><img src="https://api-assets.clashroyale.com/cards/300/vD24bBgK4rSq7wx5QEbuqChtPMRFviL_ep76GwQw1yA.png" alt="Goblin Cage"></div><div class="ci" title="Lava Hound"><img src="https://api-assets.clashroyale.com/cards/300/unicRQ975sBY2oLtfgZbAI56ZvaWz7azj-vXTLxc0r8.png" alt="Lava Hound"></div><div class="ci" title="Mega Minion"><img src="https://api-assets.clashroyale.com/cards/300/-T_e4YLbuhPBKbYnBwQfXgynNpp5eOIN_0RracYwL9c.png" alt="Mega Minion"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Ronin"><img src="https://api-assets.clashroyale.com/cards/300/X0dTFs7OGUavreDEzOtYd_YNZ8Zly6qgAE-dd-bNfWU.png" alt="Ronin"></div><div class="ci" title="Spirit Empress"><img src="https://api-assets.clashroyale.com/cards/300/MWWBZqiQeRBXSqEITVMj46nO_uCIUsqBidvUw9K2twY.png" alt="Spirit Empress"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Royal Hogs, Three Musketeers</span>
+        <span class="arch-stat">1 games · 0W-1L · 0% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">0W-1L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Earthquake"><img src="https://api-assets.clashroyale.com/cards/300/XeQXcrUu59C52DslyZVwCnbi4yamID-WxfVZLShgZmE.png" alt="Earthquake"></div><div class="ci" title="Heal Spirit"><img src="https://api-assets.clashroyale.com/cards/300/GITl06sa2nGRLPvboyXbGEv5E3I-wAwn1Eqa5esggbc.png" alt="Heal Spirit"></div><div class="ci" title="Ice Golem"><img src="https://api-assets.clashroyale.com/cards/300/r05cmpwV1o7i7FHodtZwW3fmjbXCW34IJCsDEV5cZC4.png" alt="Ice Golem"></div><div class="ci" title="Lumberjack"><img src="https://api-assets.clashroyale.com/cards/300/E6RWrnCuk13xMX5OE1EQtLEKTZQV6B78d00y8PlXt6Q.png" alt="Lumberjack"></div><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="Three Musketeers"><img src="https://api-assets.clashroyale.com/cards/300/_J2GhbkX3vswaFk1wG-dopwiHyNc_YiPhwroiKF3Mek.png" alt="Three Musketeers"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div>
+        </div>
+    </div><div class="arch">
+      <div class="arch-head"><span class="arch-name">Balloon, Lava Hound</span>
+        <span class="arch-stat">1 games · 1W-0L · 100% win</span></div>
+      <div class="deckrow">
+          <div class="deckrow-stat"><b>1g</b> <span class="wl">1W-0L</span>
+            <span class="split">CRL 0 · Prac 1</span></div>
+          <div class="icon-strip" style="--ci:30px"><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Lava Hound"><img src="https://api-assets.clashroyale.com/cards/300/unicRQ975sBY2oLtfgZbAI56ZvaWz7azj-vXTLxc0r8.png" alt="Lava Hound"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="Spirit Empress"><img src="https://api-assets.clashroyale.com/cards/300/MWWBZqiQeRBXSqEITVMj46nO_uCIUsqBidvUw9K2twY.png" alt="Spirit Empress"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Valkyrie"><img src="https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png" alt="Valkyrie"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div>
+        </div>
+    </div>
+</section>
+
+<section>
+  <h2>His staple cards (the tells)</h2>
+  <p class="lead">Cards Mugi runs most often across all 60 decks. High-frequency cards are what he's comfortable with — a fast read on which archetype he's on.</p>
+  <div class="cardgrid"><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div>
+      <div class="cardfreq-name">Skeletons</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:33%"></div></div>
+      <div class="cardfreq-pct">20 · 33%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div>
+      <div class="cardfreq-name">Tesla</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:28%"></div></div>
+      <div class="cardfreq-pct">17 · 28%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div>
+      <div class="cardfreq-name">Cannon</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:27%"></div></div>
+      <div class="cardfreq-pct">16 · 27%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div>
+      <div class="cardfreq-name">Fire Spirit</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:25%"></div></div>
+      <div class="cardfreq-pct">15 · 25%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div>
+      <div class="cardfreq-name">Electro Spirit</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:25%"></div></div>
+      <div class="cardfreq-pct">15 · 25%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div>
+      <div class="cardfreq-name">Barbarian Barrel</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:25%"></div></div>
+      <div class="cardfreq-pct">15 · 25%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div>
+      <div class="cardfreq-name">The Log</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:22%"></div></div>
+      <div class="cardfreq-pct">13 · 22%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div>
+      <div class="cardfreq-name">Ice Spirit</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:20%"></div></div>
+      <div class="cardfreq-pct">12 · 20%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div>
+      <div class="cardfreq-name">Lightning</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:20%"></div></div>
+      <div class="cardfreq-pct">12 · 20%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div>
+      <div class="cardfreq-name">Berserker</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:20%"></div></div>
+      <div class="cardfreq-pct">12 · 20%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div>
+      <div class="cardfreq-name">Poison</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:20%"></div></div>
+      <div class="cardfreq-pct">12 · 20%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div>
+      <div class="cardfreq-name">Fireball</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:20%"></div></div>
+      <div class="cardfreq-pct">12 · 20%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div>
+      <div class="cardfreq-name">Zappies</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:20%"></div></div>
+      <div class="cardfreq-pct">12 · 20%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div>
+      <div class="cardfreq-name">Knight</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:18%"></div></div>
+      <div class="cardfreq-pct">11 · 18%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div>
+      <div class="cardfreq-name">Mighty Miner</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:17%"></div></div>
+      <div class="cardfreq-pct">10 · 17%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div>
+      <div class="cardfreq-name">Tornado</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:17%"></div></div>
+      <div class="cardfreq-pct">10 · 17%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div>
+      <div class="cardfreq-name">Giant Snowball</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:17%"></div></div>
+      <div class="cardfreq-pct">10 · 17%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div>
+      <div class="cardfreq-name">Goblin Barrel</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:15%"></div></div>
+      <div class="cardfreq-pct">9 · 15%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div>
+      <div class="cardfreq-name">Magic Archer</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:15%"></div></div>
+      <div class="cardfreq-pct">9 · 15%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div>
+      <div class="cardfreq-name">Miner</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:15%"></div></div>
+      <div class="cardfreq-pct">9 · 15%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div>
+      <div class="cardfreq-name">Executioner</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:15%"></div></div>
+      <div class="cardfreq-pct">9 · 15%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div>
+      <div class="cardfreq-name">Zap</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:15%"></div></div>
+      <div class="cardfreq-pct">9 · 15%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div>
+      <div class="cardfreq-name">Wall Breakers</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:13%"></div></div>
+      <div class="cardfreq-pct">8 · 13%</div>
+    </div><div class="cardfreq">
+      <div class="ci"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div>
+      <div class="cardfreq-name">Royal Delivery</div>
+      <div class="cardfreq-bar"><div class="cardfreq-fill" style="width:13%"></div></div>
+      <div class="cardfreq-pct">8 · 13%</div>
+    </div></div>
+</section>
+
+<section>
+  <h2>How he sequences a duel set</h2>
+  <p class="lead">What win-con he tends to open, follow, and close with across his 16 tracked CRL sets. Useful for predicting his Game 2/3 once you've seen Game 1.</p>
+  <div class="seq-grid"><div class="seq-col"><div class="seq-head">Game 1 — what he opens with</div><div class="seq-item"><span class="seq-n">4×</span> Royal Hogs</div><div class="seq-item"><span class="seq-n">3×</span> Goblin Drill</div><div class="seq-item"><span class="seq-n">2×</span> Goblin Barrel, Wall Breakers</div><div class="seq-item"><span class="seq-n">2×</span> Graveyard</div><div class="seq-item"><span class="seq-n">2×</span> Mortar, Skeleton Barrel</div><div class="seq-item"><span class="seq-n">2×</span> Mortar</div><div class="seq-item"><span class="seq-n">1×</span> Goblin Barrel</div></div><div class="seq-col"><div class="seq-head">Game 2 — the follow-up</div><div class="seq-item"><span class="seq-n">3×</span> Balloon, Miner</div><div class="seq-item"><span class="seq-n">2×</span> Royal Hogs</div><div class="seq-item"><span class="seq-n">2×</span> Goblin Barrel, Wall Breakers</div><div class="seq-item"><span class="seq-n">2×</span> Goblin Drill</div><div class="seq-item"><span class="seq-n">2×</span> Graveyard</div><div class="seq-item"><span class="seq-n">2×</span> Royal Giant</div><div class="seq-item"><span class="seq-n">1×</span> Mortar, Skeleton Barrel</div><div class="seq-item"><span class="seq-n">1×</span> Goblin Barrel</div></div><div class="seq-col"><div class="seq-head">Game 3 — the decider</div><div class="seq-item"><span class="seq-n">2×</span> Hog Rider</div><div class="seq-item"><span class="seq-n">2×</span> Balloon, Miner</div><div class="seq-item"><span class="seq-n">1×</span> Royal Giant</div><div class="seq-item"><span class="seq-n">1×</span> Graveyard</div></div></div>
+</section>
+
+<section>
+  <h2>His own decks, ranked by win rate</h2>
+  <p class="lead">Which of Mugi's archetypes actually perform (min 3 decisive games). Green = his weapons, red = where he's beatable.</p>
+  <div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill good" style="width:100%"></div></div>
+      <div class="awr-pct">100%</div>
+      <div class="awr-lab">Mortar, Skeleton Barrel <span class="awr-n">(5/5)</span></div>
+    </div><div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill good" style="width:100%"></div></div>
+      <div class="awr-pct">100%</div>
+      <div class="awr-lab">Hog Rider <span class="awr-n">(3/3)</span></div>
+    </div><div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill good" style="width:75%"></div></div>
+      <div class="awr-pct">75%</div>
+      <div class="awr-lab">Graveyard <span class="awr-n">(6/8)</span></div>
+    </div><div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill good" style="width:75%"></div></div>
+      <div class="awr-pct">75%</div>
+      <div class="awr-lab">Goblin Drill <span class="awr-n">(6/8)</span></div>
+    </div><div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill good" style="width:71%"></div></div>
+      <div class="awr-pct">71%</div>
+      <div class="awr-lab">Goblin Barrel, Wall Breakers <span class="awr-n">(5/7)</span></div>
+    </div><div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill mid" style="width:57%"></div></div>
+      <div class="awr-pct">57%</div>
+      <div class="awr-lab">Royal Hogs <span class="awr-n">(4/7)</span></div>
+    </div><div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill mid" style="width:57%"></div></div>
+      <div class="awr-pct">57%</div>
+      <div class="awr-lab">Balloon, Miner <span class="awr-n">(4/7)</span></div>
+    </div><div class="awr-row">
+      <div class="awr-bar"><div class="awr-fill bad" style="width:40%"></div></div>
+      <div class="awr-pct">40%</div>
+      <div class="awr-lab">Royal Giant <span class="awr-n">(2/5)</span></div>
+    </div>
+</section>
+
+<section>
+  <h2>What has beaten him (empirical)</h2>
+  <p class="lead">Decks from our tracked field that actually took games off Mugi — 18 wins across 47 games. Small sample, so read as directional.</p>
+  <div class="emp-row">
+      <div class="emp-lab"><b>4×</b> beaten by <span class="wc">Graveyard</span></div>
+      <div class="emp-ex"><span class="emp-who">老板 Ι Batan’宙斯</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Bomb Tower"><img src="https://api-assets.clashroyale.com/cards/300/rirYRyHPc97emRjoH-c1O8uZCBzPVnToaGuNGusF3TQ.png" alt="Bomb Tower"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div></div></div><div class="emp-ex"><span class="emp-who">RUBIZALEZ</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Archers"><img src="https://api-assets.clashroyale.com/cards/300/W4Hmp8MTSdXANN8KdblbtHwtsbt0o749BbxNqmJYfA8.png" alt="Archers"></div><div class="ci" title="Dark Prince"><img src="https://api-assets.clashroyale.com/cards/300/M7fXlrKXHu2IvpSGpk36kXVstslbR08Bbxcy0jQcln8.png" alt="Dark Prince"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Demolisher"><img src="https://api-assets.clashroyale.com/cards/300/KVVOgdn40xasFLYuQv8Go_U_LCV7wSG9q9eE1H7f3Qk.png" alt="Goblin Demolisher"></div><div class="ci" title="Goblin Hut"><img src="https://api-assets.clashroyale.com/cards/300/l8ZdzzNLcwB4u7ihGgxNFQOjCT_njFuAhZr7D6PRF7E.png" alt="Goblin Hut"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>3×</b> beaten by <span class="wc">Hog Rider</span></div>
+      <div class="emp-ex"><span class="emp-who">BattleSRAM</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Arrows"><img src="https://api-assets.clashroyale.com/cards/300/Flsoci-Y6y8ZFVi5uRFTmgkPnCmMyMVrU7YmmuPvSBo.png" alt="Arrows"></div><div class="ci" title="Electro Wizard"><img src="https://api-assets.clashroyale.com/cards/300/RsFaHgB3w6vXsTjXdPr3x8l_GbV9TbOUCvIx07prbrQ.png" alt="Electro Wizard"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Golden Knight"><img src="https://api-assets.clashroyale.com/cards/300/WJd207D0O1sN-l1FTb8P9KhYL2oF5jY26vRUfTUW3FQ.png" alt="Golden Knight"></div><div class="ci" title="Hog Rider"><img src="https://api-assets.clashroyale.com/cards/300/Ubu0oUl8tZkusnkZf8Xv9Vno5IO29Y-jbZ4fhoNJ5oc.png" alt="Hog Rider"></div><div class="ci" title="Mother Witch"><img src="https://api-assets.clashroyale.com/cards/300/fO-Xah8XZkYKaSK9SCp3wnzwxtvIhun9NVY-zzte1Ng.png" alt="Mother Witch"></div><div class="ci" title="P.E.K.K.A"><img src="https://api-assets.clashroyale.com/cards/300/MlArURKhn_zWAZY-Xj1qIRKLVKquarG25BXDjUQajNs.png" alt="P.E.K.K.A"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div></div></div><div class="emp-ex"><span class="emp-who">BattleSRAM</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Arrows"><img src="https://api-assets.clashroyale.com/cards/300/Flsoci-Y6y8ZFVi5uRFTmgkPnCmMyMVrU7YmmuPvSBo.png" alt="Arrows"></div><div class="ci" title="Bowler"><img src="https://api-assets.clashroyale.com/cards/300/SU4qFXmbQXWjvASxVI6z9IJuTYolx4A0MKK90sTIE88.png" alt="Bowler"></div><div class="ci" title="Earthquake"><img src="https://api-assets.clashroyale.com/cards/300/XeQXcrUu59C52DslyZVwCnbi4yamID-WxfVZLShgZmE.png" alt="Earthquake"></div><div class="ci" title="Hog Rider"><img src="https://api-assets.clashroyale.com/cards/300/Ubu0oUl8tZkusnkZf8Xv9Vno5IO29Y-jbZ4fhoNJ5oc.png" alt="Hog Rider"></div><div class="ci" title="Lumberjack"><img src="https://api-assets.clashroyale.com/cards/300/E6RWrnCuk13xMX5OE1EQtLEKTZQV6B78d00y8PlXt6Q.png" alt="Lumberjack"></div><div class="ci" title="Mega Knight"><img src="https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png" alt="Mega Knight"></div><div class="ci" title="Mother Witch"><img src="https://api-assets.clashroyale.com/cards/300/fO-Xah8XZkYKaSK9SCp3wnzwxtvIhun9NVY-zzte1Ng.png" alt="Mother Witch"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>2×</b> beaten by <span class="wc">Royal Hogs</span></div>
+      <div class="emp-ex"><span class="emp-who">Coco</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Baby Dragon"><img src="https://api-assets.clashroyale.com/cards/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png" alt="Baby Dragon"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Monk"><img src="https://api-assets.clashroyale.com/cards/300/2onG4t4-CxqwFVZAn6zpWxFz3_mG2ksSj4Q7zldo1SM.png" alt="Monk"></div><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div></div></div><div class="emp-ex"><span class="emp-who">BattleSRAM</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Baby Dragon"><img src="https://api-assets.clashroyale.com/cards/300/cjC9n4AvEZJ3urkVh-rwBkJ-aRSsydIMqSAV48hAih0.png" alt="Baby Dragon"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Lightning"><img src="https://api-assets.clashroyale.com/cards/300/fpnESbYqe5GyZmaVVYe-SEu7tE0Kxh_HZyVigzvLjks.png" alt="Lightning"></div><div class="ci" title="Mighty Miner"><img src="https://api-assets.clashroyale.com/cards/300/Cd9R56yraxTvJiD8xJ2qT2OdsHyh94FqOAarXpbyelo.png" alt="Mighty Miner"></div><div class="ci" title="Royal Hogs"><img src="https://api-assets.clashroyale.com/cards/300/ASSQJG_MoVq9e81HZzo4bynMnyLNpNJMfSLb3hqydOw.png" alt="Royal Hogs"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div><div class="ci" title="The Log"><img src="https://api-assets.clashroyale.com/cards/300/_iDwuDLexHPFZ_x4_a0eP-rxCS6vwWgTs6DLauwwoaY.png" alt="The Log"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">X-Bow</span></div>
+      <div class="emp-ex"><span class="emp-who">Klaus</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Elixir Collector"><img src="https://api-assets.clashroyale.com/cards/300/BGLo3Grsp81c72EpxLLk-Sofk3VY56zahnUNOv3JcT0.png" alt="Elixir Collector"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Goblins"><img src="https://api-assets.clashroyale.com/cards/300/X_DQUye_OaS3QN6VC9CPw05Fit7wvSm3XegXIXKP--0.png" alt="Goblins"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Valkyrie"><img src="https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png" alt="Valkyrie"></div><div class="ci" title="Wizard"><img src="https://api-assets.clashroyale.com/cards/300/Mej7vnv4H_3p_8qPs_N6_GKahy6HDr7pU7i9eTHS84U.png" alt="Wizard"></div><div class="ci" title="X-Bow"><img src="https://api-assets.clashroyale.com/cards/300/zVQ9Hme1hlj9Dc6e1ORl9xWwglcSrP7ejow5mAhLUJc.png" alt="X-Bow"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Balloon, Miner</span></div>
+      <div class="emp-ex"><span class="emp-who">Coco</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Balloon"><img src="https://api-assets.clashroyale.com/cards/300/qBipxLo-3hhCnPrApp2Nn3b2NgrSrvwzWytvREev0CY.png" alt="Balloon"></div><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Executioner"><img src="https://api-assets.clashroyale.com/cards/300/9XL5BP2mqzV8kza6KF8rOxrpCZTyuGLp2l413DTjEoM.png" alt="Executioner"></div><div class="ci" title="Giant Skeleton"><img src="https://api-assets.clashroyale.com/cards/300/0p0gd0XaVRu1Hb1iSG1hTYbz2AN6aEiZnhaAib5O8Z8.png" alt="Giant Skeleton"></div><div class="ci" title="Miner"><img src="https://api-assets.clashroyale.com/cards/300/Y4yWvdwBCg2FpAZgs8T09Gy34WOwpLZW-ttL52Ae8NE.png" alt="Miner"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Tornado"><img src="https://api-assets.clashroyale.com/cards/300/QJB-QK1QJHdw4hjpAwVSyZBozc2ZWAR9pQ-SMUyKaT0.png" alt="Tornado"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Goblin Barrel, Wall Breakers</span></div>
+      <div class="emp-ex"><span class="emp-who">老板 Ι Batan’宙斯</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div><div class="ci" title="Wall Breakers"><img src="https://api-assets.clashroyale.com/cards/300/_xPphEfC8eEwFNrfU3cMQG9-f5JaLQ31ARCA7l3XtW4.png" alt="Wall Breakers"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Goblin Drill</span></div>
+      <div class="emp-ex"><span class="emp-who">BattleSRAM</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Fire Spirit"><img src="https://api-assets.clashroyale.com/cards/300/16-BqusVvynIgYI8_Jci3LDC-r8AI_xaIYLgXqtlmS8.png" alt="Fire Spirit"></div><div class="ci" title="Giant Snowball"><img src="https://api-assets.clashroyale.com/cards/300/7MaJLa6hK9WN2_VIshuh5DIDfGwm0wEv98gXtAxLDPs.png" alt="Giant Snowball"></div><div class="ci" title="Goblin Drill"><img src="https://api-assets.clashroyale.com/cards/300/eN2TKUYbih-26yBi0xy5LVFOA0zDftgDqxxnVfdIg1o.png" alt="Goblin Drill"></div><div class="ci" title="Knight"><img src="https://api-assets.clashroyale.com/cards/300/jAj1Q5rclXxU9kVImGqSJxa4wEMfEhvwNQ_4jiGUuqg.png" alt="Knight"></div><div class="ci" title="Magic Archer"><img src="https://api-assets.clashroyale.com/cards/300/Avli3W7BxU9HQ2SoLiXnBgGx25FoNXUSFm7OcAk68ek.png" alt="Magic Archer"></div><div class="ci" title="Poison"><img src="https://api-assets.clashroyale.com/cards/300/98HDkG2189yOULcVG9jz2QbJKtfuhH21DIrIjkOjxI8.png" alt="Poison"></div><div class="ci" title="Tesla"><img src="https://api-assets.clashroyale.com/cards/300/OiwnGrxFMNiHetYEerE-UZt0L_uYNzFY7qV_CA_OxR4.png" alt="Tesla"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Goblin Barrel</span></div>
+      <div class="emp-ex"><span class="emp-who">BattleSRAM</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Boss Bandit"><img src="https://api-assets.clashroyale.com/cards/300/nuceG9o7rAyvyc7D3sp2QSiRYtSOEgraq0NJkDf729s.png" alt="Boss Bandit"></div><div class="ci" title="Cannon"><img src="https://api-assets.clashroyale.com/cards/300/nZK1y-beLxO5vnlyUhK6-2zH2NzXJwqykcosqQ1cmZ8.png" alt="Cannon"></div><div class="ci" title="Dart Goblin"><img src="https://api-assets.clashroyale.com/cards/300/BmpK3bqEAviflqHCdxxnfm-_l3pRPJw3qxHkwS55nCY.png" alt="Dart Goblin"></div><div class="ci" title="Electro Spirit"><img src="https://api-assets.clashroyale.com/cards/300/WKd4-IAFsgPpMo7dDi9sujmYjRhOMEWiE07OUJpvD9g.png" alt="Electro Spirit"></div><div class="ci" title="Goblin Barrel"><img src="https://api-assets.clashroyale.com/cards/300/CoZdp5PpsTH858l212lAMeJxVJ0zxv9V-f5xC8Bvj5g.png" alt="Goblin Barrel"></div><div class="ci" title="Ice Spirit"><img src="https://api-assets.clashroyale.com/cards/300/lv1budiafU9XmSdrDkk0NYyqASAFYyZ06CPysXKZXlA.png" alt="Ice Spirit"></div><div class="ci" title="Royal Delivery"><img src="https://api-assets.clashroyale.com/cards/300/LPg7AGjGI3_xmi7gLLgGC50yKM1jJ2teWkZfoHJcIZo.png" alt="Royal Delivery"></div><div class="ci" title="Skeletons"><img src="https://api-assets.clashroyale.com/cards/300/oO7iKMU5m0cdxhYPZA3nWQiAUh2yoGgdThLWB1rVSec.png" alt="Skeletons"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Ram Rider, Three Musketeers</span></div>
+      <div class="emp-ex"><span class="emp-who">BattleSRAM</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Barbarian Barrel"><img src="https://api-assets.clashroyale.com/cards/300/Gb0G1yNy0i5cIGUHin8uoFWxqntNtRPhY_jeMXg7HnA.png" alt="Barbarian Barrel"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Heal Spirit"><img src="https://api-assets.clashroyale.com/cards/300/GITl06sa2nGRLPvboyXbGEv5E3I-wAwn1Eqa5esggbc.png" alt="Heal Spirit"></div><div class="ci" title="Hunter"><img src="https://api-assets.clashroyale.com/cards/300/VNabB1WKnYtYRSG7X_FZfnZjQDHTBs9A96OGMFmecrA.png" alt="Hunter"></div><div class="ci" title="Ice Golem"><img src="https://api-assets.clashroyale.com/cards/300/r05cmpwV1o7i7FHodtZwW3fmjbXCW34IJCsDEV5cZC4.png" alt="Ice Golem"></div><div class="ci" title="Ram Rider"><img src="https://api-assets.clashroyale.com/cards/300/QaJyerT7f7oMyZ3Fv1glKymtLSvx7YUXisAulxl7zRI.png" alt="Ram Rider"></div><div class="ci" title="Royal Ghost"><img src="https://api-assets.clashroyale.com/cards/300/3En2cz0ISQAaMTHY3hj3rTveFN2kJYq-H4VxvdJNvCM.png" alt="Royal Ghost"></div><div class="ci" title="Three Musketeers"><img src="https://api-assets.clashroyale.com/cards/300/_J2GhbkX3vswaFk1wG-dopwiHyNc_YiPhwroiKF3Mek.png" alt="Three Musketeers"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Giant, Graveyard</span></div>
+      <div class="emp-ex"><span class="emp-who">BattleSRAM</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Arrows"><img src="https://api-assets.clashroyale.com/cards/300/Flsoci-Y6y8ZFVi5uRFTmgkPnCmMyMVrU7YmmuPvSBo.png" alt="Arrows"></div><div class="ci" title="Bowler"><img src="https://api-assets.clashroyale.com/cards/300/SU4qFXmbQXWjvASxVI6z9IJuTYolx4A0MKK90sTIE88.png" alt="Bowler"></div><div class="ci" title="Giant"><img src="https://api-assets.clashroyale.com/cards/300/Axr4ox5_b7edmLsoHxBX3vmgijAIibuF6RImTbqLlXE.png" alt="Giant"></div><div class="ci" title="Graveyard"><img src="https://api-assets.clashroyale.com/cards/300/Icp8BIyyfBTj1ncCJS7mb82SY7TPV-MAE-J2L2R48DI.png" alt="Graveyard"></div><div class="ci" title="Mini P.E.K.K.A"><img src="https://api-assets.clashroyale.com/cards/300/Fmltc4j3Ve9vO_xhHHPEO3PRP3SmU2oKp2zkZQHRZT4.png" alt="Mini P.E.K.K.A"></div><div class="ci" title="Minions"><img src="https://api-assets.clashroyale.com/cards/300/yHGpoEnmUWPGV_hBbhn-Kk-Bs838OjGzWzJJlQpQKQA.png" alt="Minions"></div><div class="ci" title="Witch"><img src="https://api-assets.clashroyale.com/cards/300/cfwk1vzehVyHC-uloEIH6NOI0hOdofCutR5PyhIgO6w.png" alt="Witch"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Battle Ram</span></div>
+      <div class="emp-ex"><span class="emp-who">TMX I Mateja</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Arrows"><img src="https://api-assets.clashroyale.com/cards/300/Flsoci-Y6y8ZFVi5uRFTmgkPnCmMyMVrU7YmmuPvSBo.png" alt="Arrows"></div><div class="ci" title="Bandit"><img src="https://api-assets.clashroyale.com/cards/300/QWDdXMKJNpv0go-HYaWQWP6p8uIOHjqn-zX7G0p3DyM.png" alt="Bandit"></div><div class="ci" title="Battle Ram"><img src="https://api-assets.clashroyale.com/cards/300/dyc50V2cplKi4H7pq1B3I36pl_sEH5DQrNHboS_dbbM.png" alt="Battle Ram"></div><div class="ci" title="Golden Knight"><img src="https://api-assets.clashroyale.com/cards/300/WJd207D0O1sN-l1FTb8P9KhYL2oF5jY26vRUfTUW3FQ.png" alt="Golden Knight"></div><div class="ci" title="Inferno Dragon"><img src="https://api-assets.clashroyale.com/cards/300/y5HDbKtTbWG6En6TGWU0xoVIGs1-iQpIP4HC-VM7u8A.png" alt="Inferno Dragon"></div><div class="ci" title="Mega Knight"><img src="https://api-assets.clashroyale.com/cards/300/O2NycChSNhn_UK9nqBXUhhC_lILkiANzPuJjtjoz0CE.png" alt="Mega Knight"></div><div class="ci" title="Mother Witch"><img src="https://api-assets.clashroyale.com/cards/300/fO-Xah8XZkYKaSK9SCp3wnzwxtvIhun9NVY-zzte1Ng.png" alt="Mother Witch"></div><div class="ci" title="Zappies"><img src="https://api-assets.clashroyale.com/cards/300/QZfHRpLRmutZbCr5fpLnTpIp89vLI6NrAwzGZ8tHEc4.png" alt="Zappies"></div></div></div>
+    </div><div class="emp-row">
+      <div class="emp-lab"><b>1×</b> beaten by <span class="wc">Lava Hound</span></div>
+      <div class="emp-ex"><span class="emp-who">40k Oker</span><div class="icon-strip" style="--ci:26px"><div class="ci" title="Berserker"><img src="https://api-assets.clashroyale.com/cards/300/NA6W8S1JBYBlOPwD3dNvJLFvVDKq-UuBs_J3i3ewLFI.png" alt="Berserker"></div><div class="ci" title="Fireball"><img src="https://api-assets.clashroyale.com/cards/300/lZD9MILQv7O-P3XBr_xOLS5idwuz3_7Ws9G60U36yhc.png" alt="Fireball"></div><div class="ci" title="Lava Hound"><img src="https://api-assets.clashroyale.com/cards/300/unicRQ975sBY2oLtfgZbAI56ZvaWz7azj-vXTLxc0r8.png" alt="Lava Hound"></div><div class="ci" title="Skeleton Dragons"><img src="https://api-assets.clashroyale.com/cards/300/qPOtg9uONh47_NLxGhhFc_ww9PlZ6z3Ry507q1NZUXs.png" alt="Skeleton Dragons"></div><div class="ci" title="Spirit Empress"><img src="https://api-assets.clashroyale.com/cards/300/MWWBZqiQeRBXSqEITVMj46nO_uCIUsqBidvUw9K2twY.png" alt="Spirit Empress"></div><div class="ci" title="Tombstone"><img src="https://api-assets.clashroyale.com/cards/300/LjSfSbwQfkZuRJY4pVxKspZ-a0iM5KAhU8w-a_N5Z7Y.png" alt="Tombstone"></div><div class="ci" title="Valkyrie"><img src="https://api-assets.clashroyale.com/cards/300/0lIoYf3Y_plFTzo95zZL93JVxpfb3MMgFDDhgSDGU9A.png" alt="Valkyrie"></div><div class="ci" title="Zap"><img src="https://api-assets.clashroyale.com/cards/300/7dxh2-yCBy1x44GrBaL29vjqnEEeJXHEAlsi5g6D1eY.png" alt="Zap"></div></div></div>
+    </div>
+</section>
+
+<section>
+  <h2>What beats his win-cons (whole-pool model)</h2>
+  <p class="lead">Across every tracked game, when someone faced a Mugi-style win-con (Graveyard / Goblin Drill / Royal Hogs / Balloon-Miner / Goblin Barrel / Wall Breakers / Royal Giant / Mortar), how did each of our win-cons do? Bigger sample than the head-to-head. Faded rows = small sample, don't over-trust.</p>
+  <div class="comm-row small-sample">
+      <div class="comm-bar"><div class="comm-fill good" style="width:72%"></div></div>
+      <div class="comm-pct">72%</div>
+      <div class="comm-lab">Lava Hound, Miner <span class="comm-n">(13/18 · low sample)</span></div>
+    </div><div class="comm-row small-sample">
+      <div class="comm-bar"><div class="comm-fill good" style="width:70%"></div></div>
+      <div class="comm-pct">70%</div>
+      <div class="comm-lab">X-Bow <span class="comm-n">(14/20 · low sample)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill good" style="width:65%"></div></div>
+      <div class="comm-pct">65%</div>
+      <div class="comm-lab">Mortar, Skeleton Barrel <span class="comm-n">(93/143)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill good" style="width:63%"></div></div>
+      <div class="comm-pct">63%</div>
+      <div class="comm-lab">Royal Hogs <span class="comm-n">(231/367)</span></div>
+    </div><div class="comm-row small-sample">
+      <div class="comm-bar"><div class="comm-fill good" style="width:62%"></div></div>
+      <div class="comm-pct">62%</div>
+      <div class="comm-lab">Royal Hogs, Three Musketeers <span class="comm-n">(8/13 · low sample)</span></div>
+    </div><div class="comm-row small-sample">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:59%"></div></div>
+      <div class="comm-pct">59%</div>
+      <div class="comm-lab">Battle Ram, Three Musketeers <span class="comm-n">(10/17 · low sample)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:59%"></div></div>
+      <div class="comm-pct">59%</div>
+      <div class="comm-lab">Battle Ram <span class="comm-n">(124/211)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:59%"></div></div>
+      <div class="comm-pct">59%</div>
+      <div class="comm-lab">Goblin Barrel, Wall Breakers <span class="comm-n">(123/210)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:57%"></div></div>
+      <div class="comm-pct">57%</div>
+      <div class="comm-lab">Electro Giant <span class="comm-n">(21/37)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:55%"></div></div>
+      <div class="comm-pct">55%</div>
+      <div class="comm-lab">Balloon, Miner <span class="comm-n">(76/137)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:55%"></div></div>
+      <div class="comm-pct">55%</div>
+      <div class="comm-lab">Goblin Barrel <span class="comm-n">(26/47)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:55%"></div></div>
+      <div class="comm-pct">55%</div>
+      <div class="comm-lab">Mortar <span class="comm-n">(29/53)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:54%"></div></div>
+      <div class="comm-pct">54%</div>
+      <div class="comm-lab">Hog Rider <span class="comm-n">(144/268)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:53%"></div></div>
+      <div class="comm-pct">53%</div>
+      <div class="comm-lab">Graveyard <span class="comm-n">(119/224)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:51%"></div></div>
+      <div class="comm-pct">51%</div>
+      <div class="comm-lab">Miner, Wall Breakers <span class="comm-n">(84/165)</span></div>
+    </div><div class="comm-row">
+      <div class="comm-bar"><div class="comm-fill mid" style="width:51%"></div></div>
+      <div class="comm-pct">51%</div>
+      <div class="comm-lab">Golem <span class="comm-n">(49/97)</span></div>
+    </div>
+</section>
+
+<section class="plan">
+  <h2>🎯 Game plan vs Mugi</h2>
+  <h3>Lead with Graveyard again — it's your best and most-proven line.</h3>
+  <p>Graveyard is the single deck that's beaten him most across the whole field (see empirical), you main it, and it's a coin-flip-or-better into most of his lists. His Day-1 Royal Hogs deck had no real Graveyard answer — that's the game you already won.</p>
+  <h3>Do NOT re-run the same second deck.</h3>
+  <p>He's now seen your Goblin-Barrel / Wall-Breakers bait. Expect him to pack concentrated splash (Valkyrie, Log, Bomber/Bats) to blank it. Pivot your second slot to <b>Royal Hogs</b> (your best whole-pool counter at 63% into his archetypes) or your <b>Hog Rider</b> deck — Hog is one of only two things that's beaten him multiple times, and it races his slower Balloon/Mortar/Royal-Giant lines before they set up.</p>
+  <h3>Target his shaky decks.</h3>
+  <p>If you can bait him onto Royal Giant (40% win) or Royal Hogs / Balloon-Miner (57%), you're in his worst matchups. His Mortar/Skeleton-Barrel and Hog Rider decks are undefeated in the data — don't get into a grind with those; out-tempo instead.</p>
+  <div class="adjust">
+  <h3>How he likely adjusts to avoid another 2–0</h3>
+  <p><b>Anti-Graveyard prep:</b> he'll bring a building + splash core (Bowler/Valkyrie/Bomb Tower + Poison, maybe Freeze) in one deck specifically to survive your GY. His Day-1 loss came from having zero of that.</p>
+  <p><b>Anti-bait splash:</b> expect heavy splash in his other deck so your bait stops trading up.</p>
+  <p><b>Tempo pivot:</b> being a flex, he may try to out-race rather than out-defend — a fast-cycle Hog/Royal-Hogs to beat Graveyard on the clock, plus an X-Bow or Mortar siege to punish your slower deck. Counter-move: don't bring two slow decks; keep at least one fast win-con so he can't safely commit to a siege.</p>
+  </div>
+</section>
+
+<div class="foot">Generated from 47 tracked games vs Mugi across the archived master files. Empirical head-to-head samples are small — treat as directional, not definitive. Practice = clanMate/Friendly; Official CRL = live-tournament time-cluster matches.</div>
+
+</div></body></html>

@@ -1,0 +1,9 @@
+# Debug snapshots regenerated on every fetch (the master_*.json archive is the source of truth)
+raw_*.json
+__pycache__/
+*.pyc
+.DS_Store
+
+# staging archive used to seed the repo (safe to delete)
+code_update.tar.gz
+code_update.zip
