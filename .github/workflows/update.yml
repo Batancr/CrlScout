@@ -64,12 +64,17 @@ jobs:
           python build_dashboard.py
           python compute_run_diff.py
 
+      # Netlify deploys cost credits (free plan: ~20/month), so they run ONLY on a manual
+      # "Run workflow" click -- never on the every-6-hours schedule. Refresh the live site
+      # on demand (e.g. before a match); the scheduled runs still fetch/rebuild/commit/Discord.
       - name: Prepare dashboard for Netlify
+        if: github.event_name == 'workflow_dispatch'
         run: |
           mkdir -p _site
           cp crl_opponent_scout.html _site/index.html
 
       - name: Deploy dashboard to Netlify
+        if: github.event_name == 'workflow_dispatch'
         continue-on-error: true          # a missing/invalid Netlify secret must not fail the whole run
         uses: netlify/actions/cli@master
         with:
