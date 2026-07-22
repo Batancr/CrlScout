@@ -13,7 +13,7 @@ name: Update CRL data & dashboard
 
 on:
   schedule:
-    - cron: '0 */6 * * *'        # every 6 hours (UTC)
+    - cron: '0 */3 * * *'        # every 3 hours (UTC)
   workflow_dispatch: {}          # manual "Run workflow" button
 
 permissions:
