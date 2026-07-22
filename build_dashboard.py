@@ -2943,8 +2943,8 @@ function renderDuelSetRecordSection(g) {
 
 // Duel-history mode: 'crl' (Official CRL) or 'practice'. Toggled inside the modal.
 let _histMode = 'crl';
-function renderHistoryList(g) {
-  const isCrl = _histMode === 'crl';
+function renderHistoryList(g, mode) {
+  const isCrl = (mode || _histMode) === 'crl';
   const src = (isCrl ? DATA.group_a_history : DATA.group_a_practice_history) || {};
   const games = src[g.tag] || [];
   if (!games.length) {
@@ -2977,22 +2977,39 @@ function openHistoryModal(g) {
         ? `<ul class="player-note-list">${notes.map(n => `<li>${n}</li>`).join('')}</ul>`
         : ` ${notes[0]}`) + `</div>`
     : '';
-  function paint() {
-    historyModalBody.innerHTML =
-      noteHtml +
-      renderRecentPracticeSection(g) +
-      renderRecommendationSection(g) +
-      renderMatchupPrepSection(g) +
-      renderSequencingSection(g) +
-      '<div class="reco-heading" style="margin-top:18px;">Duel History</div>' +
-      renderHistoryToggle(g) +
-      `<div id="histList">${renderHistoryList(g)}</div>` +
-      renderDuelSetRecordSection(g);
-    historyModalBody.querySelectorAll('.hist-tab').forEach(btn => {
-      btn.onclick = () => { _histMode = btn.dataset.mode; paint(); };
-    });
-  }
-  paint();
+  // Pre-render BOTH history lists ONCE (they're the only thing the toggle changes).
+  // Switching then just swaps the cached list instead of rebuilding the whole modal --
+  // the old code re-rendered every section (thousands of card icons) on each click,
+  // which caused multi-second/​minute lag for players with long histories.
+  const histHtml = {
+    crl: renderHistoryList(g, 'crl'),
+    practice: renderHistoryList(g, 'practice'),
+  };
+  historyModalBody.innerHTML =
+    noteHtml +
+    renderRecentPracticeSection(g) +
+    renderRecommendationSection(g) +
+    renderMatchupPrepSection(g) +
+    renderSequencingSection(g) +
+    '<div class="reco-heading" style="margin-top:18px;">Duel History</div>' +
+    renderHistoryToggle(g) +
+    `<div id="histList">
+       <div class="hist-pane" data-pane="crl"${_histMode === 'crl' ? '' : ' style="display:none"'}>${histHtml.crl}</div>
+       <div class="hist-pane" data-pane="practice"${_histMode === 'practice' ? '' : ' style="display:none"'}>${histHtml.practice}</div>
+     </div>` +
+    renderDuelSetRecordSection(g);
+  // Both lists are already in the DOM; the toggle just flips which pane is visible -- a pure
+  // CSS show/hide, so switching is instant no matter how many games a player has.
+  historyModalBody.querySelectorAll('.hist-tab').forEach(btn => {
+    btn.onclick = () => {
+      if (btn.dataset.mode === _histMode) return;
+      _histMode = btn.dataset.mode;
+      historyModalBody.querySelectorAll('#histList .hist-pane').forEach(p =>
+        p.style.display = (p.dataset.pane === _histMode) ? '' : 'none');
+      historyModalBody.querySelectorAll('.hist-tab').forEach(b =>
+        b.classList.toggle('active', b.dataset.mode === _histMode));
+    };
+  });
   historyModal.classList.add('show');
 }
 
