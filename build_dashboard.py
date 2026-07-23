@@ -1763,7 +1763,8 @@ html = """<!DOCTYPE html>
   .card-icon-wrap { position: relative; display: inline-block; }
   .card-icon {
     border-radius: 5px; border: 1px solid var(--border);
-    object-fit: cover; background: var(--surface-1); display: block;
+    background-color: var(--surface-1); display: block;
+    background-size: contain; background-repeat: no-repeat; background-position: center;
   }
   .card-icon-fallback {
     width: 32px; height: 40px; border-radius: 5px;
@@ -1780,7 +1781,8 @@ html = """<!DOCTYPE html>
   .badge-champ { background: var(--series-yellow); color: #4a3400; right: -4px; }
   .badge-evo { background: var(--series-violet); color: #fff; right: 10px; }
   .badge-champ.badge-img, .badge-evo.badge-img {
-    background: var(--surface-1); padding: 0; overflow: hidden;
+    background-color: var(--surface-1); padding: 0; overflow: hidden;
+    background-size: cover; background-repeat: no-repeat; background-position: center;
   }
   .badge-champ.badge-img img, .badge-evo.badge-img img {
     width: 100%; height: 100%; object-fit: cover; display: block;
@@ -2029,6 +2031,8 @@ html = """<!DOCTYPE html>
     cursor: pointer; user-select: none; font-size: 12.5px; color: var(--text-secondary);
   }
   .deck-tile img { width: 20px; height: 20px; border-radius: 4px; object-fit: cover; flex-shrink: 0; }
+  .deck-tile-ic { width: 20px; height: 20px; border-radius: 4px; flex-shrink: 0; display: inline-block;
+    background-size: cover; background-repeat: no-repeat; background-position: center; }
   .deck-tile.selected { background: var(--series-blue); color: #fff; border-color: var(--series-blue); }
   .deck-tile.disabled { opacity: .35; cursor: not-allowed; }
 
@@ -2565,6 +2569,20 @@ const allCards = DATA.all_cards || [];
 const cardIcons = DATA.card_icons;
 const cardIconsEvo = DATA.card_icons_evo || {};
 const cardIconsHero = DATA.card_icons_hero || {};
+// Define each card image ONCE as a CSS class, instead of inlining its ~12KB base64 string into
+// every <img> src. Rendering a long duel history used to duplicate those blobs thousands of
+// times -> 60-70MB of DOM per player -> the modal froze for high-game players (e.g. SandBox).
+// Now every card is a tiny <span> that just references a shared class.
+const iconSlug = (s) => s.replace(/[^a-zA-Z0-9]+/g, '_');
+(function buildIconStylesheet() {
+  let css = '';
+  for (const [n, u] of Object.entries(cardIcons))     if (u) css += `.ci-${iconSlug(n)}{background-image:url("${u}")}`;
+  for (const [n, u] of Object.entries(cardIconsEvo))  if (u) css += `.cie-${iconSlug(n)}{background-image:url("${u}")}`;
+  for (const [n, u] of Object.entries(cardIconsHero)) if (u) css += `.cih-${iconSlug(n)}{background-image:url("${u}")}`;
+  const el = document.createElement('style');
+  el.textContent = css;
+  document.head.appendChild(el);
+})();
 const playerBriefs = DATA.player_briefs || {};
 const playerDecks = DATA.player_decks || {};
 const championCards = new Set(DATA.card_champions);
@@ -2596,17 +2614,17 @@ function cardIconStrip(cardNames, size) {
     const isForcedArt = forcedArtCards.has(name);
     const champBadge = (!isForcedArt && championCards.has(name))
       ? (heroUrl
-          ? `<span class="badge-champ badge-img" title="Champion / Hero card"><img src="${heroUrl}" alt=""></span>`
+          ? `<span class="badge-champ badge-img cih-${iconSlug(name)}" title="Champion / Hero card"></span>`
           : '<span class="badge-champ" title="Champion / Hero card">&#9819;</span>')
       : '';
     const evoBadge = (!isForcedArt && evoCapableCards.has(name))
       ? (evoUrl
-          ? `<span class="badge-evo badge-img" title="Sometimes played as an Evolution"><img src="${evoUrl}" alt=""></span>`
+          ? `<span class="badge-evo badge-img cie-${iconSlug(name)}" title="Sometimes played as an Evolution"></span>`
           : '<span class="badge-evo" title="Sometimes played as an Evolution">&#9733;</span>')
       : '';
     const badges = champBadge + evoBadge;
     const inner = url
-      ? `<img class="card-icon" src="${url}" alt="${name}" title="${name}" loading="lazy" width="${size}" height="${Math.round(size*1.25)}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'card-icon-fallback',textContent:'${name.charAt(0)}',title:'${name}'}))">`
+      ? `<span class="card-icon ci-${iconSlug(name)}" title="${name}" style="width:${size}px;height:${Math.round(size*1.25)}px"></span>`
       : `<div class="card-icon-fallback" title="${name}">${name.charAt(0)}</div>`;
     return `<div class="card-icon-wrap">${inner}${badges}</div>`;
   }).join('') + '</div>';
@@ -3996,8 +4014,7 @@ const DECK_PREDICTOR_SUB = {
 };
 
 function deckTileIcon(name) {
-  const url = cardIcons[name];
-  return url ? `<img src="${url}" alt="">` : '';
+  return cardIcons[name] ? `<span class="deck-tile-ic ci-${iconSlug(name)}"></span>` : '';
 }
 
 function makeDeckSlot(suffix) {
