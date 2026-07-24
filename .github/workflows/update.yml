@@ -101,11 +101,23 @@ jobs:
           git rm --cached --ignore-unmatch crl_opponent_scout.html
           git add -A
           if git diff --cached --quiet; then
-            echo "No changes this run."
-          else
-            git commit -m "Auto update $(date -u +'%Y-%m-%dT%H:%MZ')"
-            git push
+            echo "No changes this run."; exit 0
           fi
+          git commit -m "Auto update $(date -u +'%Y-%m-%dT%H:%MZ')"
+          # Resilient push: if another run (or a manual push) landed on main while this run was
+          # building, merge it in -- our freshly-built files win any conflict, remote-only files
+          # (e.g. a code change you pushed) are kept -- then push. Retry a few times; if all fail
+          # the next scheduled run reconciles anyway (the archive is append-only).
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              echo "pushed on attempt $attempt"; exit 0
+            fi
+            echo "push rejected; syncing with remote and retrying ($attempt)"
+            git fetch origin main
+            git merge -X ours --no-edit origin/main || git merge --abort || true
+            sleep $(( (RANDOM % 6) + 3 ))
+          done
+          echo "could not push after retries; the next scheduled run will reconcile."; exit 1
 
       - name: Upload dashboard artifact
         uses: actions/upload-artifact@v4
