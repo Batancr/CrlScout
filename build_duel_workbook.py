@@ -318,6 +318,83 @@ def _in_official_crl_cluster(battle_time):
     return False
 
 
+# ---------------------------------------------------------------------------------------
+# MANUALLY-CONFIRMED Official CRL matches (Monthly Finals etc.)
+#
+# WHY THIS EXISTS: the Monthly Finals bracket games came in as type="clanMate"/mode="Friendly"
+# -- identical to ordinary practice, and unlike the earlier CRL days (which were
+# "friendly"/"Friendly" inside a live time-cluster). Since top-16 players also PRACTICE each
+# other all day in the same window, there's no automatic signal that separates a finals duel
+# from practice. So finals matches are confirmed MANUALLY here: you paste the real bracket
+# matchups (which you know), and every rebuild -- local and the GitHub automation -- tags
+# exactly those games as Official CRL. This is the reliable version of the "a single duel-set
+# between two top-16 players is usually a real match" heuristic: you confirm it, so no
+# practice gets mislabeled.
+#
+# HOW TO ADD A NEW EVENT DAY: append entries below. Each entry is:
+#     (date "YYYYMMDD" in UTC, frozenset({tagA, tagB}), window_or_None)
+# where window_or_None is either None (any game between the pair that whole UTC day) or a
+# ("startISO","endISO") tuple to restrict to the live event window (use one if a pair might
+# also have practiced each other that same day). Use CANONICAL tags (e.g. Batan's 2nd account
+# #9RG0VPUVY is aliased to his main #9RQ8YRYQL -- use the main tag here).
+CRL_MATCH_OVERRIDES = [
+    # 2026-07-25 & 2026-07-26 Monthly Finals double-elimination bracket (confirmed by user from
+    # the official bracket). Each pairing is tagged ONLY on the specific UTC day its bracket
+    # match was played, so same-players practice on OTHER days is NOT swept in. Verified against
+    # the data: every match below is a clean short block (2-4 games, matching the 2-0/2-1 bracket
+    # scores) except the two long finals blocks (MohLight vs Clown 07-26 = UB Final + Grand Final;
+    # both legitimately CRL). NOTE the earlier 07-23 sessions between these players were long
+    # 15-21 game blocks = PRACTICE, and are deliberately NOT tagged (no bracket ran on 07-23).
+    #
+    # --- Day 1: 2026-07-25 (UB R1, UB QF, LB R1, LB R2 partial) ---
+    ("20260725", frozenset({"#Y022GRCJQ", "#YLVV0JPQ"}), None),   # SandBox vs Oker      (UB R1)
+    ("20260725", frozenset({"#2CLV2RP0", "#9RQ8YRYQL"}), None),   # Mugi vs Batan        (UB R1)
+    ("20260725", frozenset({"#G9YV9GR8R", "#R09228V"}), None),    # Mohamed Light vs Morten (UB R1)
+    ("20260725", frozenset({"#9CPCC890", "#RJ88Y8U08"}), None),   # Adriel vs Pedro      (UB R1)
+    ("20260725", frozenset({"#GPPYR9JYR", "#UJQQCUCQ8"}), None),  # Clown vs Franco      (UB R1)
+    ("20260725", frozenset({"#22LC8JG02", "#8LJ92G8UG"}), None),  # JorZ vs Vitor75      (UB R1)
+    ("20260725", frozenset({"#RUQ0JU2P", "#U8RYGC8GU"}), None),   # Asaf vs Polaris      (UB R1)
+    ("20260725", frozenset({"#2LJ0ULYCC", "#U890Q9UQ"}), None),   # Guriko vs Sub        (UB R1)
+    ("20260725", frozenset({"#Y022GRCJQ", "#9RQ8YRYQL"}), None),  # SandBox vs Batan     (UB QF)
+    ("20260725", frozenset({"#G9YV9GR8R", "#9CPCC890"}), None),   # Mohamed Light vs Adriel (UB QF)
+    ("20260725", frozenset({"#GPPYR9JYR", "#22LC8JG02"}), None),  # Clown vs JorZ        (UB QF; excludes 07-24 practice)
+    ("20260725", frozenset({"#RUQ0JU2P", "#U890Q9UQ"}), None),    # Asaf vs Sub          (UB QF)
+    ("20260725", frozenset({"#YLVV0JPQ", "#2CLV2RP0"}), None),    # Oker vs Mugi         (LB R1)
+    ("20260725", frozenset({"#R09228V", "#RJ88Y8U08"}), None),    # Morten vs Pedro      (LB R1)
+    ("20260725", frozenset({"#UJQQCUCQ8", "#8LJ92G8UG"}), None),  # Franco vs Vitor75    (LB R1)
+    ("20260725", frozenset({"#U8RYGC8GU", "#2LJ0ULYCC"}), None),  # Polaris vs Guriko    (LB R1)
+    #
+    # --- Day 2: 2026-07-26 (UB SF, UB Final, Grand Final, LB R2/R3/QF/SF/Final) ---
+    ("20260726", frozenset({"#Y022GRCJQ", "#G9YV9GR8R"}), None),  # SandBox vs Mohamed Light (UB SF)
+    ("20260726", frozenset({"#GPPYR9JYR", "#RUQ0JU2P"}), None),   # Clown vs Asaf        (UB SF)
+    ("20260726", frozenset({"#G9YV9GR8R", "#GPPYR9JYR"}), None),  # Mohamed Light vs Clown (UB Final + Grand Final)
+    ("20260726", frozenset({"#U890Q9UQ", "#2CLV2RP0"}), None),    # Sub vs Mugi          (LB R2)
+    ("20260726", frozenset({"#22LC8JG02", "#R09228V"}), None),    # JorZ vs Morten       (LB R2)
+    ("20260726", frozenset({"#9CPCC890", "#8LJ92G8UG"}), None),   # Adriel vs Vitor75    (LB R2)
+    ("20260726", frozenset({"#9RQ8YRYQL", "#U8RYGC8GU"}), None),  # Batan vs Polaris     (LB R2)
+    ("20260726", frozenset({"#2CLV2RP0", "#22LC8JG02"}), None),   # Mugi vs JorZ         (LB R3)
+    ("20260726", frozenset({"#8LJ92G8UG", "#9RQ8YRYQL"}), None),  # Vitor75 vs Batan     (LB R3)
+    ("20260726", frozenset({"#Y022GRCJQ", "#22LC8JG02"}), None),  # SandBox vs JorZ      (LB QF)
+    ("20260726", frozenset({"#RUQ0JU2P", "#8LJ92G8UG"}), None),   # Asaf vs Vitor75      (LB QF)
+    ("20260726", frozenset({"#Y022GRCJQ", "#RUQ0JU2P"}), None),   # SandBox vs Asaf      (LB SF)
+    ("20260726", frozenset({"#G9YV9GR8R", "#RUQ0JU2P"}), None),   # Mohamed Light vs Asaf (LB Final)
+]
+
+
+def _is_confirmed_crl(p_tag, o_tag, battle_time):
+    """True if this game is a manually-confirmed Official CRL match (see CRL_MATCH_OVERRIDES).
+    Matches on UTC date + the unordered pair of CANONICAL tags, optionally within a window."""
+    pair = frozenset({p_tag, o_tag})
+    day = battle_time.strftime("%Y%m%d")
+    for od, opair, window in CRL_MATCH_OVERRIDES:
+        if od == day and opair == pair:
+            if window is None:
+                return True
+            if parse_time(window[0]) <= battle_time <= parse_time(window[1]):
+                return True
+    return False
+
+
 def classify_match_category(battle_type, mode_name, battle_time, opponent_tag=None, roster_tags=None):
     """Returns 'Official CRL', 'Practice', or None (not a relevant type/mode at all --
     ranked ladder, 2v2 team wars, the trail/Showdown_Friendly event mode, etc. -- these
@@ -404,6 +481,10 @@ def load_rows():
             o_tag, o_name = opp.get("tag"), opp.get("name")
             p_name = canon_name(p_tag, p_name); p_tag = canon_tag(p_tag)
             o_name = canon_name(o_tag, o_name); o_tag = canon_tag(o_tag)
+            # Manually-confirmed Official CRL matches (e.g. Monthly Finals that arrived as
+            # clanMate/Friendly, indistinguishable from practice) -- promote them here.
+            if category != "Official CRL" and _is_confirmed_crl(p_tag, o_tag, battle_time):
+                category = "Official CRL"
             rows.append({
                 "player_tag": p_tag,
                 "player_name": p_name,
