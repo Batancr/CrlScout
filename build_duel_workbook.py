@@ -39,6 +39,65 @@ MAX_GAMES_PER_DUEL = 3
 SESSION_GAP_HOURS = 1  # assumption: >=1h between duels vs the same opponent = new practice session
 
 # ---------------------------------------------------------------------------
+# PRACTICE-DUEL COMPLETENESS GATE (added 2026-08-06)
+#
+# THE RULE, per Alexander: a *Practice* duel is supposed to be a full 3-game set. If one
+# comes back with fewer than 3 distinct games, that is missing data (games aged out of the
+# API's ~30-battle window before we fetched), not a real short set -- so those games must
+# not feed the aggregate deck/win-con/win-rate stats.
+#
+# Official CRL duels are the OPPOSITE case and are deliberately NOT gated here: a 2-0 sweep
+# is genuinely complete with 2 games, and a 1-1 is legitimately pending game 3. That shape
+# logic already lives in compute_crl_duel_status() and stays the authority for CRL.
+#
+# WHY A DATE CUTOFF: before 2026-08-01 the archive was being fetched only every 3 hours,
+# so a large share of Practice sets are truncated purely as an artifact of that cadence --
+# gating the whole history would throw away ~51% of all games. From 08-01 onward (and with
+# the 30-minute fetch cadence in fetch.yml) a short Practice set is a real signal.
+#
+# TURNING IT OFF: during CRL event days the fetch pattern is different and partial sets are
+# expected mid-event. Disable without editing code:
+#     CRL_ENFORCE_COMPLETENESS=0 python build_duel_workbook.py
+# Move the cutoff the same way:
+#     CRL_COMPLETENESS_FROM=20260901T000000.000Z python build_duel_workbook.py
+# ---------------------------------------------------------------------------
+ENFORCE_PRACTICE_COMPLETENESS = os.environ.get(
+    "CRL_ENFORCE_COMPLETENESS", "1"
+).strip().lower() not in ("0", "false", "no", "off")
+PRACTICE_COMPLETENESS_FROM = os.environ.get(
+    "CRL_COMPLETENESS_FROM", "20260801T000000.000Z"
+)
+
+
+def _completeness_cutoff():
+    """Parsed cutoff datetime, or None when the gate is disabled/unset."""
+    if not ENFORCE_PRACTICE_COMPLETENESS or not PRACTICE_COMPLETENESS_FROM:
+        return None
+    try:
+        return datetime.strptime(
+            PRACTICE_COMPLETENESS_FROM, "%Y%m%dT%H%M%S.%fZ"
+        ).replace(tzinfo=timezone.utc)
+    except ValueError:
+        print(f"WARNING: CRL_COMPLETENESS_FROM={PRACTICE_COMPLETENESS_FROM!r} is not in "
+              f"battleTime format (YYYYMMDDTHHMMSS.mmmZ); completeness gate DISABLED.")
+        return None
+
+
+def is_stats_eligible(category, duel_start, distinct_game_count):
+    """Should this duel's games count toward aggregate deck / win-con / win-rate stats?
+
+    Only Practice duels starting on or after the cutoff are gated, and only for being
+    short. Everything else -- all Official CRL, everything before the cutoff -- stays in."""
+    cutoff = _completeness_cutoff()
+    if cutoff is None:
+        return True
+    if category != "Practice":
+        return True
+    if duel_start < cutoff:
+        return True
+    return distinct_game_count >= MAX_GAMES_PER_DUEL
+
+# ---------------------------------------------------------------------------
 # Where the data files (master_*.json / raw_*.json) live and where the workbook is written.
 # Set env CRL_HOME to run the whole pipeline out of ONE directory (used by GitHub Actions:
 # CRL_HOME=$GITHUB_WORKSPACE). When CRL_HOME is unset, the original Cowork split paths are
@@ -677,6 +736,12 @@ def build_dataset():
             session_num = duel_to_session_num[id(duel)]
             session_id = f"{player_name}_vs_{opp_name}_S{session_num}{id_suffix}".replace(" ", "")
             uncertain = (i == 0)  # first duel for this pair: no visibility before fetch window
+            # Completeness must be known BEFORE the per-game rows are built, so each game
+            # row can carry the flag the aggregations filter on. See is_stats_eligible().
+            distinct_games = [r for r in duel if not r["is_rematch"]][:MAX_GAMES_PER_DUEL]
+            stats_eligible = is_stats_eligible(
+                category, duel[0]["battle_time"], len(distinct_games)
+            )
             decks_for_summary = []
             for g, r in enumerate(duel, start=1):
                 duel_log.append({
@@ -695,10 +760,9 @@ def build_dataset():
                     "uncertain_start": uncertain,
                     "is_rematch": r["is_rematch"],
                     "match_category": category,
+                    "stats_eligible": stats_eligible,
                 })
                 decks_for_summary.append(", ".join(r["deck"]))
-
-            distinct_games = [r for r in duel if not r["is_rematch"]][:3]
 
             if category == "Official CRL":
                 # Best-of-3 completion is different from Practice: a 2-0 sweep is COMPLETE
@@ -738,6 +802,7 @@ def build_dataset():
                 "wincon_sequence": wincon_sequence,
                 "match_category": category,
                 "crl_status": crl_status,
+                "stats_eligible": stats_eligible,
             })
 
         num_sessions = len(sessions)
@@ -801,6 +866,9 @@ def compute_player_lookup(duel_log, weighted=False):
     })
     for r in duel_log:
         if not r["deck"]:
+            continue
+        # Skip games from short post-cutoff Practice sets -- see is_stats_eligible().
+        if not r.get("stats_eligible", True):
             continue
         p = per_player[r["player_name"]]
         p["games"] += 1

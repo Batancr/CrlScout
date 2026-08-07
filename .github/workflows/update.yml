@@ -1,15 +1,26 @@
 name: Update CRL data & dashboard
 
-# Fetches fresh Clash Royale battle logs, rebuilds the workbook + dashboard, publishes the
-# dashboard to Netlify, posts a "what changed" summary to Discord, and commits the data back.
+# Rebuilds the workbook + dashboard from the battle archive, publishes the dashboard to
+# Netlify, posts a "what changed" summary to Discord, and commits the derived data back.
 # The large dashboard HTML is NOT committed (kept out of git to avoid bloat) -- it lives on
 # Netlify and as a build artifact instead.
 #
+# THIS WORKFLOW NO LONGER FETCHES (changed 2026-08-06). Fetching moved to fetch.yml, which
+# runs every 30 minutes instead of every 3 hours, because the Clash Royale API only returns
+# a player's last ~25-30 battles and a 3-hour gap was letting real games age out unseen.
+# See the header of fetch.yml for the full reasoning.
+#
+# OWNERSHIP RULE -- do not break this:
+#   * fetch.yml  writes ONLY master_*.json and fetch_log.json
+#   * update.yml writes ONLY derived artifacts (CRL_Duel_Decks.xlsx, run_state.json, ...)
+# Disjoint file sets is what lets both push to main without the `-X ours` strategy below
+# ever discarding freshly fetched battles.
+#
 # Required repo secrets (Settings -> Secrets and variables -> Actions):
-#   CR_API_TOKEN         - Clash Royale API token (proxy IP 45.79.218.79 whitelisted)
 #   NETLIFY_AUTH_TOKEN   - Netlify personal access token   (optional; deploy skipped if unset)
 #   NETLIFY_SITE_ID      - Netlify site's API/Site ID       (optional; deploy skipped if unset)
 #   DISCORD_WEBHOOK_URL  - Discord channel webhook URL       (optional; notify skipped if unset)
+#   (CR_API_TOKEN is still required, but by fetch.yml -- not here.)
 
 on:
   schedule:
@@ -18,6 +29,7 @@ on:
 
 permissions:
   contents: write
+  actions: write        # needed to purge old artifacts (see the cleanup step)
 
 concurrency:
   group: crl-update
@@ -26,12 +38,16 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    # Before this cap, a run hung by a GitHub-side incident sat at the head of the
+    # `crl-update` concurrency group and blocked every later run indefinitely, with no
+    # signal that anything was wrong. Now a stuck run dies and the next cron proceeds.
+    timeout-minutes: 60
     steps:
       - name: Check out repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -42,11 +58,42 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends libreoffice-calc
 
-      - name: Fetch latest battle logs (via RoyaleAPI proxy)
+      # Fetching now belongs to fetch.yml. If that workflow silently stops (expired
+      # CR_API_TOKEN, a long GitHub Actions incident, a disabled schedule), this build would
+      # otherwise happily rebuild a dashboard from stale data and look completely healthy.
+      # This makes that failure mode visible instead.
+      - name: Check archive freshness
+        id: freshness
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          from datetime import datetime, timezone
+          try:
+              log = json.load(open("fetch_log.json"))
+              last = datetime.fromisoformat(log[-1]["fetched_at_utc"])
+              age = (datetime.now(timezone.utc) - last).total_seconds() / 3600
+              print(f"age_hours={age:.1f}")
+              print(f"stale={'true' if age > 3 else 'false'}")
+              print(f"last_fetch={log[-1]['fetched_at_utc'][:16]}")
+          except Exception as e:
+              print("age_hours=unknown")
+              print("stale=true")
+              print(f"last_fetch=unreadable ({type(e).__name__})")
+          PY
+          cat "$GITHUB_OUTPUT"
+
+      - name: Warn if the archive is stale
+        if: steps.freshness.outputs.stale == 'true'
+        continue-on-error: true
         env:
-          CR_API_TOKEN: ${{ secrets.CR_API_TOKEN }}
-          CR_API_BASE: https://proxy.royaleapi.dev/v1
-        run: python fetch_cr_battlelogs.py
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          MSG="🚨 **CRL archive is stale** — last successful fetch: ${{ steps.freshness.outputs.last_fetch }} (${{ steps.freshness.outputs.age_hours }}h ago). fetch.yml should run every 30 min. Check the Actions tab and CR_API_TOKEN."
+          echo "$MSG"
+          if [ -n "$DISCORD_WEBHOOK_URL" ]; then
+            jq -n --arg m "$MSG" '{content: $m}' > stale_payload.json
+            curl -sS -H "Content-Type: application/json" -X POST -d @stale_payload.json "$DISCORD_WEBHOOK_URL"
+          fi
 
       - name: Rebuild workbook + dashboard + change summary
         env:
@@ -90,7 +137,16 @@ jobs:
         run: |
           if [ -z "$DISCORD_WEBHOOK_URL" ]; then echo "No DISCORD_WEBHOOK_URL secret set; skipping."; exit 0; fi
           if [ ! -f run_summary.txt ]; then echo "No run_summary.txt produced; skipping."; exit 0; fi
-          jq -n --rawfile msg run_summary.txt '{content: $msg}' > discord_payload.json
+          # Roll up gap risk across the ~6 fetch runs that happened since the last rebuild,
+          # so any blind window shows up next to the stats it silently corrupted.
+          python gap_risk_report.py --window 6 --out gap_rollup.txt || true
+          if [ -f gap_rollup.txt ]; then
+            printf '\n\n---\n' >> run_summary.txt
+            cat gap_rollup.txt >> run_summary.txt
+          fi
+          # Discord hard-caps messages at 2000 chars.
+          head -c 1900 run_summary.txt > discord_body.txt
+          jq -n --rawfile msg discord_body.txt '{content: $msg}' > discord_payload.json
           curl -sS -H "Content-Type: application/json" -X POST -d @discord_payload.json "$DISCORD_WEBHOOK_URL"
 
       - name: Commit refreshed data (dashboard HTML kept out of git; see Netlify / artifact)
@@ -99,7 +155,11 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           # Keep the large (~47MB) dashboard OUT of git history so the repo doesn't bloat.
           git rm --cached --ignore-unmatch crl_opponent_scout.html
-          git add -A
+          # Stage everything EXCEPT the battle archive. fetch.yml owns those files; staging
+          # them here would let the `-X ours` merge below overwrite battles fetched while
+          # this (multi-minute) build was running -- silently undoing the whole point of the
+          # 30-minute fetch cadence.
+          git add -A -- . ':!master_*.json' ':!fetch_log.json'
           if git diff --cached --quiet; then
             echo "No changes this run."; exit 0
           fi
@@ -119,9 +179,40 @@ jobs:
           done
           echo "could not push after retries; the next scheduled run will reconcile."; exit 1
 
+      # ARTIFACT STORAGE -- why this is so restricted (2026-08-06)
+      # -----------------------------------------------------------
+      # This step used to upload the ~47MB dashboard on EVERY run with 14-day retention.
+      # At 8 runs/day that is ~5.3 GB of live storage against a 500 MB free-plan quota, so it
+      # was always going to blow up; it just took until now to accumulate. When the quota is
+      # hit, upload-artifact errors and -- because it was the last step -- marked otherwise
+      # perfectly good runs as FAILED, even though the data was already fetched, rebuilt and
+      # committed successfully.
+      #
+      # Three changes: purge old artifacts first, only upload on a manual run (Netlify is the
+      # real distribution channel), and never let this step fail the build again.
+      - name: Purge old dashboard artifacts
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Keep only the newest crl-dashboard artifact; delete the rest.
+          ids=$(gh api --paginate "repos/${{ github.repository }}/actions/artifacts?per_page=100" \
+                  --jq '.artifacts | map(select(.name=="crl-dashboard")) | sort_by(.created_at) | reverse | .[1:] | .[].id' || true)
+          for id in $ids; do
+            echo "deleting artifact $id"
+            gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/$id" || true
+          done
+
+      - name: Compress dashboard for upload
+        if: github.event_name == 'workflow_dispatch'
+        run: gzip -9 -c crl_opponent_scout.html > crl_opponent_scout.html.gz
+
       - name: Upload dashboard artifact
-        uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch'
+        continue-on-error: true          # storage quota must never fail an otherwise-good run
+        uses: actions/upload-artifact@v6
         with:
           name: crl-dashboard
-          path: crl_opponent_scout.html
-          retention-days: 14
+          path: crl_opponent_scout.html.gz
+          retention-days: 2
+          overwrite: true

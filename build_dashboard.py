@@ -143,6 +143,9 @@ def build_player_briefs(duel_log, card_elixir, min_games_for_winrate):
     for r in duel_log:
         if not r["deck"]:
             continue
+        # Short post-cutoff Practice sets are missing data, not real short sets.
+        if not r.get("stats_eligible", True):
+            continue
         p = per_player[r["player_name"]]
         deck_key = ", ".join(sorted(r["deck"]))
         p["deck_games"][deck_key] += 1
@@ -258,11 +261,35 @@ BEST_PICKS_MIN_CLUSTERS_TARGET = 5  # keep loosening the deck-overlap threshold 
                                      # least this many duel-set clusters qualify
 
 
+def is_set_complete(non_rematch):
+    """Is this duel a FINISHED best-of-3?
+
+    Practice: needs all 3 games -- that's the format.
+
+    Official CRL: a 2-0 sweep ends the set at 2 games and is just as complete as a 2-1.
+    Requiring 3 games here (which both callers used to do) silently threw away every
+    legitimate sweep, so the strongest CRL performances -- the ones that ended early
+    precisely because they were dominant -- never appeared in Best Picks at all.
+    Mirrors compute_crl_duel_status() in build_duel_workbook.py; keep them in sync.
+
+    `non_rematch` is the duel's distinct (non-instant-rematch) games, chronological."""
+    n = len(non_rematch)
+    if n >= MAX_GAMES_PER_DUEL:
+        return True
+    if n == 2 and non_rematch[0].get("match_category") == "Official CRL":
+        wins = sum(1 for g in non_rematch if g["crowns_for"] > g["crowns_against"])
+        return wins in (0, 2)      # 2-0 or 0-2 sweep -- decided, no game 3
+    return False
+
+
 def compute_best_decks(duel_log, min_games=BEST_PICKS_MIN_DECK_GAMES):
     games = Counter()
     wins = Counter()
     for r in duel_log:
         if not r["deck"] or len(r["deck"]) != 8:
+            continue
+        # Short post-cutoff Practice sets are missing data, not real short sets.
+        if not r.get("stats_eligible", True):
             continue
         key = ", ".join(sorted(r["deck"]))
         games[key] += 1
@@ -290,7 +317,7 @@ def compute_best_wincon_sets(duel_log, min_duels=BEST_PICKS_MIN_WINCON_SET_DUELS
         if games[0]["uncertain_start"]:
             continue
         non_rematch = [g for g in games if not g["is_rematch"]][:MAX_GAMES_PER_DUEL]
-        if len(non_rematch) < MAX_GAMES_PER_DUEL:
+        if not is_set_complete(non_rematch):
             continue
         wincon_set = set()
         for g in non_rematch:
@@ -367,7 +394,7 @@ def compute_best_duel_sets(duel_log, min_duels=BEST_PICKS_MIN_DUELSET_DUELS):
         if games[0]["uncertain_start"]:
             continue
         non_rematch = [g for g in games if not g["is_rematch"]][:MAX_GAMES_PER_DUEL]
-        if len(non_rematch) < MAX_GAMES_PER_DUEL:
+        if not is_set_complete(non_rematch):
             continue
         deck_keys = []
         valid = True
@@ -862,6 +889,9 @@ for r in combined_duel_log:
     if not r.get('deck') or len(r['deck']) != 8:
         continue
     if r.get('crowns_for') is None or r.get('crowns_against') is None:
+        continue
+    # Short post-cutoff Practice sets are missing data, not real short sets.
+    if not r.get('stats_eligible', True):
         continue
     player_decks[r['player_tag']].append({
         'd': ', '.join(sorted(r['deck'])),

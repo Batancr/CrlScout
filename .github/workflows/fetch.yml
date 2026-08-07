@@ -1,0 +1,118 @@
+name: Fetch CRL battle logs
+
+# WHY THIS IS A SEPARATE WORKFLOW FROM update.yml
+# ------------------------------------------------
+# The Clash Royale API only ever returns a player's most recent ~25-30 battles. If a player
+# plays more than that between two fetches, the ones in the middle age out of the API window
+# and are gone forever -- no amount of later fetching brings them back. The ONLY defence is
+# fetching more often than players can burn through 30 games.
+#
+# update.yml used to do the fetching, but it also rebuilds the whole workbook + dashboard,
+# which needs LibreOffice and takes minutes. That cost is why it only ran every 3 hours --
+# and 3 hours turned out to be far too slow. An audit of fetch_log.json on 2026-08-06 found
+# 123 confirmed blind windows in the first 51 logged runs (median ~14h, worst ~127h).
+#
+# So fetching is split out here: this job is just ~85 HTTP calls, finishes in ~2 minutes, and
+# runs every 30 minutes. update.yml keeps the slow rebuild on its 3-hourly cadence and no
+# longer fetches at all.
+#
+# OWNERSHIP RULE (this is what keeps the two workflows from fighting over main):
+#   * fetch.yml  writes ONLY master_*.json and fetch_log.json
+#   * update.yml writes ONLY derived artifacts (CRL_Duel_Decks.xlsx, run_state.json)
+# Disjoint file sets means git merges them cleanly and update.yml's `-X ours` conflict
+# strategy can never clobber freshly fetched battles.
+#
+# Required secrets: CR_API_TOKEN (required), DISCORD_WEBHOOK_URL (optional).
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'     # every 30 minutes
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: crl-fetch
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    # A hung run used to block every later run in its concurrency group indefinitely.
+    # This caps the damage: a stuck fetch dies on its own and the next cron takes over.
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Retries cover transient CR API / proxy hiccups. They do NOT cover GitHub runner
+      # allocation failures ("job was not acquired by Runner of type hosted") -- nothing
+      # inside a job can retry that, which is exactly why the 30-minute cadence matters:
+      # a run lost to a GitHub incident is covered by the next one half an hour later.
+      - name: Fetch latest battle logs (via RoyaleAPI proxy)
+        env:
+          CR_API_TOKEN: ${{ secrets.CR_API_TOKEN }}
+          CR_API_BASE: https://proxy.royaleapi.dev/v1
+        run: |
+          for attempt in 1 2 3; do
+            if python fetch_cr_battlelogs.py; then
+              echo "fetch succeeded on attempt $attempt"; exit 0
+            fi
+            echo "fetch failed (attempt $attempt); retrying in 30s"
+            sleep 30
+          done
+          echo "fetch failed after 3 attempts"; exit 1
+
+      - name: Check for gap risk
+        id: gap
+        run: |
+          if python gap_risk_report.py --window 1 --out gap_report.txt; then
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Alert Discord about gap risk
+        if: steps.gap.outputs.found == 'true'
+        continue-on-error: true
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then echo "No webhook set; skipping."; exit 0; fi
+          jq -n --rawfile msg gap_report.txt '{content: $msg}' > gap_payload.json
+          curl -sS -H "Content-Type: application/json" -X POST -d @gap_payload.json "$DISCORD_WEBHOOK_URL"
+
+      - name: Commit archive (master_*.json + fetch_log.json ONLY)
+        run: |
+          git config user.name  "crl-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- 'master_*.json' fetch_log.json
+          if git diff --cached --quiet; then
+            echo "No new battles this run."; exit 0
+          fi
+          git commit -m "Fetch battle logs $(date -u +'%Y-%m-%dT%H:%MZ')"
+          # The archive is append-only and deduped by battleTime, so rebasing onto whatever
+          # landed on main while we were fetching is always safe.
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:main; then
+              echo "pushed on attempt $attempt"; exit 0
+            fi
+            echo "push rejected; rebasing onto origin/main and retrying ($attempt)"
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; git merge -X ours --no-edit origin/main || true; }
+            sleep $(( (RANDOM % 6) + 3 ))
+          done
+          echo "could not push after retries; the next run reconciles (archive is append-only)."
+          exit 1
