@@ -129,9 +129,12 @@ Implemented as `is_stats_eligible()` in `build_duel_workbook.py`, which stamps e
 - **`uncertain_start` is deliberately NOT part of this gate.** It flags the first duel per
   pair (no visibility before the fetch window); it still only gates the sequence-dependent
   analyses (Win-Con Sets, Deck Predictor, Best Picks), as before.
-- **Still ungated: the Excel COUNTIF sheets** (Deck Stats, Deck Matchups, Card Frequency,
-  Player Lookup sheet). They count every Duel Log row via COUNTIF and would need rewriting
-  to COUNTIFS against a new eligibility column. The dashboard is gated; the workbook is not.
+- **The Excel sheets are gated too** (added 2026-08-07). Duel Log carries a **"Stats Eligible"**
+  column (col 36 / `AJ`) mirroring the flag, and Deck Stats / Deck Matchups / Card Frequency
+  append `COUNTIFS(... ,'Duel Log'!AJ:AJ,"Yes")` to every count. The Player Lookup sheet needed
+  no change — it renders `compute_player_lookup`, which is already gated in Python. Workbook
+  and dashboard now agree on every deck's game count.
+  **If you add a new COUNTIF over Duel Log, add the `ELIGIBLE` criterion pair to it.**
 
 `is_set_complete()` in `build_dashboard.py` fixed a related bug: Best Picks required 3 games
 and so discarded every legitimate Official-CRL 2-0 sweep (22 sets on the 07-27 archive).

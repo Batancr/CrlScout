@@ -1140,6 +1140,11 @@ def main():
         "Duel Start Uncertain", "Instant Rematch",                                      # 28-29
         "Own Deck Key", "Opponent Deck Key", "Deck A", "Deck B", "Deck A Result",       # 30-34
         "Match Category",                                                               # 35
+        # "Yes"/"No" mirror of the stats_eligible flag (see is_stats_eligible()). Exists so
+        # the COUNTIFS formulas on Deck Stats / Deck Matchups / Card Frequency can apply the
+        # same practice-completeness gate the dashboard applies -- before this column the
+        # workbook and the dashboard disagreed on every deck's game count.
+        "Stats Eligible",                                                               # 36
     ]
     COL = {name: i + 1 for i, name in enumerate(headers)}
     ws.append(headers)
@@ -1178,6 +1183,8 @@ def main():
         ws.cell(row=r_i, column=COL["Own Deck Key"], value=own_key)
         ws.cell(row=r_i, column=COL["Opponent Deck Key"], value=opp_key)
         ws.cell(row=r_i, column=COL["Match Category"], value=r["match_category"])
+        ws.cell(row=r_i, column=COL["Stats Eligible"],
+                value="Yes" if r.get("stats_eligible", True) else "No")
 
         ok = get_column_letter(COL["Own Deck Key"])
         opk = get_column_letter(COL["Opponent Deck Key"])
@@ -1303,13 +1310,18 @@ def main():
     style_header_row(ws_ds, 1, len(headers_ds))
     ok_col = get_column_letter(COL["Own Deck Key"])
     res_col = get_column_letter(COL["Result"])
+    # Reusable trailing criterion pair that restricts every count below to games from
+    # complete duel sets, matching the dashboard. When the completeness gate is switched
+    # off (CRL_ENFORCE_COMPLETENESS=0) every row is stamped "Yes", so this is a no-op.
+    el_col = get_column_letter(COL["Stats Eligible"])
+    ELIGIBLE = f"'Duel Log'!{el_col}$2:{el_col}${log_last_row},\"Yes\""
     for ri, dk in enumerate(deck_keys, start=2):
         ws_ds.cell(row=ri, column=1, value=dk).font = BASE_FONT
         ws_ds.cell(row=ri, column=2, value=", ".join(sorted(players_by_deck[dk]))).font = BASE_FONT
-        gp = f"=COUNTIF('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri})"
-        wn = f"=COUNTIFS('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri},'Duel Log'!{res_col}$2:{res_col}${log_last_row},\"Win\")"
-        ls = f"=COUNTIFS('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri},'Duel Log'!{res_col}$2:{res_col}${log_last_row},\"Loss\")"
-        dr = f"=COUNTIFS('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri},'Duel Log'!{res_col}$2:{res_col}${log_last_row},\"Draw\")"
+        gp = f"=COUNTIFS('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri},{ELIGIBLE})"
+        wn = f"=COUNTIFS('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri},'Duel Log'!{res_col}$2:{res_col}${log_last_row},\"Win\",{ELIGIBLE})"
+        ls = f"=COUNTIFS('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri},'Duel Log'!{res_col}$2:{res_col}${log_last_row},\"Loss\",{ELIGIBLE})"
+        dr = f"=COUNTIFS('Duel Log'!{ok_col}$2:{ok_col}${log_last_row},$A{ri},'Duel Log'!{res_col}$2:{res_col}${log_last_row},\"Draw\",{ELIGIBLE})"
         ws_ds.cell(row=ri, column=3, value=gp).font = BASE_FONT
         ws_ds.cell(row=ri, column=4, value=wn).font = BASE_FONT
         ws_ds.cell(row=ri, column=5, value=ls).font = BASE_FONT
@@ -1341,16 +1353,16 @@ def main():
         ws_dm.cell(row=ri, column=1, value=da).font = BASE_FONT
         ws_dm.cell(row=ri, column=2, value=db).font = BASE_FONT
         gp = (f"=COUNTIFS('Duel Log'!{da_col}$2:{da_col}${log_last_row},$A{ri},"
-              f"'Duel Log'!{db_col}$2:{db_col}${log_last_row},$B{ri})")
+              f"'Duel Log'!{db_col}$2:{db_col}${log_last_row},$B{ri},{ELIGIBLE})")
         aw = (f"=COUNTIFS('Duel Log'!{da_col}$2:{da_col}${log_last_row},$A{ri},"
               f"'Duel Log'!{db_col}$2:{db_col}${log_last_row},$B{ri},"
-              f"'Duel Log'!{dares_col}$2:{dares_col}${log_last_row},\"Win\")")
+              f"'Duel Log'!{dares_col}$2:{dares_col}${log_last_row},\"Win\",{ELIGIBLE})")
         bw = (f"=COUNTIFS('Duel Log'!{da_col}$2:{da_col}${log_last_row},$A{ri},"
               f"'Duel Log'!{db_col}$2:{db_col}${log_last_row},$B{ri},"
-              f"'Duel Log'!{dares_col}$2:{dares_col}${log_last_row},\"Loss\")")
+              f"'Duel Log'!{dares_col}$2:{dares_col}${log_last_row},\"Loss\",{ELIGIBLE})")
         dw = (f"=COUNTIFS('Duel Log'!{da_col}$2:{da_col}${log_last_row},$A{ri},"
               f"'Duel Log'!{db_col}$2:{db_col}${log_last_row},$B{ri},"
-              f"'Duel Log'!{dares_col}$2:{dares_col}${log_last_row},\"Draw\")")
+              f"'Duel Log'!{dares_col}$2:{dares_col}${log_last_row},\"Draw\",{ELIGIBLE})")
         ws_dm.cell(row=ri, column=3, value=gp).font = BASE_FONT
         ws_dm.cell(row=ri, column=4, value=aw).font = BASE_FONT
         ws_dm.cell(row=ri, column=5, value=bw).font = BASE_FONT
@@ -1501,7 +1513,7 @@ def main():
             col_letters = ["I", "J", "K", "L", "M", "N", "O", "P"]  # Card 1..8 in Duel Log
             terms = "+".join(
                 f'COUNTIFS(\'Duel Log\'!C$2:C${log_last_row},"{p}",'
-                f"'Duel Log'!{cl}$2:{cl}${log_last_row},$A{ri})"
+                f"'Duel Log'!{cl}$2:{cl}${log_last_row},$A{ri},{ELIGIBLE})"
                 for cl in col_letters
             )
             ws3.cell(row=ri, column=pi, value=f"={terms}").font = BASE_FONT
