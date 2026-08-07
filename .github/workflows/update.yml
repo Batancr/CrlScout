@@ -120,15 +120,27 @@ jobs:
           mkdir -p _site
           cp crl_opponent_scout.html _site/index.html
 
+      # Deploys via the netlify-cli npm package rather than netlify/actions/cli@master.
+      # That action is an aging Docker wrapper: it spams deprecated `set-output` warnings,
+      # costs a container pull on every run, and -- the reason it got replaced -- reports a
+      # missing secret as a bare "Authentication required" with no clue which secret is at
+      # fault. The explicit guard below says exactly what's wrong instead.
       - name: Deploy dashboard to Netlify
         if: github.event_name == 'workflow_dispatch'
         continue-on-error: true          # a missing/invalid Netlify secret must not fail the whole run
-        uses: netlify/actions/cli@master
-        with:
-          args: deploy --dir=_site --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
+            echo "::warning::NETLIFY_AUTH_TOKEN secret is empty or unset -- skipping deploy."
+            exit 0
+          fi
+          if [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "::warning::NETLIFY_SITE_ID secret is empty or unset -- skipping deploy."
+            exit 0
+          fi
+          npx --yes netlify-cli deploy --dir=_site --prod
 
       - name: Notify Discord (what changed since last run)
         continue-on-error: true
