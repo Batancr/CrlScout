@@ -152,6 +152,43 @@ Implemented as `is_stats_eligible()` in `build_duel_workbook.py`, which stamps e
 `is_set_complete()` in `build_dashboard.py` fixed a related bug: Best Picks required 3 games
 and so discarded every legitimate Official-CRL 2-0 sweep (22 sets on the 07-27 archive).
 
+## Practice-session rule (added 2026-08-07)
+
+Alexander's rule: **a clan/friendly battle is not practice just because it was friendly.**
+"Players don't just play 1 set and call it a day." A *session* (consecutive duels vs the same
+opponent, `SESSION_GAP_HOURS = 1`) must contain **more than 2 complete duel sets** — i.e.
+`MIN_COMPLETE_SETS_PER_PRACTICE_SESSION = 3` — for its games to count as practice at all.
+
+- **Two ways to qualify** (`is_real_practice_session()` in `build_duel_workbook.py`, folded
+  into `stats_eligible`): `MIN_COMPLETE_SETS_PER_PRACTICE_SESSION = 3` complete sets **OR**
+  `MIN_GAMES_PER_PRACTICE_SESSION = 6` raw games. Env: `CRL_MIN_SETS_PER_SESSION` (0 disables
+  the whole rule), `CRL_MIN_GAMES_PER_SESSION`.
+- **Why volume is a second path** — a manual QC pass caught the set-count rule dropping
+  obviously-real practice. Worst case: Vitor75 vs Clown, **20 games over 134 minutes**, which
+  failed because the duel grouper split it into eleven 1–2 game fragments (sizes
+  2,2,2,1,2,1,2,3,1,3,1) so only 2 counted as "complete". The set count was measuring the
+  health of the duel *grouping*, not whether it was practice. Adding the games test rescued
+  all 36 such sessions and changed nothing about the 402 genuine one-offs.
+- Net effect: drops 866 games (8.7% of all), 100% Practice.
+- **Official CRL is never gated by this.** A one-off bracket meeting is normal, and
+  Alexander has personally verified those games.
+- **Per session, not per pair** — deliberately. A pair with 14 sets spread over months isn't
+  the same as two players actually sitting down to practice.
+- The archive backs the threshold up: 444 practice "sessions" hold ZERO complete sets and
+  average 1.4 games (one-off clan battles), while real practice clusters at 3–7 sets/session.
+  Drops ~13% of all games, all Practice.
+- Practice **history** is gated too (`_history_rows`), which was the visible symptom —
+  one-off opponents were showing up in Batan's practice log.
+
+## Duel history for all players (added 2026-08-07)
+
+The history modal used to be Group-A-only. It's now built for every tag on the player side of
+a logged game (84 players), and a **▤ Duel History** button appears on any searched player's
+profile. Export keys are still `group_a_history` / `group_a_practice_history` so nothing
+downstream changed; empty arrays are skipped to keep the payload small. The Group-A-only
+sections inside the modal (recommendations, matchup prep, sequencing) already guard against
+missing tags and render nothing for non-roster players.
+
 ## Date filter + icon delivery (added 2026-08-07)
 
 ### Date filter

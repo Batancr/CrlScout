@@ -1192,6 +1192,11 @@ def _history_rows(tag, category):
     games = [
         r for r in combined_duel_log
         if r["player_tag"] == tag and r.get("match_category") == category
+        # Practice history must show real practice only. A one-off clan battle is not
+        # practice just because it was friendly -- see is_real_practice_session() in
+        # build_duel_workbook.py. Official CRL is never gated: a single bracket meeting
+        # is completely normal there.
+        and (category != "Practice" or r.get("stats_eligible", True))
     ]
     games.sort(key=lambda r: r["battle_time"], reverse=True)
     out = []
@@ -1223,14 +1228,26 @@ PLAYER_NOTES = {
     ],
 }
 
+# Duel history for EVERY tracked player, not just the Group A panel (changed 2026-08-07).
+# The modal was originally built for the pinned Group A roster, but the same view is useful
+# for any opponent you search -- so build it for every tag that appears on the player side
+# of a logged game. Only ~84 players have games, so this is a couple of MB, not a blow-up.
+# Keys stay the same (group_a_history / group_a_practice_history) so nothing downstream
+# needs to know the roster gate is gone.
 group_a_history = {}           # Official CRL
 group_a_practice_history = {}  # Practice
-for g in group_a:
-    if not g["has_data"]:
-        continue
-    tag = g["tag"]
-    group_a_history[tag] = _history_rows(tag, "Official CRL")
-    group_a_practice_history[tag] = _history_rows(tag, "Practice")
+_history_tags = {r["player_tag"] for r in combined_duel_log if r.get("player_tag")}
+for tag in _history_tags:
+    crl_rows = _history_rows(tag, "Official CRL")
+    prac_rows = _history_rows(tag, "Practice")
+    # Skip tags that ended up with nothing after the practice-session gate, so the
+    # payload doesn't carry hundreds of empty arrays.
+    if crl_rows:
+        group_a_history[tag] = crl_rows
+    if prac_rows:
+        group_a_practice_history[tag] = prac_rows
+print(f"Duel history exported for {len(_history_tags)} players "
+      f"({len(group_a_history)} with CRL games, {len(group_a_practice_history)} with practice games).")
 # ---- Recent Practice Trends per player (added 2026-07-21 per user) ----
 # For each Group A player: their PRACTICE games since the end of the most recent Official CRL
 # day (dynamic -- the last window in OFFICIAL_CRL_LIVE_CLUSTERS, so this auto-advances when a
@@ -1870,6 +1887,14 @@ html = """<!DOCTYPE html>
     flex-wrap: wrap; gap: 10px; margin-bottom: 16px;
   }
   .profile-head h2 { margin: 0; font-size: 24px; }
+  /* Duel-history button on the player profile (added 2026-08-07). The modal used to be
+     reachable only from the pinned Group A chips; now any searched player gets it. */
+  .profile-hist-btn {
+    font: inherit; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px;
+    cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--series-blue); background: transparent; color: var(--series-blue);
+  }
+  .profile-hist-btn:hover { background: var(--series-blue); color: #fff; }
   .stat-row { display: flex; gap: 28px; flex-wrap: wrap; }
   .stat-tile { min-width: 90px; }
   .stat-tile .num {
@@ -2493,6 +2518,7 @@ html = """<!DOCTYPE html>
   <div class="profile" id="profile">
     <div class="profile-head">
       <h2 id="profName"></h2>
+      <button class="profile-hist-btn" id="profHistoryBtn" style="display:none;">▤ Duel History</button>
     </div>
     <div class="stat-row" id="statRow"></div>
 
@@ -3693,6 +3719,22 @@ function selectPlayer(name) {
     : '') + (tagsForProfile.length
       ? ` <span class="table-note" style="font-size:12px;">${tagsForProfile.join(', ')}</span>`
       : '');
+  // Duel-history button: show it for any player we actually exported history for.
+  // A player can carry more than one tag (corrected mid-history), so take the first
+  // that has data rather than assuming tag[0].
+  const _histBtn = document.getElementById('profHistoryBtn');
+  const _crlHist = DATA.group_a_history || {}, _pracHist = DATA.group_a_practice_history || {};
+  const _histTag = tagsForProfile.find(t => (_crlHist[t] || _pracHist[t]));
+  if (_histTag) {
+    const _c = (_crlHist[_histTag] || []).length, _p = (_pracHist[_histTag] || []).length;
+    _histBtn.style.display = '';
+    _histBtn.title = `${_c} Official CRL, ${_p} practice game(s) -- toggle inside`;
+    _histBtn.onclick = () => openHistoryModal({ tag: _histTag, name: name, status: '' });
+  } else {
+    _histBtn.style.display = 'none';
+    _histBtn.onclick = null;
+  }
+
   const pct = parsePct(p['Win Rate']);
   const wrClass = pct === null ? '' : winRateClass(pct);
   const officialCount = p['Official CRL Games'] || 0;

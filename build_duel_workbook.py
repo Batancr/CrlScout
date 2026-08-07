@@ -83,6 +83,88 @@ def _completeness_cutoff():
         return None
 
 
+# ---------------------------------------------------------------------------
+# PRACTICE-SESSION RULE (added 2026-08-07)
+#
+# THE RULE, per Alexander: "players don't just play 1 set and call it a day as practice."
+# A clan/friendly battle is not automatically practice. For a session to count as real
+# practice, the two players must play MORE THAN 2 complete duel sets in that session --
+# i.e. at least MIN_COMPLETE_SETS_PER_PRACTICE_SESSION of them, back to back.
+#
+# A "session" is already defined here: consecutive duels against the same opponent with
+# less than SESSION_GAP_HOURS between them (group_into_sessions).
+#
+# WHY PER SESSION, NOT PER PAIR: a pair that racked up 14 sets over months is not the
+# same as one that actually sat down and practiced. The threshold has to be met within a
+# single sitting, which is what a real practice block looks like.
+#
+# The archive backs this up -- the distribution is sharply bimodal. 444 practice
+# "sessions" contain ZERO complete sets and average 1.4 games (one-off clan battles),
+# while genuine practice clusters at 3-7 complete sets per session. Applying the rule
+# drops ~16% of practice games and almost all of it is that one-off tail.
+#
+# OFFICIAL CRL IS NEVER TOUCHED. Alexander has personally verified those games, and a
+# one-off Official CRL match is completely normal -- bracket play is single meetings.
+# This gate only ever looks at Practice.
+#
+# Disable or retune without editing code:
+#     CRL_MIN_SETS_PER_SESSION=0   python build_duel_workbook.py   # off
+#     CRL_MIN_SETS_PER_SESSION=2   python build_duel_workbook.py   # looser
+# ---------------------------------------------------------------------------
+# TWO WAYS TO QUALIFY, and the second one matters (added after a manual QC pass).
+#
+# Requiring 3 complete sets ALONE produced false positives on obviously-real practice.
+# The worst example: Vitor75 vs Clown, 20 games across 134 minutes, which failed because
+# the duel grouper carved it into eleven fragments of 1-2 games (sizes 2,2,2,1,2,1,2,3,1,3,1)
+# and so only 2 of them counted as "complete". Nobody plays someone for over two hours by
+# accident. The set count was measuring the health of the duel GROUPING, not whether the
+# session was practice.
+#
+# So a session also qualifies on raw volume: MIN_GAMES_PER_PRACTICE_SESSION games in one
+# sitting. Six is two full sets' worth of commitment -- comfortably past a one-off, while
+# still nowhere near the 1-3 game clan battles this rule exists to remove.
+#
+# On the 08-07 archive this rescues all 36 large sessions the set-count rule was wrongly
+# dropping, and changes nothing about the 402 genuine one-offs it correctly drops.
+def _int_env(name, default):
+    try:
+        return int(os.environ.get(name, str(default)))
+    except ValueError:
+        print(f"WARNING: {name} is not an integer; falling back to {default}.")
+        return default
+
+
+MIN_COMPLETE_SETS_PER_PRACTICE_SESSION = _int_env("CRL_MIN_SETS_PER_SESSION", 3)
+MIN_GAMES_PER_PRACTICE_SESSION = _int_env("CRL_MIN_GAMES_PER_SESSION", 6)
+
+
+def session_complete_set_count(session):
+    """How many duels in this session are full 3-distinct-game sets."""
+    return sum(
+        1 for duel in session
+        if len([g for g in duel if not g["is_rematch"]]) >= MAX_GAMES_PER_DUEL
+    )
+
+
+def session_game_count(session):
+    """Total games played in this session, however they got grouped into duels."""
+    return sum(len(duel) for duel in session)
+
+
+def is_real_practice_session(category, complete_sets_in_session, games_in_session):
+    """Does this session clear the bar for being counted as practice at all?
+
+    Passes on EITHER enough complete duel sets OR enough raw games -- see the note above
+    on why volume is a necessary second path. Official CRL always passes."""
+    if MIN_COMPLETE_SETS_PER_PRACTICE_SESSION <= 0:
+        return True
+    if category != "Practice":
+        return True
+    if complete_sets_in_session >= MIN_COMPLETE_SETS_PER_PRACTICE_SESSION:
+        return True
+    return games_in_session >= MIN_GAMES_PER_PRACTICE_SESSION
+
+
 def is_stats_eligible(category, duel_start, distinct_game_count):
     """Should this duel's games count toward aggregate deck / win-con / win-rate stats?
 
@@ -718,7 +800,11 @@ def build_dataset():
         duels = group_into_duels(pair_rows)
         sessions = group_into_sessions(duels)
         duel_to_session_num = {}
+        session_complete_sets = {}   # session number -> how many full 3-game sets it holds
+        session_game_counts = {}     # session number -> total games, however grouped
         for s_num, sess in enumerate(sessions, start=1):
+            session_complete_sets[s_num] = session_complete_set_count(sess)
+            session_game_counts[s_num] = session_game_count(sess)
             for d in sess:
                 duel_to_session_num[id(d)] = s_num
 
@@ -739,7 +825,15 @@ def build_dataset():
             # Completeness must be known BEFORE the per-game rows are built, so each game
             # row can carry the flag the aggregations filter on. See is_stats_eligible().
             distinct_games = [r for r in duel if not r["is_rematch"]][:MAX_GAMES_PER_DUEL]
-            stats_eligible = is_stats_eligible(
+            # Two independent gates, both must pass:
+            #   1. the duel itself isn't a truncated post-cutoff Practice set
+            #   2. the SESSION it belongs to is a real practice block, not a one-off
+            #      clan battle (see is_real_practice_session)
+            real_practice = is_real_practice_session(
+                category, session_complete_sets[session_num],
+                session_game_counts[session_num],
+            )
+            stats_eligible = real_practice and is_stats_eligible(
                 category, duel[0]["battle_time"], len(distinct_games)
             )
             decks_for_summary = []
