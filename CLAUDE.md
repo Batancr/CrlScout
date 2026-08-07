@@ -139,6 +139,42 @@ Implemented as `is_stats_eligible()` in `build_duel_workbook.py`, which stamps e
 `is_set_complete()` in `build_dashboard.py` fixed a related bug: Best Picks required 3 games
 and so discarded every legitimate Official-CRL 2-0 sweep (22 sets on the 07-27 archive).
 
+## Date filter + icon delivery (added 2026-08-07)
+
+### Date filter
+
+The CR meta resets each monthly balance patch, so all-time deck win rates blend dead metas.
+The dashboard now has a **Time period** control (All time / This month / Last 30-60-90 days /
+custom date) in the match-category bar.
+
+- `game_log` is exported from `build_dashboard.py` as interned lookup tables plus one 5-int
+  row per game: `[playerIdx, deckIdx, isOfficial, isWin, dayOffset]` from a 2020-01-01 epoch.
+  Win conditions are resolved **per deck in Python** so `classify_deck()` stays the only
+  source of truth. ~10k games ≈ a few hundred KB.
+- **Invariant to preserve:** with no cutoff the client uses the Python-built aggregates
+  untouched and never runs the JS path (`dateFilterActive()` gates it). So the default view
+  can't drift from the workbook, and a JS bug can only affect a filtered view.
+- JS mirrors of `compute_player_lookup`, `compute_best_decks`, `build_player_briefs` and the
+  Deck Explorer feed live in the `DATE FILTER` block. **`OFFICIAL_GAME_WEIGHT`,
+  `MIN_OFFICIAL_GAMES_FOR_WEIGHT` and `MIN_GAMES_FOR_WINRATE_RANKING` are duplicated there
+  and must be kept in sync with `build_duel_workbook.py`.**
+- `glPct()` implements round-half-to-**even** to match Python's `f"{x:.0%}"`. Plain
+  `Math.round` rounds half-up and made a 5/8 win rate show 62% all-time but 63% filtered.
+- **Not date-filtered:** win-con sets, duel sets, Deck Predictor (they need duel grouping,
+  deliberately not ported to JS), and the Deck Stats / Win-Con Sets tables (Excel COUNTIFS).
+  The status line under the control says so.
+- Verified by extracting the JS and diffing against Python over 2,500 real games ×
+  87 players × both weighting modes — exact match on every field.
+
+### Icon delivery
+
+`CRL_INLINE_ICONS` (default `0`) switches `embed_local_icons()` between:
+
+- **linked** (default): CSS points at `card_icons/<file>.png`; page drops ~47 MB → ~6 MB.
+  **`card_icons/` must be served next to the HTML** — `update.yml` copies it into `_site/`.
+- **inline** (`CRL_INLINE_ICONS=1`): base64, one portable offline file. The workflow builds
+  this second for the downloadable artifact.
+
 ## Known history / gotchas
 
 - Card icons render via CSS classes, not inline images — an earlier inline approach made the

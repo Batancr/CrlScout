@@ -114,11 +114,17 @@ jobs:
       # Netlify deploys cost credits (free plan: ~20/month), so they run ONLY on a manual
       # "Run workflow" click -- never on the every-6-hours schedule. Refresh the live site
       # on demand (e.g. before a match); the scheduled runs still fetch/rebuild/commit/Discord.
+      # card_icons/ must ship alongside index.html: as of 2026-08-07 the dashboard links
+      # icons as relative "card_icons/<file>.png" paths instead of inlining 41MB of base64,
+      # which took the page from ~47MB to ~6MB. Without this copy the site loads but every
+      # card image 404s.
       - name: Prepare dashboard for Netlify
         if: github.event_name == 'workflow_dispatch'
         run: |
           mkdir -p _site
           cp crl_opponent_scout.html _site/index.html
+          cp -r card_icons _site/card_icons
+          echo "_site contents: $(du -sh _site | cut -f1), $(ls _site/card_icons | wc -l) icons"
 
       # Deploys via the netlify-cli npm package rather than netlify/actions/cli@master.
       # That action is an aging Docker wrapper: it spams deprecated `set-output` warnings,
@@ -215,9 +221,20 @@ jobs:
             gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/$id" || true
           done
 
-      - name: Compress dashboard for upload
+      # The downloadable copy is built with CRL_INLINE_ICONS=1 so it stays ONE portable
+      # file you can open offline with no sibling card_icons/ folder. The Netlify copy
+      # above uses the small linked-icon build instead. Two different tradeoffs, one
+      # pipeline: fast to load online, self-contained offline.
+      - name: Build a self-contained copy for download
         if: github.event_name == 'workflow_dispatch'
-        run: gzip -9 -c crl_opponent_scout.html > crl_opponent_scout.html.gz
+        continue-on-error: true
+        env:
+          CRL_HOME: ${{ github.workspace }}
+          CRL_INLINE_ICONS: '1'
+        run: |
+          python build_dashboard.py
+          mv crl_opponent_scout.html crl_opponent_scout_standalone.html
+          gzip -9 crl_opponent_scout_standalone.html
 
       - name: Upload dashboard artifact
         if: github.event_name == 'workflow_dispatch'
@@ -225,6 +242,6 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: crl-dashboard
-          path: crl_opponent_scout.html.gz
+          path: crl_opponent_scout_standalone.html.gz
           retention-days: 2
           overwrite: true

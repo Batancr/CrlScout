@@ -25,6 +25,7 @@ import json
 import os
 import re
 from collections import Counter, defaultdict
+from datetime import datetime, timezone
 import openpyxl
 
 XLSX_PATH = os.path.join(os.environ["CRL_HOME"], "CRL_Duel_Decks.xlsx") if os.environ.get("CRL_HOME") else "CRL_Duel_Decks.xlsx"
@@ -182,12 +183,33 @@ def _safe_card_filename_base(name):
     return re.sub(r"[^A-Za-z0-9]+", "_", name).strip("_")
 
 
+# ---------------------------------------------------------------------------
+# ICON DELIVERY MODE (changed 2026-08-07)
+#
+# Base64-embedding every card icon made the dashboard 47MB, of which 87% (41.5MB) was
+# card art -- so the page took the better part of a minute to load over the network and
+# the browser had to parse 41MB of base64 before painting anything.
+#
+# Default is now LINKED: the CSS points at "card_icons/<file>.png" relative to the HTML,
+# which drops the page to roughly 6MB. The icons still come from the same local folder,
+# they're just fetched as ordinary images (and cached by the browser between visits)
+# instead of being inlined. This requires card_icons/ to sit next to the HTML wherever
+# it's served -- update.yml copies it into _site/ for the Netlify deploy.
+#
+# Set CRL_INLINE_ICONS=1 to get the old single-file behaviour back. Use that when you
+# want one portable HTML you can email or open offline with no sibling folder.
+# ---------------------------------------------------------------------------
+INLINE_ICONS = os.environ.get("CRL_INLINE_ICONS", "0").strip().lower() in ("1", "true", "yes", "on")
+ICON_DIR_NAME = "card_icons"
+
+
 def embed_local_icons(icons, icons_evo, icons_hero):
     """If a card_icons/ folder (from download_card_icons.py, run somewhere with real
     internet access -- this sandbox's egress proxy blocks api-assets.clashroyale.com)
-    exists next to this script, replace hotlinked URLs with embedded base64 data URLs
-    so the dashboard works fully offline -- for the base card art AND, where present,
-    the real evolution-form and hero-form art (not just a generic badge icon).
+    exists next to this script, replace hotlinked URLs with either a relative path into
+    that folder (default) or an embedded base64 data URL (CRL_INLINE_ICONS=1) -- for the
+    base card art AND, where present, the real evolution-form and hero-form art (not
+    just a generic badge icon).
 
     Scans the folder directly by filename convention rather than trusting
     manifest.json's schema, since that file's format has changed across versions of
@@ -203,9 +225,16 @@ def embed_local_icons(icons, icons_evo, icons_hero):
     on_disk = set(os.listdir(local_dir))
 
     def _load(fname):
+        """Returns the URL the CSS should use for this icon, or None if the file is empty.
+
+        Linked mode still opens the file, purely to reject zero-byte downloads the same
+        way inline mode does -- a broken icon should fall back to the hotlinked URL, not
+        render as a dead relative link."""
         fpath = os.path.join(local_dir, fname)
         if not os.path.getsize(fpath):
             return None
+        if not INLINE_ICONS:
+            return f"{ICON_DIR_NAME}/{fname}"
         with open(fpath, "rb") as f:
             return f"data:image/png;base64,{base64.b64encode(f.read()).decode('ascii')}"
 
@@ -905,6 +934,98 @@ print(f"Deck Explorer data: {len(player_decks)} players with at least one full-d
 from build_duel_workbook import compute_player_lookup  # noqa: E402
 
 
+# ---------------------------------------------------------------------------
+# COMPACT PER-GAME LOG for the client-side date filter (added 2026-08-07)
+#
+# WHY: the Clash Royale meta resets with each monthly balance patch, so a deck's all-time
+# win rate can be badly misleading -- but the old history is still worth keeping, since a
+# player's card/win-con preferences carry across patches. The user wants to say "only show
+# me games since Aug 1" (or any date) and have the deck/win-rate views follow.
+#
+# Every dashboard view used to read a slice that Python aggregated at BUILD time, and the
+# only axis was match_category. Date cutoffs are user-chosen at RUN time, so they can't be
+# precomputed -- there are infinitely many. This ships the raw per-game rows instead and
+# lets the browser aggregate.
+#
+# SIZE: naively this is ~1.1MB of repeated deck strings. Interning the decks and players
+# into lookup tables and storing integer indices gets it to a few hundred KB -- the whole
+# archive is only ~10k games, so this was never a big-data problem.
+#
+# SAFETY PROPERTY WORTH KEEPING: when no cutoff is set (the default), the client uses the
+# Python-computed aggregates exactly as before and never runs the JS path. The JS
+# aggregation only kicks in once the user picks a date, so the default view stays
+# byte-identical to what Python produced and can't drift from the workbook.
+#
+# Win conditions are resolved per DECK here rather than ported to JS, so classify_deck()
+# stays the single source of truth for what counts as a win condition.
+# ---------------------------------------------------------------------------
+_gl_deck_ids = {}
+_gl_deck_list = []
+_gl_deck_wincons = []
+_gl_player_ids = {}
+_gl_players = []
+_gl_games = []
+GAME_LOG_EPOCH = datetime(2020, 1, 1, tzinfo=timezone.utc)   # day 0; keeps day numbers small
+
+
+def _gl_deck_id(deck):
+    key = ", ".join(sorted(deck))
+    if key not in _gl_deck_ids:
+        _gl_deck_ids[key] = len(_gl_deck_list)
+        _gl_deck_list.append(key)
+        _gl_deck_wincons.append(sorted(classify_deck(deck) or []))
+    return _gl_deck_ids[key]
+
+
+def _gl_player_id(name, tag):
+    if name not in _gl_player_ids:
+        _gl_player_ids[name] = len(_gl_players)
+        _gl_players.append({"n": name, "t": [], "e": False, "s": False, "c": False})
+    p = _gl_players[_gl_player_ids[name]]
+    if tag and tag not in p["t"]:
+        p["t"].append(tag)
+    return _gl_player_ids[name]
+
+
+for r in combined_duel_log:
+    if not r.get("deck") or len(r["deck"]) != 8:
+        continue
+    if r.get("crowns_for") is None or r.get("crowns_against") is None:
+        continue
+    # Same practice-completeness gate the Python aggregates apply, so a date-filtered
+    # view and the all-time view can never disagree about which games are legitimate.
+    if not r.get("stats_eligible", True):
+        continue
+    bt = r["battle_time"]
+    if not hasattr(bt, "toordinal"):
+        continue
+    _gl_games.append([
+        _gl_player_id(r["player_name"], r.get("player_tag")),
+        _gl_deck_id(r["deck"]),
+        1 if r.get("match_category") == "Official CRL" else 0,
+        1 if r["crowns_for"] > r["crowns_against"] else 0,
+        (bt - GAME_LOG_EPOCH).days,
+    ])
+
+for _p in _gl_players:
+    _n = _p["n"]
+    _p["e"] = _n in extended_names_all and _n not in scouted_names
+    _p["c"] = _n in scouted_names
+    _p["s"] = _n not in tracked_names and _n not in scouted_names and _n not in extended_names_all
+
+game_log = {
+    "epoch": GAME_LOG_EPOCH.strftime("%Y-%m-%d"),
+    "players": _gl_players,
+    "decks": _gl_deck_list,
+    "deck_wincons": _gl_deck_wincons,
+    # [player_idx, deck_idx, is_official, is_win, day_offset]
+    "games": _gl_games,
+}
+print(f"Date-filter game log: {len(_gl_games)} games, {len(_gl_players)} players, "
+      f"{len(_gl_deck_list)} distinct decks "
+      f"({len(json.dumps(game_log, ensure_ascii=False)) / 1048576:.2f} MB of JSON).")
+
+
 def _fmt_deck_freq(entry):
     if not entry:
         return ""
@@ -1557,6 +1678,15 @@ print(f"Best Picks computed -- All: {len(best_picks['all']['decks'])} ranked dec
 transitions = build_wincon_transitions(combined_duel_log)
 card_elixir = build_card_elixir()
 player_briefs = build_player_briefs(combined_duel_log, card_elixir, MIN_GAMES_FOR_WINRATE_RANKING)
+
+# Average elixir per distinct deck, parallel to game_log["decks"], so the client can
+# rebuild the player briefs' elixir tendency under a date cutoff without shipping the
+# whole per-card elixir table. Computed here because build_card_elixir() isn't available
+# where game_log itself is assembled.
+game_log["deck_elixir"] = []
+for _deck_key in game_log["decks"]:
+    _costs = [card_elixir[c] for c in _deck_key.split(", ") if c in card_elixir]
+    game_log["deck_elixir"].append(round(sum(_costs) / len(_costs), 3) if _costs else None)
 all_cards = sorted(card_icons.keys())
 
 data = {
@@ -1587,6 +1717,7 @@ data = {
     "forced_art_cards": sorted(forced_art_cards),
     "transitions": transitions,
     "player_briefs": player_briefs,
+    "game_log": game_log,
 }
 data_json = json.dumps(data, ensure_ascii=False)
 print(f"Card icons found for {len(card_icons)} distinct cards "
@@ -1594,8 +1725,13 @@ print(f"Card icons found for {len(card_icons)} distinct cards "
 print(f"Evolution-form art available for {len(card_icons_evo)} cards, "
       f"hero-form art available for {len(card_icons_hero)} cards.")
 if embedded_count:
-    print(f"Embedded {embedded_count} base/evolution/hero icon files as base64 "
-          f"(offline-capable) from local card_icons/ folder.")
+    if INLINE_ICONS:
+        print(f"Embedded {embedded_count} base/evolution/hero icon files as base64 "
+              f"(offline-capable, single file) from local card_icons/ folder.")
+    else:
+        print(f"Linked {embedded_count} base/evolution/hero icon files as relative "
+              f"{ICON_DIR_NAME}/ paths. The card_icons/ folder MUST be served alongside "
+              f"the HTML. Set CRL_INLINE_ICONS=1 for a single self-contained file.")
 else:
     print("No local card_icons/ folder found -- icons are hotlinked (need internet to display). "
           "Run download_card_icons.py somewhere with internet access, then re-run this script "
@@ -1949,6 +2085,24 @@ html = """<!DOCTYPE html>
   }
   .weight-toggle input[type="checkbox"] { cursor: pointer; }
   .weight-toggle.disabled { opacity: 0.45; pointer-events: none; }
+  /* Date filter (added 2026-08-07) */
+  .date-filter {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    font-size: 13px; color: var(--text-secondary);
+    padding: 8px 0 0; margin-top: 8px; border-top: 1px solid var(--border);
+  }
+  .date-filter select, .date-filter input[type="date"] {
+    font: inherit; padding: 5px 8px; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary);
+    cursor: pointer;
+  }
+  .date-filter .df-status { font-size: 12px; }
+  .date-filter .df-status.on { color: var(--series-blue); font-weight: 600; }
+  .date-filter .df-clear {
+    font: inherit; font-size: 12px; padding: 4px 10px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--border); background: transparent; color: var(--text-secondary);
+  }
+  .date-filter .df-clear:hover { color: var(--text-primary); border-color: var(--text-secondary); }
   .best-picks { margin-bottom: 30px; }
   .view-tabs { display: flex; gap: 6px; margin: 4px 0 4px; }
   .view-tab {
@@ -2295,6 +2449,23 @@ html = """<!DOCTYPE html>
       <input type="checkbox" id="weightToggle">
       Weight Official CRL games higher <span class="table-note" style="font-size:11px;">(only affects "All Games" rankings; no effect until a deck/win-con has 5+ official games)</span>
     </label>
+    <!-- Date filter: the CR meta resets each balance patch, so all-time deck win rates
+         blend metas that no longer exist. Cutting to "since <date>" keeps the history
+         available without letting it distort current reads. -->
+    <div class="date-filter" id="dateFilterBar">
+      <span>Time period:</span>
+      <select id="dateCutoffPreset">
+        <option value="all">All time</option>
+        <option value="thismonth">This month</option>
+        <option value="30">Last 30 days</option>
+        <option value="60">Last 60 days</option>
+        <option value="90">Last 90 days</option>
+        <option value="custom">Since a specific date...</option>
+      </select>
+      <input type="date" id="dateCutoffCustom" style="display:none;">
+      <button class="df-clear" id="dateCutoffClear" style="display:none;">Clear</button>
+      <span class="df-status" id="dateFilterStatus">Showing all games ever recorded.</span>
+    </div>
   </div>
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search a player name or tag (e.g. #80ULUJLYY)..." autocomplete="off">
@@ -2586,11 +2757,199 @@ let weightOfficialGames = false;   // only meaningful when matchCategoryFilter =
 let players = PLAYER_POOLS.all_unweighted;
 let playerByName = {};
 function rebuildPlayerPool() {
-  if (matchCategoryFilter === 'practice') players = PLAYER_POOLS.practice;
+  if (dateFilterActive()) {
+    // Recompute from the raw log. Only reachable once a cutoff is set -- see the
+    // invariant note in the DATE FILTER block below.
+    players = glPlayerLookup(matchCategoryFilter, matchCategoryFilter === 'all' && weightOfficialGames);
+  }
+  else if (matchCategoryFilter === 'practice') players = PLAYER_POOLS.practice;
   else if (matchCategoryFilter === 'official') players = PLAYER_POOLS.official;
   else players = weightOfficialGames ? PLAYER_POOLS.all_weighted : PLAYER_POOLS.all_unweighted;
   playerByName = {};
   players.forEach(p => playerByName[p['Player']] = p);
+}
+
+// ============================================================================
+// DATE FILTER (added 2026-08-07)
+//
+// The Clash Royale meta resets with every monthly balance patch, so an all-time deck
+// win rate blends together metas that no longer exist. This lets you cut the data to
+// "since <date>" without losing the history -- card and win-con preferences carry across
+// patches even when specific decks don't.
+//
+// HOW IT WORKS: DATA.game_log holds every game as a 5-int row
+// [playerIdx, deckIdx, isOfficial, isWin, dayOffset], with decks/players interned into
+// lookup tables. When a cutoff is set we re-run the same aggregations Python does, in JS,
+// over the filtered rows.
+//
+// IMPORTANT INVARIANT: with no cutoff (the default) we do NOT recompute -- we hand back
+// the exact Python-built objects. So the default view can never drift from the workbook,
+// and any bug in the JS port can only ever affect a date-filtered view. Keep it that way.
+//
+// These three constants MUST match build_duel_workbook.py (OFFICIAL_GAME_WEIGHT,
+// MIN_OFFICIAL_GAMES_FOR_WEIGHT, MIN_GAMES_FOR_WINRATE_RANKING).
+// ============================================================================
+const GAME_LOG = DATA.game_log || null;
+const GL_EPOCH_MS = GAME_LOG ? Date.parse(GAME_LOG.epoch + 'T00:00:00Z') : 0;
+const OFFICIAL_GAME_WEIGHT = 3;
+const MIN_OFFICIAL_GAMES_FOR_WEIGHT = 5;
+const MIN_GAMES_FOR_WINRATE_RANKING = 2;
+
+let dateCutoffDay = null;          // null = all time; otherwise a day offset into the log
+
+const glDayFromISO = (iso) => Math.floor((Date.parse(iso + 'T00:00:00Z') - GL_EPOCH_MS) / 86400000);
+const glISOFromDay = (d) => new Date(GL_EPOCH_MS + d * 86400000).toISOString().slice(0, 10);
+const dateFilterActive = () => GAME_LOG && dateCutoffDay !== null;
+
+// Tag -> player index, so Deck Explorer (which is keyed by tag) can use the same log.
+const GL_TAG_TO_PLAYER = {};
+if (GAME_LOG) GAME_LOG.players.forEach((p, i) => (p.t || []).forEach(t => { GL_TAG_TO_PLAYER[t] = i; }));
+
+function glRows(category) {
+  const out = [];
+  if (!GAME_LOG) return out;
+  const games = GAME_LOG.games, cut = dateCutoffDay;
+  for (let i = 0; i < games.length; i++) {
+    const g = games[i];
+    if (cut !== null && g[4] < cut) continue;
+    if (category === 'practice' && g[2] === 1) continue;
+    if (category === 'official' && g[2] === 0) continue;
+    out.push(g);
+  }
+  return out;
+}
+
+// Python's f"{x:.0%}" rounds half-to-EVEN; JS Math.round rounds half-UP. That one
+// difference made a 5/8 win rate render as 62% in the all-time view and 63% in the
+// date-filtered view of the same games. Match Python exactly so the two never disagree.
+function glPct(n) {
+  const v = n * 100, f = Math.floor(v), diff = v - f;
+  let r;
+  if (diff > 0.5) r = f + 1;
+  else if (diff < 0.5) r = f;
+  else r = (f % 2 === 0) ? f : f + 1;
+  return `${r}%`;
+}
+const glGames = (n) => `${n} game${n !== 1 ? 's' : ''}`;
+
+// Mirrors build_duel_workbook.compute_player_lookup + build_dashboard._format_player_lookup.
+function glPlayerLookup(category, weighted) {
+  const rows = glRows(category);
+  const decks = GAME_LOG.decks, wincons = GAME_LOG.deck_wincons;
+  const acc = new Map();
+  for (const g of rows) {
+    let a = acc.get(g[0]);
+    if (!a) {
+      a = { games: 0, wins: 0, practice: 0, official: 0,
+            dg: new Map(), dw: new Map(), dof: new Map(), wg: new Map(), wof: new Map() };
+      acc.set(g[0], a);
+    }
+    const isOff = g[2] === 1, won = g[3] === 1, di = g[1];
+    a.games++; if (won) a.wins++;
+    isOff ? a.official++ : a.practice++;
+    a.dg.set(di, (a.dg.get(di) || 0) + 1);
+    if (won) a.dw.set(di, (a.dw.get(di) || 0) + 1);
+    if (isOff) a.dof.set(di, (a.dof.get(di) || 0) + 1);
+    for (const wc of wincons[di]) {
+      a.wg.set(wc, (a.wg.get(wc) || 0) + 1);
+      if (isOff) a.wof.set(wc, (a.wof.get(wc) || 0) + 1);
+    }
+  }
+
+  const rank = (count, official) =>
+    (weighted && official >= MIN_OFFICIAL_GAMES_FOR_WEIGHT)
+      ? (count - official) + official * OFFICIAL_GAME_WEIGHT
+      : count;
+
+  const out = [];
+  for (const [pi, a] of acc) {
+    const meta = GAME_LOG.players[pi];
+    const byFreq = [...a.dg.entries()]
+      .sort((x, y) => rank(y[1], a.dof.get(y[0]) || 0) - rank(x[1], a.dof.get(x[0]) || 0))
+      .slice(0, 3);
+    const eligible = [...a.dg.entries()]
+      .filter(([di, n]) => n >= MIN_GAMES_FOR_WINRATE_RANKING)
+      .map(([di, n]) => [di, (a.dw.get(di) || 0) / n, n]);
+    const byWr = eligible.slice().sort((x, y) => (y[1] - x[1]) || (y[2] - x[2])).slice(0, 3);
+    const topWc = [...a.wg.entries()]
+      .sort((x, y) => rank(y[1], a.wof.get(y[0]) || 0) - rank(x[1], a.wof.get(x[0]) || 0))
+      .slice(0, 3);
+
+    const row = {
+      'Player': meta.n,
+      'Total Games': a.games,
+      'Total Wins': a.wins,
+      'Win Rate': a.games ? glPct(a.wins / a.games) : 'n/a',
+      'Practice Games': a.practice,
+      'Official CRL Games': a.official,
+      'Player Tag(s)': (meta.t || []).join(', '),
+      '_is_extended': !!meta.e, '_is_shadow': !!meta.s, '_is_scouted': !!meta.c,
+    };
+    for (let i = 0; i < 3; i++) {
+      row[`Most-Played Deck #${i + 1}`]   = byFreq[i] ? `${decks[byFreq[i][0]]} (${glGames(byFreq[i][1])})` : '';
+      row[`Best Win-Rate Deck #${i + 1}`] = byWr[i]   ? `${decks[byWr[i][0]]} (${glPct(byWr[i][1])} win rate, ${glGames(byWr[i][2])})` : '';
+      row[`Top Win Condition #${i + 1}`]  = topWc[i]  ? `${topWc[i][0]} (${glGames(topWc[i][1])})` : '';
+    }
+    out.push(row);
+  }
+  out.sort((a, b) => (b['Total Games'] || 0) - (a['Total Games'] || 0));
+  return out;
+}
+
+// Mirrors compute_best_decks().
+function glBestDecks(category) {
+  const decks = GAME_LOG.decks;
+  const g = new Map(), w = new Map();
+  for (const r of glRows(category)) {
+    g.set(r[1], (g.get(r[1]) || 0) + 1);
+    if (r[3] === 1) w.set(r[1], (w.get(r[1]) || 0) + 1);
+  }
+  const out = [];
+  for (const [di, n] of g) {
+    const wins = w.get(di) || 0;
+    out.push({ deck: decks[di], games: n, wins, win_rate: n ? wins / n : 0 });
+  }
+  out.sort((a, b) => (b.win_rate - a.win_rate) || (b.games - a.games));
+  return out;
+}
+
+// Mirrors build_player_briefs().
+function glPlayerBriefs(category) {
+  const decks = GAME_LOG.decks, elix = GAME_LOG.deck_elixir || [];
+  const acc = new Map();
+  for (const r of glRows(category)) {
+    let a = acc.get(r[0]);
+    if (!a) { a = { dg: new Map(), dw: new Map(), ex: [] }; acc.set(r[0], a); }
+    a.dg.set(r[1], (a.dg.get(r[1]) || 0) + 1);
+    if (r[3] === 1) a.dw.set(r[1], (a.dw.get(r[1]) || 0) + 1);
+    if (elix[r[1]] != null) a.ex.push(elix[r[1]]);
+  }
+  const briefs = {};
+  for (const [pi, a] of acc) {
+    const eligible = [...a.dg.entries()]
+      .filter(([, n]) => n >= MIN_GAMES_FOR_WINRATE_RANKING)
+      .map(([di, n]) => ({ deck: decks[di], win_rate: (a.dw.get(di) || 0) / n, games: n }));
+    briefs[GAME_LOG.players[pi].n] = {
+      best_decks:  eligible.slice().sort((x, y) => (y.win_rate - x.win_rate) || (y.games - x.games)).slice(0, 3),
+      worst_decks: eligible.slice().sort((x, y) => (x.win_rate - y.win_rate) || (y.games - x.games)).slice(0, 3),
+      avg_elixir:  a.ex.length ? Math.round((a.ex.reduce((s, v) => s + v, 0) / a.ex.length) * 100) / 100 : null,
+    };
+  }
+  return briefs;
+}
+
+// Deck Explorer's per-tag game list, in the same {d,c,w} shape the build emits.
+function glPlayerDecks() {
+  const decks = GAME_LOG.decks, out = {};
+  const tagsByPlayer = GAME_LOG.players.map(p => p.t || []);
+  for (const r of glRows('all')) {
+    for (const tag of tagsByPlayer[r[0]]) {
+      (out[tag] || (out[tag] = [])).push({
+        d: decks[r[1]], c: r[2] === 1 ? 'crl' : 'other', w: r[3] === 1,
+      });
+    }
+  }
+  return out;
 }
 rebuildPlayerPool();
 const winconSets = DATA.wincon_sets_top;
@@ -2613,8 +2972,10 @@ const iconSlug = (s) => s.replace(/[^a-zA-Z0-9]+/g, '_');
   el.textContent = css;
   document.head.appendChild(el);
 })();
-const playerBriefs = DATA.player_briefs || {};
-const playerDecks = DATA.player_decks || {};
+// let, not const: both are swapped out for JS-recomputed versions when a date cutoff
+// is active (see applyDateCutoff).
+let playerBriefs = DATA.player_briefs || {};
+let playerDecks = DATA.player_decks || {};
 const championCards = new Set(DATA.card_champions);
 const evoCapableCards = new Set(DATA.card_evolution_capable);
 const forcedArtCards = new Set(DATA.forced_art_cards || []);
@@ -3388,6 +3749,78 @@ weightToggleEl.addEventListener('change', () => {
   onPlayerPoolChanged();
 });
 
+// ---------- Date filter wiring ----------
+const dfPresetEl = document.getElementById('dateCutoffPreset');
+const dfCustomEl = document.getElementById('dateCutoffCustom');
+const dfClearEl  = document.getElementById('dateCutoffClear');
+const dfStatusEl = document.getElementById('dateFilterStatus');
+const dfBarEl    = document.getElementById('dateFilterBar');
+
+// No game_log in the payload (older build) -> hide the control rather than show one that
+// silently does nothing.
+if (!GAME_LOG && dfBarEl) dfBarEl.style.display = 'none';
+
+function applyDateCutoff() {
+  // Everything downstream reads these three, so refresh them together.
+  playerBriefs = dateFilterActive() ? glPlayerBriefs('all') : (DATA.player_briefs || {});
+  playerDecks  = dateFilterActive() ? glPlayerDecks()       : (DATA.player_decks  || {});
+
+  if (dateFilterActive()) {
+    const total = glRows('all').length;
+    dfStatusEl.textContent = `Showing ${total.toLocaleString()} game${total !== 1 ? 's' : ''} since ${glISOFromDay(dateCutoffDay)}. Win-con sets, duel sets and the Deck Predictor remain all-time.`;
+    dfStatusEl.classList.add('on');
+    dfClearEl.style.display = '';
+  } else {
+    dfStatusEl.textContent = 'Showing all games ever recorded.';
+    dfStatusEl.classList.remove('on');
+    dfClearEl.style.display = 'none';
+  }
+
+  // onPlayerPoolChanged -> selectPlayer -> renderDeckExplorer, so the explorer refreshes
+  // itself for the selected player. Only redraw it directly if no player is selected but
+  // a tag is still current (otherwise it would blank with an undefined tag).
+  onPlayerPoolChanged();
+  if (typeof renderBestPicks === 'function') renderBestPicks();
+  if (typeof currentProfileTag !== 'undefined' && currentProfileTag
+      && typeof renderDeckExplorer === 'function') {
+    renderDeckExplorer(currentProfileTag);
+  }
+}
+
+if (GAME_LOG) {
+  dfPresetEl.addEventListener('change', () => {
+    const v = dfPresetEl.value;
+    dfCustomEl.style.display = v === 'custom' ? '' : 'none';
+    const todayDay = Math.floor((Date.now() - GL_EPOCH_MS) / 86400000);
+    if (v === 'all') dateCutoffDay = null;
+    else if (v === 'thismonth') {
+      const n = new Date();
+      dateCutoffDay = glDayFromISO(`${n.getUTCFullYear()}-${String(n.getUTCMonth() + 1).padStart(2, '0')}-01`);
+    }
+    else if (v === 'custom') {
+      // Wait for an actual date before filtering; don't blank the dashboard on selection.
+      if (!dfCustomEl.value) return;
+      dateCutoffDay = glDayFromISO(dfCustomEl.value);
+    }
+    else dateCutoffDay = todayDay - parseInt(v, 10);
+    applyDateCutoff();
+  });
+  dfCustomEl.addEventListener('change', () => {
+    if (!dfCustomEl.value) return;
+    dfPresetEl.value = 'custom';
+    dfCustomEl.style.display = '';
+    dateCutoffDay = glDayFromISO(dfCustomEl.value);
+    applyDateCutoff();
+  });
+  dfClearEl.addEventListener('click', () => {
+    dateCutoffDay = null;
+    dfPresetEl.value = 'all';
+    dfCustomEl.style.display = 'none';
+    dfCustomEl.value = '';
+    applyDateCutoff();
+  });
+}
+
 // ---------- Generic sortable/filterable table ----------
 // opts (added 2026-07-19): { filterInputId, filterFn, minGamesKey, minGamesSelectId,
 // showCountSelectId } -- minGamesKey is the row field to compare against the "Min games
@@ -3553,7 +3986,15 @@ function limitRows(list) {
 }
 
 function renderBestPicks() {
-  const bucket = BEST_PICKS[bestPicksCategory] || { decks: [], wincon_sets: [], duel_sets: [], duel_sets_threshold: null };
+  const baseBucket = BEST_PICKS[bestPicksCategory] || { decks: [], wincon_sets: [], duel_sets: [], duel_sets_threshold: null };
+  // Under a date cutoff the deck ranking is recomputed live; win-con sets and duel sets
+  // stay all-time (they depend on duel grouping, which is not ported to JS) and the UI
+  // labels them as such. Spread into a NEW object rather than assigning onto baseBucket --
+  // mutating it would permanently clobber the Python-built all-time rankings, so clearing
+  // the cutoff would never restore them.
+  const bucket = dateFilterActive()
+    ? { ...baseBucket, decks: glBestDecks(bestPicksCategory) }
+    : baseBucket;
   const minPlayed = parseInt(bestPicksMinPlayedEl.value, 10) || 1;
   if (bestPicksView === 'decks') {
     const filtered = bucket.decks.filter(r => r.games >= minPlayed);
