@@ -1,0 +1,99 @@
+name: Redeploy dashboard (fast)
+
+# A ~2-minute republish, for when you want the live site refreshed but don't need the
+# full rebuild. Manual only -- nothing schedules this.
+#
+# WHY IT'S FAST: update.yml spends most of its ~10-15 minutes on things this job skips
+# entirely -- apt-get installing LibreOffice, two full formula recalcs of the workbook,
+# and the five add_*_analysis.py passes. build_dashboard.py needs none of that: it reads
+# the battle archive directly and loads the ALREADY-COMMITTED CRL_Duel_Decks.xlsx.
+#
+# WHAT YOU GET vs update.yml
+#   FRESH  -- every game fetch.yml has archived since the last full rebuild. The player
+#             pool, deck win rates, Best Picks, Deck Explorer and the date filter all read
+#             master_*.json at build time, so they're current to the last 30-minute fetch.
+#   STALE  -- the Deck Stats and Win-Con Sets tables, which are COUNTIFS output read out of
+#             the committed workbook. They only change when update.yml recalcs it.
+#   SKIPPED -- run_state.json / the Discord change summary. This job commits nothing.
+#
+# So: use this before a match to pull in the last couple of hours of practice games.
+# Use update.yml when you care about the workbook-derived tables being current.
+#
+# Required secrets: NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID.
+
+on:
+  workflow_dispatch: {}
+
+# Read-only: this job builds a gitignored HTML file and pushes it to Netlify. It must
+# never write to the repo -- that's update.yml's and fetch.yml's job (see the ownership
+# rule in both of their headers).
+permissions:
+  contents: read
+
+concurrency:
+  group: crl-deploy
+  cancel-in-progress: true      # a newer redeploy request supersedes an in-flight one
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Report data freshness
+        run: |
+          python - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          try:
+              log = json.load(open("fetch_log.json"))
+              last = datetime.fromisoformat(log[-1]["fetched_at_utc"])
+              age = (datetime.now(timezone.utc) - last).total_seconds() / 3600
+              print(f"Battle archive last fetched {last:%Y-%m-%d %H:%M} UTC ({age:.1f}h ago).")
+              if age > 3:
+                  print("::warning::Archive is more than 3h old -- check that fetch.yml is running.")
+          except Exception as e:
+              print(f"::warning::Could not read fetch_log.json ({type(e).__name__}).")
+          print("Workbook-derived tables (Deck Stats, Win-Con Sets) come from the committed "
+                "CRL_Duel_Decks.xlsx and are only as fresh as the last full update.yml run.")
+          PY
+
+      - name: Build dashboard (no LibreOffice, no workbook recalc)
+        env:
+          CRL_HOME: ${{ github.workspace }}
+        run: python build_dashboard.py
+
+      - name: Prepare site
+        run: |
+          mkdir -p _site
+          cp crl_opponent_scout.html _site/index.html
+          cp -r card_icons _site/card_icons
+          echo "_site: $(du -sh _site | cut -f1), $(ls _site/card_icons | wc -l) icons"
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
+            echo "::error::NETLIFY_AUTH_TOKEN secret is empty or unset."
+            exit 1
+          fi
+          if [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "::error::NETLIFY_SITE_ID secret is empty or unset."
+            exit 1
+          fi
+          npx --yes netlify-cli deploy --dir=_site --prod

@@ -87,6 +87,19 @@ credits/month — refresh the live site on demand before a match via "Run workfl
 change summary + a 6-run gap-risk rollup to Discord, commits, uploads the dashboard as a
 14-day artifact. `timeout-minutes: 60`.
 
+### `.github/workflows/deploy.yml` — manual only, ~2 min
+
+Fast republish. Runs `build_dashboard.py` alone: no LibreOffice, no workbook recalc, no
+`add_*_analysis.py` passes. **Commits nothing** (`permissions: contents: read`).
+
+- Fresh: every game fetched since the last full rebuild — the dashboard reads
+  `master_*.json` directly.
+- Stale: Deck Stats and Win-Con Sets, which are COUNTIFS output read from the committed
+  `CRL_Duel_Decks.xlsx` and only change when `update.yml` recalcs it.
+
+Use before a match to pull in recent practice; use `update.yml` when the workbook-derived
+tables need to be current.
+
 ### ⚠️ Ownership rule — do not break this
 
 - `fetch.yml` writes **only** `master_*.json` and `fetch_log.json`
