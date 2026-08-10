@@ -71,14 +71,16 @@ MIN_SIGHTINGS_TO_PROMOTE = 2
 # of this tracker is top-ladder behaviour, and one bad-but-frequent opponent costs a slot
 # and an API call every cycle for the rest of the season.
 #
-# CALIBRATION (2026-08-09, over 2,282 players in the baseline): 2900 is about the 99th
-# percentile of Chaos Draft trophies -- only 28 players clear it, 25 of them seen 2+ times.
-# Deliberately strict. Lower it to ~2800 (106 players) if the roster stays too small to be
-# useful. Note trophies drift during a season, so this is judged on the HIGHEST value we've
-# observed for that player, not their current one.
+# CALIBRATION: first set to 2900 from the CRL-derived baseline (only 28 of 2,282 players
+# cleared it there). That baseline was misleading -- it is mostly CRL players who dabble in
+# this mode, whereas the seed roster is AT the top of the ladder and keeps meeting other
+# top-ladder players. Run 1 promoted 20 players in a single pass. RAISED TO 3000 on
+# 2026-08-10 (~top 0.3% of the baseline) so the roster fills gradually instead of hitting
+# the cap in a day. Note trophies drift upward during a season, so this is judged on the
+# HIGHEST value we've observed for a player, not their current one.
 #
 # Seeds and Batan bypass this entirely -- they're hand-picked.
-MIN_TROPHIES_TO_PROMOTE = int(os.environ.get("CHAOS_MIN_TROPHIES", "2900"))
+MIN_TROPHIES_TO_PROMOTE = int(os.environ.get("CHAOS_MIN_TROPHIES", "3000"))
 
 # Seed roster: top Chaos Draft ladder players (supplied 2026-08-09), including Batan's two
 # accounts -- he is a top player in this mode and is analysed as one of the tracked group,

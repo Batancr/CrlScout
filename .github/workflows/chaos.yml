@@ -21,14 +21,18 @@ env:
   # Hard ceiling on tracked players -- every one costs an API call every 30 minutes.
   CHAOS_MAX_ROSTER: '100'
   # A DISCOVERED opponent needs 2+ sightings AND this many trophies to be promoted.
-  # Seeds bypass it. 2900 is ~the 99th percentile of Chaos Draft players, deliberately
-  # strict so matchmaking noise doesn't consume slots.
+  # Seeds bypass it.
   #
-  # EXPECT PROMOTIONS TO ACCELERATE LATE IN THE SEASON: trophies inflate as players climb,
-  # so the pool clearing 2900 grows over the 8 days. That's the intended shape -- slow at
-  # first, filling as the genuine top of the ladder separates itself. CHAOS_MAX_ROSTER is
-  # the backstop if it accelerates faster than expected. Raise this number to tighten.
-  CHAOS_MIN_TROPHIES: '2900'
+  # RAISED 2900 -> 3000 after run 1 (2026-08-10). The 2900 bar was calibrated against the
+  # CRL-derived baseline, where only 28 of 2,282 players cleared it -- but that baseline is
+  # mostly CRL players dabbling in this mode. The actual seed roster sits AT the top of the
+  # ladder and therefore keeps meeting other top-ladder players, so run 1 promoted 20 in one
+  # go (10 -> 30 roster) and would have hit the 100 cap within a day or two.
+  #
+  # 3000 is roughly the top 0.3% of the baseline. Combined with the trophy inflation that
+  # happens as a season progresses, this should let the roster fill gradually rather than
+  # all at once -- which is the intent.
+  CHAOS_MIN_TROPHIES: '3000'
 
 on:
   schedule:
