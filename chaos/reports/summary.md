@@ -77,6 +77,24 @@ Higher = more idiosyncratic. Needs 100+ decisions to mean much.
 | SK xopxsam | 536 | 0.098 | +0.166 | 86% |
 | batan | 1052 | 0.074 | +0.145 | 68% |
 
+## Draft skill: capture rate
+
+Share of the strength that was actually on the table which the player took.
+'Available' is near-identical for everyone, so this isolates decision quality
+from luck of the draw. **Untracked field: 43.9%.**
+
+| Player | Games | Win rate | Capture | Available | Won draft | Lost draft |
+|---|---|---|---|---|---|---|
+| Sam❤️Rehwald | 30 | 67% | **88.5%** | 0.217 | 79% (19) | 45% (11) |
+| SK xopxsam | 134 | 86% | **81.4%** | 0.204 | 93% (86) | 73% (48) |
+| Busfahrer Dirk | 34 | 76% | **75.1%** | 0.213 | 83% (24) | 60% (10) |
+| Eurus | 30 | 87% | **71.2%** | 0.185 | 95% (20) | 70% (10) |
+| OcT❤️Lev4ek | 31 | 74% | **70.9%** | 0.231 | 81% (21) | 60% (10) |
+| Asaf | 31 | 81% | **66.1%** | 0.231 | 84% (19) | 75% (12) |
+| batan | 263 | 68% | **66.0%** | 0.220 | 81% (147) | 52% (116) |
+| tiktok@kai_cr12 | 31 | 74% | **65.6%** | 0.242 | 79% (19) | 67% (12) |
+| 凛冬Rintou✨卤蛋 | 29 | 72% | **65.5%** | 0.224 | 95% (20) | 22% (9) |
+
 ## Tracked players
 
 | Player | Games | Win rate |
