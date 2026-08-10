@@ -170,6 +170,49 @@ def main():
                     rn[c] += 1
                     rw[c] += 1 if won else 0
 
+    # ---- card_strength_model.csv (optional; needs numpy) ----
+    model_note = "numpy not installed -- strength model skipped."
+    strength = {}
+    try:
+        import numpy as np
+        cards = sorted({c for _, _, tc, oc in battles.values() for c in tc + oc})
+        idx = {c: i for i, c in enumerate(cards)}
+        X, y = [], []
+        for (t, o, tc, oc) in battles.values():
+            tcr, ocr = t.get("crowns") or 0, o.get("crowns") or 0
+            if tcr == ocr:
+                continue
+            v = np.zeros(len(cards))
+            for c in tc:
+                v[idx[c]] += 1
+            for c in oc:
+                v[idx[c]] -= 1
+            X.append(v)
+            y.append(1.0 if tcr > ocr else 0.0)
+        X, y = np.array(X), np.array(y)
+        if len(y) >= 200:
+            wgt = np.zeros(len(cards))
+            lam, lr = 2.0, 0.5
+            for _ in range(4000):
+                p = 1 / (1 + np.exp(-X @ wgt))
+                wgt -= lr * (X.T @ (p - y) / len(y) + lam * wgt / len(y))
+            acc = (((1 / (1 + np.exp(-X @ wgt))) > 0.5) == (y > 0.5)).mean()
+            with open(os.path.join(OUT_DIR, "card_strength_model.csv"), "w", newline="",
+                      encoding="utf-8") as f:
+                w = csv.writer(f)
+                w.writerow(["Card", "Strength", "Top Pick Rate", "Times Offered (all)"])
+                for c, s in sorted(zip(cards, wgt), key=lambda kv: -kv[1]):
+                    off = stats["field"]["off"][c]
+                    w.writerow([c, f"{s:+.3f}",
+                                pct(stats["top"]["pick"][c] / stats["top"]["off"][c])
+                                if stats["top"]["off"][c] else "", off])
+            strength = dict(zip(cards, (float(x) for x in wgt)))
+            model_note = f"strength model fitted on {len(y)} battles, in-sample accuracy {acc:.1%}."
+        else:
+            model_note = f"only {len(y)} battles -- need 200+ for the strength model."
+    except ImportError:
+        pass
+
     # ---- card_pick_and_win.csv ----
     all_cards = sorted(set(stats["field"]["off"]) | set(stats["top"]["off"]))
     with open(os.path.join(OUT_DIR, "card_pick_and_win.csv"), "w", newline="", encoding="utf-8") as f:
@@ -209,46 +252,64 @@ def main():
         for c, p, a, r, b, d, z in sorted(rows, key=lambda x: -x[5]):
             w.writerow([c, pct(p), a, pct(r), b, f"{d:+.1%}", f"{z:.2f}"])
 
-    # ---- card_strength_model.csv (optional; needs numpy) ----
-    model_note = "numpy not installed -- strength model skipped."
-    try:
-        import numpy as np
-        cards = sorted({c for _, _, tc, oc in battles.values() for c in tc + oc})
-        idx = {c: i for i, c in enumerate(cards)}
-        X, y = [], []
-        for (t, o, tc, oc) in battles.values():
-            tcr, ocr = t.get("crowns") or 0, o.get("crowns") or 0
-            if tcr == ocr:
+    # ---- player_profiles.csv : how each tracked player DRAFTS ----
+    #
+    # The headline stat here is DRAFT EDGE: using the fitted card strengths, the average of
+    # strength(card they took) - strength(card they passed on), across all their choices.
+    # Because the offered pairs are random (verified: elixir, rarity and spell-vs-spell
+    # rates all match a shuffled null), every player faces a comparable distribution of
+    # decisions -- so this isolates decision quality from luck of the draw in a way raw win
+    # rate cannot. Positive = they consistently take the better card of the two.
+    #
+    # It's only meaningful once a player has a few dozen decisions; the CSV carries the
+    # count so thin rows can be filtered rather than silently trusted.
+    prof = defaultdict(lambda: {"g": 0, "w": 0, "dec": 0, "edge": 0.0,
+                                "pick": Counter(), "off": Counter()})
+    for (t, o, tc, oc) in battles.values():
+        tt, ot = canon(t.get("tag")), canon(o.get("tag"))
+        tcr, ocr = t.get("crowns") or 0, o.get("crowns") or 0
+        if tcr == ocr:
+            continue
+        for chooser_is_team, chosen, rejected, _r in decode_draft(tc, oc):
+            tag = tt if chooser_is_team else ot
+            if tag not in tracked:
                 continue
-            v = np.zeros(len(cards))
-            for c in tc:
-                v[idx[c]] += 1
-            for c in oc:
-                v[idx[c]] -= 1
-            X.append(v)
-            y.append(1.0 if tcr > ocr else 0.0)
-        X, y = np.array(X), np.array(y)
-        if len(y) >= 200:
-            wgt = np.zeros(len(cards))
-            lam, lr = 2.0, 0.5
-            for _ in range(4000):
-                p = 1 / (1 + np.exp(-X @ wgt))
-                wgt -= lr * (X.T @ (p - y) / len(y) + lam * wgt / len(y))
-            acc = (((1 / (1 + np.exp(-X @ wgt))) > 0.5) == (y > 0.5)).mean()
-            with open(os.path.join(OUT_DIR, "card_strength_model.csv"), "w", newline="",
-                      encoding="utf-8") as f:
-                w = csv.writer(f)
-                w.writerow(["Card", "Strength", "Top Pick Rate", "Times Offered (all)"])
-                for c, s in sorted(zip(cards, wgt), key=lambda kv: -kv[1]):
-                    off = stats["field"]["off"][c]
-                    w.writerow([c, f"{s:+.3f}",
-                                pct(stats["top"]["pick"][c] / stats["top"]["off"][c])
-                                if stats["top"]["off"][c] else "", off])
-            model_note = f"strength model fitted on {len(y)} battles, in-sample accuracy {acc:.1%}."
-        else:
-            model_note = f"only {len(y)} battles -- need 200+ for the strength model."
-    except ImportError:
-        pass
+            p = prof[tag]
+            p["dec"] += 1
+            p["pick"][chosen] += 1
+            p["off"][chosen] += 1
+            p["off"][rejected] += 1
+            if strength:
+                p["edge"] += strength.get(chosen, 0.0) - strength.get(rejected, 0.0)
+    for tag, d in per_player.items():
+        prof[tag]["g"], prof[tag]["w"] = d["g"], d["w"]
+
+    field_rate = {c: (stats["field"]["pick"][c] / stats["field"]["off"][c])
+                  for c in stats["field"]["off"] if stats["field"]["off"][c]}
+    with open(os.path.join(OUT_DIR, "player_profiles.csv"), "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["Player", "Tag", "Games", "Wins", "Win Rate", "Draft Decisions",
+                    "Draft Edge (avg strength gained per pick)",
+                    "Most Picked #1", "Most Picked #2", "Most Picked #3",
+                    "Most Contrarian Pick (vs field)", "Most Avoided (vs field)"])
+        for tag, p in sorted(prof.items(), key=lambda kv: -kv[1]["g"]):
+            if not p["dec"]:
+                continue
+            nm = (roster.get(tag, {}) or {}).get("name") or tag
+            top = [c for c, _ in p["pick"].most_common(3)]
+            # divergence vs the field, only on cards this player saw enough times
+            div = []
+            for c, n in p["off"].items():
+                if n < 4 or c not in field_rate:
+                    continue
+                div.append((c, p["pick"][c] / n - field_rate[c], n))
+            div.sort(key=lambda x: -x[1])
+            hi = f"{div[0][0]} (+{div[0][1]:.0%})" if div else ""
+            lo = f"{div[-1][0]} ({div[-1][1]:.0%})" if div else ""
+            w.writerow([nm, tag, p["g"], p["w"],
+                        pct(p["w"] / p["g"]) if p["g"] else "",
+                        p["dec"], f"{p['edge']/p['dec']:+.3f}" if p["dec"] and strength else "",
+                        *(top + [""] * 3)[:3], hi, lo])
 
     # ---- summary.md ----
     def top_by(group, key, n=10, reverse=True):
@@ -271,6 +332,57 @@ def main():
               "| Card | Pick rate | Offers | Win rate |", "|---|---|---|---|"]
     for c, pr, off, wr, ind in top_by("top", 1, reverse=False):
         lines.append(f"| {c} | {pr:.0%} | {off} | {wr:.0%} |")
+    # ---- automatic findings ----
+    # Recomputed every run so the interesting questions answer themselves as data arrives,
+    # instead of needing a fresh manual pass each time.
+    lines += ["", "## What separates the top players from the field", "",
+              "Pick-rate gap on cards both groups saw enough of. A positive gap means the",
+              "tracked top players take it more often than the field does.", "",
+              "| Card | Top | Field | Gap | Model strength |", "|---|---|---|---|---|"]
+    gaps = []
+    for c, n in stats["top"]["off"].items():
+        fn = stats["field"]["off"][c]
+        if n < 40 or fn < 200:
+            continue
+        gaps.append((c, stats["top"]["pick"][c] / n, stats["field"]["pick"][c] / fn,
+                     strength.get(c)))
+    gaps.sort(key=lambda r: -(r[1] - r[2]))
+    for c, tr, fr, st in gaps[:6]:
+        lines.append(f"| {c} | {tr:.0%} | {fr:.0%} | **+{tr-fr:.0%}** | "
+                     f"{st:+.2f} |" if st is not None else
+                     f"| {c} | {tr:.0%} | {fr:.0%} | **+{tr-fr:.0%}** | — |")
+    lines += ["", "Cards the top players avoid *more* than the field:", "",
+              "| Card | Top | Field | Gap | Model strength |", "|---|---|---|---|---|"]
+    for c, tr, fr, st in gaps[-6:]:
+        lines.append(f"| {c} | {tr:.0%} | {fr:.0%} | **{tr-fr:.0%}** | "
+                     f"{st:+.2f} |" if st is not None else
+                     f"| {c} | {tr:.0%} | {fr:.0%} | **{tr-fr:.0%}** | — |")
+
+    # Who drafts unlike the rest of the tracked group? Mean absolute deviation of a
+    # player's pick rates from the group's, over cards they've each seen enough times.
+    lines += ["", "## Draft-style outliers among the tracked players", "",
+              "How far each player's pick rates sit from the tracked-group consensus.",
+              "Higher = more idiosyncratic. Needs 100+ decisions to mean much.", "",
+              "| Player | Decisions | Deviation from consensus | Draft edge | Win rate |",
+              "|---|---|---|---|---|"]
+    top_rate = {c: stats["top"]["pick"][c] / n for c, n in stats["top"]["off"].items() if n}
+    devs = []
+    for tag, p in prof.items():
+        if p["dec"] < 100:
+            continue
+        ds = [abs(p["pick"][c] / n - top_rate[c])
+              for c, n in p["off"].items() if n >= 5 and c in top_rate]
+        if len(ds) < 15:
+            continue
+        devs.append((tag, sum(ds) / len(ds), p))
+    for tag, d, p in sorted(devs, key=lambda r: -r[1]):
+        nm = (roster.get(tag, {}) or {}).get("name") or tag
+        edge = f"{p['edge']/p['dec']:+.3f}" if p["dec"] and strength else "—"
+        wr = f"{p['w']/p['g']:.0%}" if p["g"] else "—"
+        lines.append(f"| {nm} | {p['dec']} | {d:.3f} | {edge} | {wr} |")
+    if not devs:
+        lines.append("| *(no player has 100+ decisions yet)* | | | | |")
+
     lines += ["", "## Tracked players", "", "| Player | Games | Win rate |", "|---|---|---|"]
     for tag, d in sorted(per_player.items(), key=lambda kv: -kv[1]["g"]):
         nm = (roster.get(tag, {}) or {}).get("name") or tag

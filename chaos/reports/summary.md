@@ -35,6 +35,48 @@
 | Dark Prince | 21% | 92 | 64% |
 | Royal Giant | 21% | 91 | 63% |
 
+## What separates the top players from the field
+
+Pick-rate gap on cards both groups saw enough of. A positive gap means the
+tracked top players take it more often than the field does.
+
+| Card | Top | Field | Gap | Model strength |
+|---|---|---|---|---|
+| Knight | 74% | 53% | **+21%** | -0.03 |
+| Goblin Hut | 80% | 65% | **+15%** | +0.11 |
+| Suspicious Bush | 79% | 64% | **+15%** | +0.43 |
+| Three Musketeers | 62% | 47% | **+15%** | +0.06 |
+| The Log | 73% | 59% | **+14%** | +0.26 |
+| Poison | 86% | 74% | **+12%** | +0.20 |
+
+Cards the top players avoid *more* than the field:
+
+| Card | Top | Field | Gap | Model strength |
+|---|---|---|---|---|
+| Lava Hound | 4% | 19% | **-15%** | -0.27 |
+| Dark Prince | 21% | 36% | **-15%** | -0.13 |
+| Hunter | 29% | 45% | **-16%** | -0.14 |
+| Flying Machine | 23% | 40% | **-16%** | -0.12 |
+| Elite Barbarians | 21% | 38% | **-18%** | -0.20 |
+| X-Bow | 28% | 49% | **-21%** | -0.36 |
+
+## Draft-style outliers among the tracked players
+
+How far each player's pick rates sit from the tracked-group consensus.
+Higher = more idiosyncratic. Needs 100+ decisions to mean much.
+
+| Player | Decisions | Deviation from consensus | Draft edge | Win rate |
+|---|---|---|---|---|
+| 凛冬Rintou✨卤蛋 | 116 | 0.206 | +0.147 | 72% |
+| OcT❤️Lev4ek | 124 | 0.193 | +0.164 | 74% |
+| Sam❤️Rehwald | 120 | 0.177 | +0.192 | 67% |
+| Busfahrer Dirk | 136 | 0.164 | +0.160 | 76% |
+| Asaf | 124 | 0.162 | +0.153 | 81% |
+| tiktok@kai_cr12 | 124 | 0.146 | +0.158 | 74% |
+| Eurus | 120 | 0.127 | +0.131 | 87% |
+| SK xopxsam | 536 | 0.098 | +0.166 | 86% |
+| batan | 1052 | 0.074 | +0.145 | 68% |
+
 ## Tracked players
 
 | Player | Games | Win rate |
