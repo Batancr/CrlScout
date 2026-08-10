@@ -1,0 +1,60 @@
+<!doctype html><meta charset="utf-8">
+<title>Chaos Draft — quick reference</title>
+<style>
+:root{--bg:#12131a;--card:#1b1d27;--line:#2b2e3d;--tx:#e7e9f0;--dim:#9aa0b4;
+--good:#4ade80;--bad:#f87171;--accent:#60a5fa}
+*{box-sizing:border-box}
+body{margin:0;padding:20px;background:var(--bg);color:var(--tx);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+h1{font-size:20px;margin:0 0 2px} h2{font-size:15px;margin:0 0 10px;color:var(--dim);
+text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.sub{color:var(--dim);font-size:13px;margin-bottom:18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card.wide{grid-column:1/-1}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase}
+tr:last-child td{border-bottom:none}
+td:nth-child(2),td:nth-child(3),th:nth-child(2),th:nth-child(3){text-align:right;
+font-variant-numeric:tabular-nums}
+.kpis{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .n{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--dim);font-size:12px;margin-top:2px}
+.good{color:var(--good)} .bad{color:var(--bad)} .accent{color:var(--accent)}
+.empty{color:var(--dim);font-style:italic}
+.note{color:var(--dim);font-size:12px;margin-top:10px;line-height:1.5}
+@media(prefers-color-scheme:light){:root{--bg:#f6f7f9;--card:#fff;--line:#e3e5ea;
+--tx:#14161c;--dim:#666e80;--good:#15803d;--bad:#b91c1c;--accent:#1d4ed8}}
+</style>
+<h1>Chaos Draft — quick reference</h1>
+<div class="sub">4,074 battles &middot; 32,592 decoded decisions &middot;
+43 tracked players &middot; updated 2026-08-10 15:17 UTC</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="n accent">66.5%</div><div class="l">your capture rate</div></div>
+  <div class="kpi"><div class="n">47.2%</div><div class="l">field</div></div>
+  <div class="kpi"><div class="n good">90.0%</div><div class="l">best (Sam❤️Rehwald)</div></div>
+  <div class="kpi"><div class="n good">79.6%</div><div class="l">win % when draft won</div></div>
+  <div class="kpi"><div class="n bad">54.6%</div><div class="l">win % when draft lost</div></div>
+</div>
+
+<div class="grid">
+  <div class="card"><h2>Take</h2><table>
+    <tr><th>Card</th><th>Str</th><th>Top pick</th></tr><tr><td>Suspicious Bush</td><td>+0.41</td><td>68.8%</td></tr><tr><td>Goblin Drill</td><td>+0.35</td><td>85.3%</td></tr><tr><td>Goblin Demolisher</td><td>+0.34</td><td>86.6%</td></tr><tr><td>Skeleton Barrel</td><td>+0.34</td><td>85.1%</td></tr><tr><td>Musketeer</td><td>+0.33</td><td>72.2%</td></tr><tr><td>Skeleton Army</td><td>+0.32</td><td>85.4%</td></tr><tr><td>Fireball</td><td>+0.31</td><td>89.5%</td></tr><tr><td>The Log</td><td>+0.30</td><td>60.8%</td></tr><tr><td>Barbarian Barrel</td><td>+0.28</td><td>63.8%</td></tr><tr><td>Vines</td><td>+0.24</td><td>79.5%</td></tr></table></div>
+  <div class="card"><h2>Pass</h2><table>
+    <tr><th>Card</th><th>Str</th><th>Top pick</th></tr><tr><td>Royal Giant</td><td>-0.40</td><td>16.9%</td></tr><tr><td>X-Bow</td><td>-0.34</td><td>32.7%</td></tr><tr><td>Elixir Golem</td><td>-0.34</td><td>7.5%</td></tr><tr><td>Rocket</td><td>-0.33</td><td>34.3%</td></tr><tr><td>Lava Hound</td><td>-0.29</td><td>6.7%</td></tr><tr><td>Inferno Tower</td><td>-0.27</td><td>30.6%</td></tr><tr><td>Elite Barbarians</td><td>-0.22</td><td>24.8%</td></tr><tr><td>Dark Prince</td><td>-0.20</td><td>23.4%</td></tr><tr><td>Fisherman</td><td>-0.20</td><td>14.2%</td></tr><tr><td>Rage</td><td>-0.19</td><td>9.7%</td></tr></table></div>
+  <div class="card"><h2>Your biggest leaks</h2><table>
+    <tr><th>Card you take</th><th>Times</th><th>Lost</th></tr><tr><td>Royal Giant</td><td>14</td><td>-3.7</td></tr><tr><td>Ronin</td><td>15</td><td>-3.2</td></tr><tr><td>X-Bow</td><td>12</td><td>-3.0</td></tr><tr><td>P.E.K.K.A</td><td>15</td><td>-2.2</td></tr><tr><td>Bandit</td><td>15</td><td>-2.1</td></tr><tr><td>Tesla</td><td>15</td><td>-2.0</td></tr><tr><td>Royal Delivery</td><td>8</td><td>-1.7</td></tr><tr><td>Valkyrie</td><td>10</td><td>-1.5</td></tr></table>
+    <div class="note">Times you took it when the other card was rated higher.</div></div>
+  <div class="card"><h2>You pass these too often</h2><table>
+    <tr><th>Card</th><th>Times</th><th>Forgone</th></tr><tr><td>Skeleton Barrel</td><td>13</td><td>-2.8</td></tr><tr><td>Heal Spirit</td><td>19</td><td>-2.4</td></tr><tr><td>Goblin Drill</td><td>11</td><td>-2.4</td></tr><tr><td>Zappies</td><td>14</td><td>-2.3</td></tr><tr><td>Skeleton Army</td><td>8</td><td>-2.0</td></tr><tr><td>Suspicious Bush</td><td>7</td><td>-1.9</td></tr><tr><td>Rascals</td><td>11</td><td>-1.9</td></tr><tr><td>Witch</td><td>12</td><td>-1.8</td></tr></table></div>
+  <div class="card wide"><h2>Capture rate — tracked players</h2><table>
+    <tr><th>Player</th><th>Games</th><th>Win</th><th>Capture</th><th>Available</th></tr><tr><td>Sam❤️Rehwald</td><td>30</td><td>66.7%</td><td>90.0%</td><td>0.228</td></tr><tr><td>SK xopxsam</td><td>151</td><td>81.5%</td><td>84.2%</td><td>0.210</td></tr><tr><td>リクルート</td><td>51</td><td>49.0%</td><td>81.5%</td><td>0.225</td></tr><tr><td>tarikzius</td><td>33</td><td>45.5%</td><td>80.2%</td><td>0.223</td></tr><tr><td>けーたいぷ✨</td><td>34</td><td>50.0%</td><td>78.7%</td><td>0.221</td></tr><tr><td>OcT❤️Lev4ek</td><td>31</td><td>74.2%</td><td>77.3%</td><td>0.234</td></tr><tr><td>Busfahrer Dirk</td><td>73</td><td>67.1%</td><td>73.6%</td><td>0.214</td></tr><tr><td>郁白❤️时光☪</td><td>35</td><td>65.7%</td><td>72.7%</td><td>0.244</td></tr><tr><td>ΨΨΨ</td><td>31</td><td>48.4%</td><td>72.3%</td><td>0.222</td></tr><tr><td>5>Niko✨Drill</td><td>35</td><td>48.6%</td><td>72.2%</td><td>0.216</td></tr><tr><td>vicki£22</td><td>35</td><td>57.1%</td><td>72.0%</td><td>0.205</td></tr><tr><td>Eurus</td><td>30</td><td>86.7%</td><td>70.1%</td><td>0.191</td></tr><tr><td>Asaf</td><td>31</td><td>80.6%</td><td>69.2%</td><td>0.234</td></tr><tr><td>=★The Star★=</td><td>90</td><td>53.3%</td><td>68.6%</td><td>0.213</td></tr><tr><td>Hazy</td><td>30</td><td>73.3%</td><td>68.5%</td><td>0.262</td></tr><tr><td>Metalfusion</td><td>33</td><td>51.5%</td><td>68.4%</td><td>0.199</td></tr><tr><td>Reora.</td><td>67</td><td>44.8%</td><td>68.3%</td><td>0.224</td></tr><tr><td>batan</td><td>263</td><td>68.1%</td><td>68.1%</td><td>0.227</td></tr><tr><td>Batman</td><td>65</td><td>55.4%</td><td>67.1%</td><td>0.221</td></tr><tr><td>SYX_OGtrooper</td><td>47</td><td>55.3%</td><td>66.9%</td><td>0.205</td></tr><tr><td>カオス</td><td>84</td><td>48.8%</td><td>66.9%</td><td>0.211</td></tr><tr><td>かさあま</td><td>43</td><td>51.2%</td><td>65.5%</td><td>0.217</td></tr><tr><td>tiktok@kai_cr12</td><td>31</td><td>74.2%</td><td>65.2%</td><td>0.248</td></tr><tr><td>RAIN</td><td>37</td><td>56.8%</td><td>64.9%</td><td>0.236</td></tr><tr><td>Dread Unlock</td><td>41</td><td>46.3%</td><td>63.5%</td><td>0.219</td></tr><tr><td>Golem</td><td>33</td><td>54.5%</td><td>62.9%</td><td>0.245</td></tr><tr><td>Loris</td><td>48</td><td>54.2%</td><td>62.6%</td><td>0.226</td></tr><tr><td>23BS6N</td><td>47</td><td>55.3%</td><td>62.0%</td><td>0.226</td></tr><tr><td>Arrrr＿</td><td>64</td><td>50.0%</td><td>60.6%</td><td>0.218</td></tr><tr><td>Aʀоmaτ❤</td><td>74</td><td>48.6%</td><td>60.3%</td><td>0.197</td></tr><tr><td>MicinoCoccoloso</td><td>88</td><td>53.4%</td><td>59.8%</td><td>0.217</td></tr><tr><td>凛冬Rintou✨卤蛋</td><td>59</td><td>57.6%</td><td>58.7%</td><td>0.223</td></tr><tr><td>leon</td><td>85</td><td>52.9%</td><td>57.4%</td><td>0.224</td></tr><tr><td>GiovanniXD</td><td>34</td><td>61.8%</td><td>54.5%</td><td>0.207</td></tr><tr><td>Pi✨Maskk</td><td>36</td><td>66.7%</td><td>51.5%</td><td>0.214</td></tr><tr><td>Tim f2p</td><td>71</td><td>46.5%</td><td>47.9%</td><td>0.212</td></tr><tr><td>Sweeping Demon</td><td>41</td><td>46.3%</td><td>37.7%</td><td>0.220</td></tr></table>
+    <div class="note">Capture = share of the strength on the table that they took (skill).
+    Available = how much was on the table (luck) &mdash; near-identical for everyone, which is
+    what makes capture a fair comparison. Card strengths come from a ridge logistic model over
+    every battle; it cannot see synergy, card levels or matchup, so trust your own read when a
+    weaker card obviously completes your eight.</div></div>
+</div>

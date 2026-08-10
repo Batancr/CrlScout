@@ -114,6 +114,86 @@ def pct(x):
     return f"{x:.1%}"
 
 
+def write_dashboard(path, ctx):
+    """One self-contained HTML page, rebuilt on every run.
+
+    Deliberately dependency-free -- no CDN, no JS framework, no external CSS. It has to
+    open straight off disk (or a phone, or a USB stick) with no network, because the point
+    is glancing at it mid-session. Everything it shows comes from the same numbers the CSVs
+    carry, so the two can never disagree."""
+    def rows(items, cols):
+        return "".join("<tr>" + "".join(f"<td>{c}</td>" for c in r) + "</tr>" for r in items) \
+            if items else f'<tr><td colspan="{cols}" class="empty">not enough data yet</td></tr>'
+
+    take = rows([(c, f"{s:+.2f}", tp) for c, s, tp in ctx["take"]], 3)
+    avoid = rows([(c, f"{s:+.2f}", tp) for c, s, tp in ctx["avoid"]], 3)
+    leaks = rows([(c, n, f"{e:.1f}") for c, n, e in ctx["leaks"]], 3)
+    passed = rows([(c, n, f"{e:.1f}") for c, n, e in ctx["passed"]], 3)
+    board = rows(ctx["board"], 5)
+    html = f"""<!doctype html><meta charset="utf-8">
+<title>Chaos Draft — quick reference</title>
+<style>
+:root{{--bg:#12131a;--card:#1b1d27;--line:#2b2e3d;--tx:#e7e9f0;--dim:#9aa0b4;
+--good:#4ade80;--bad:#f87171;--accent:#60a5fa}}
+*{{box-sizing:border-box}}
+body{{margin:0;padding:20px;background:var(--bg);color:var(--tx);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}}
+h1{{font-size:20px;margin:0 0 2px}} h2{{font-size:15px;margin:0 0 10px;color:var(--dim);
+text-transform:uppercase;letter-spacing:.06em;font-weight:600}}
+.sub{{color:var(--dim);font-size:13px;margin-bottom:18px}}
+.grid{{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}}
+.card{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}}
+.card.wide{{grid-column:1/-1}}
+table{{width:100%;border-collapse:collapse;font-size:14px}}
+td,th{{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left}}
+th{{color:var(--dim);font-weight:600;font-size:12px;text-transform:uppercase}}
+tr:last-child td{{border-bottom:none}}
+td:nth-child(2),td:nth-child(3),th:nth-child(2),th:nth-child(3){{text-align:right;
+font-variant-numeric:tabular-nums}}
+.kpis{{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));margin-bottom:16px}}
+.kpi{{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}}
+.kpi .n{{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}}
+.kpi .l{{color:var(--dim);font-size:12px;margin-top:2px}}
+.good{{color:var(--good)}} .bad{{color:var(--bad)}} .accent{{color:var(--accent)}}
+.empty{{color:var(--dim);font-style:italic}}
+.note{{color:var(--dim);font-size:12px;margin-top:10px;line-height:1.5}}
+@media(prefers-color-scheme:light){{:root{{--bg:#f6f7f9;--card:#fff;--line:#e3e5ea;
+--tx:#14161c;--dim:#666e80;--good:#15803d;--bad:#b91c1c;--accent:#1d4ed8}}}}
+</style>
+<h1>Chaos Draft — quick reference</h1>
+<div class="sub">{ctx['battles']:,} battles &middot; {ctx['decisions']:,} decoded decisions &middot;
+{ctx['roster']} tracked players &middot; updated {ctx['updated']}</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="n accent">{ctx['my_capture']}</div><div class="l">your capture rate</div></div>
+  <div class="kpi"><div class="n">{ctx['field_capture']}</div><div class="l">field</div></div>
+  <div class="kpi"><div class="n good">{ctx['best_capture']}</div><div class="l">best ({ctx['best_name']})</div></div>
+  <div class="kpi"><div class="n good">{ctx['win_hi']}</div><div class="l">win % when draft won</div></div>
+  <div class="kpi"><div class="n bad">{ctx['win_lo']}</div><div class="l">win % when draft lost</div></div>
+</div>
+
+<div class="grid">
+  <div class="card"><h2>Take</h2><table>
+    <tr><th>Card</th><th>Str</th><th>Top pick</th></tr>{take}</table></div>
+  <div class="card"><h2>Pass</h2><table>
+    <tr><th>Card</th><th>Str</th><th>Top pick</th></tr>{avoid}</table></div>
+  <div class="card"><h2>Your biggest leaks</h2><table>
+    <tr><th>Card you take</th><th>Times</th><th>Lost</th></tr>{leaks}</table>
+    <div class="note">Times you took it when the other card was rated higher.</div></div>
+  <div class="card"><h2>You pass these too often</h2><table>
+    <tr><th>Card</th><th>Times</th><th>Forgone</th></tr>{passed}</table></div>
+  <div class="card wide"><h2>Capture rate — tracked players</h2><table>
+    <tr><th>Player</th><th>Games</th><th>Win</th><th>Capture</th><th>Available</th></tr>{board}</table>
+    <div class="note">Capture = share of the strength on the table that they took (skill).
+    Available = how much was on the table (luck) &mdash; near-identical for everyone, which is
+    what makes capture a fair comparison. Card strengths come from a ridge logistic model over
+    every battle; it cannot see synergy, card levels or matchup, so trust your own read when a
+    weaker card obviously completes your eight.</div></div>
+</div>"""
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(html)
+
+
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     battles = load_battles()
@@ -448,6 +528,52 @@ def main():
         lines.append(f"| {nm}{flag} | {d['g']} | {d['w']/d['g']:.0%} |" if d["g"] else "")
     with open(os.path.join(OUT_DIR, "summary.md"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")
+
+    # ---- dashboard.html : the at-a-glance view, rebuilt every run ----
+    from datetime import datetime, timezone
+    bat = [prof[t] for t in BATAN if t in prof and prof[t]["dec"]]
+    my = {"cap_num": sum(b["cap_num"] for b in bat), "cap_den": sum(b["cap_den"] for b in bat),
+          "hi": sum(b["hi"] for b in bat), "hi_w": sum(b["hi_w"] for b in bat),
+          "lo": sum(b["lo"] for b in bat), "lo_w": sum(b["lo_w"] for b in bat)}
+    ranked = sorted(((t, p) for t, p in prof.items() if p["g"] >= 25 and p["cap_den"]),
+                    key=lambda kv: -(kv[1]["cap_num"] / kv[1]["cap_den"]))
+    tiers = sorted(((c, s, stats["top"]["pick"][c] / stats["top"]["off"][c]
+                     if stats["top"]["off"][c] else None)
+                    for c, s in strength.items() if stats["field"]["off"][c] >= 200),
+                   key=lambda r: -r[1]) if strength else []
+    leaks, passed = Counter(), Counter()
+    leakn, passn = Counter(), Counter()
+    for (t, o, tc, oc) in battles.values():
+        tt, ot = canon(t.get("tag")), canon(o.get("tag"))
+        if (t.get("crowns") or 0) == (o.get("crowns") or 0):
+            continue
+        for cit, chosen, rejected, _r in decode_draft(tc, oc):
+            if (tt if cit else ot) not in BATAN:
+                continue
+            d = strength.get(chosen, 0.0) - strength.get(rejected, 0.0)
+            if d < 0:
+                leaks[chosen] += d
+                leakn[chosen] += 1
+                passed[rejected] += d
+                passn[rejected] += 1
+    write_dashboard(os.path.join(OUT_DIR, "dashboard.html"), {
+        "battles": len(battles), "decisions": sum(stats["field"]["pick"].values()),
+        "roster": len(tracked),
+        "updated": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
+        "my_capture": pct(my["cap_num"] / my["cap_den"]) if my["cap_den"] else "—",
+        "field_capture": pct(field_capture) if field_capture else "—",
+        "best_capture": pct(ranked[0][1]["cap_num"] / ranked[0][1]["cap_den"]) if ranked else "—",
+        "best_name": ((roster.get(ranked[0][0], {}) or {}).get("name") or "—") if ranked else "—",
+        "win_hi": pct(my["hi_w"] / my["hi"]) if my["hi"] else "—",
+        "win_lo": pct(my["lo_w"] / my["lo"]) if my["lo"] else "—",
+        "take": [(c, s, pct(tp) if tp is not None else "—") for c, s, tp in tiers[:10]],
+        "avoid": [(c, s, pct(tp) if tp is not None else "—") for c, s, tp in tiers[-10:][::-1]],
+        "leaks": [(c, leakn[c], e) for c, e in leaks.most_common()[:-9:-1]],
+        "passed": [(c, passn[c], e) for c, e in passed.most_common()[:-9:-1]],
+        "board": [((roster.get(t, {}) or {}).get("name") or t, p["g"],
+                   pct(p["w"] / p["g"]), pct(p["cap_num"] / p["cap_den"]),
+                   f"{p['cap_den']/p['dec']:.3f}") for t, p in ranked],
+    })
 
     print(f"{len(battles)} battles | {len(tracked)} tracked top players | "
           f"{sum(stats['field']['pick'].values())} decisions decoded")
