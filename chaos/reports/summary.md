@@ -1,39 +1,39 @@
 # Chaos Draft tracker
 
-- Unique battles archived: **2856**
-- Tracked top players: **30**
-- Draft decisions decoded: **22848**
-- strength model fitted on 2856 battles, in-sample accuracy 64.5%.
+- Unique battles archived: **3430**
+- Tracked top players: **33**
+- Draft decisions decoded: **27440**
+- strength model fitted on 3430 battles, in-sample accuracy 64.1%.
 
 ## Most picked when offered — tracked top players
 
 | Card | Pick rate | Offers | Win rate |
 |---|---|---|---|
-| Goblin Barrel | 91% | 85 | 79% |
-| Poison | 86% | 86 | 72% |
-| Fireball | 84% | 96 | 74% |
-| Goblin Demolisher | 84% | 83 | 74% |
-| Skeleton Army | 84% | 97 | 74% |
-| Electro Wizard | 82% | 74 | 69% |
-| Skeleton Barrel | 82% | 116 | 83% |
-| Mega Knight | 81% | 95 | 63% |
-| Royal Hogs | 80% | 84 | 72% |
-| Goblin Hut | 80% | 84 | 69% |
+| Goblin Barrel | 90% | 156 | 67% |
+| Fireball | 88% | 185 | 67% |
+| Poison | 87% | 158 | 65% |
+| Skeleton Army | 86% | 173 | 68% |
+| Royal Hogs | 86% | 163 | 65% |
+| Skeleton Barrel | 84% | 208 | 73% |
+| Goblin Drill | 84% | 170 | 68% |
+| Goblin Demolisher | 84% | 162 | 65% |
+| Golem | 83% | 183 | 64% |
+| Vines | 80% | 148 | 67% |
 
 ## Least picked — tracked top players
 
 | Card | Pick rate | Offers | Win rate |
 |---|---|---|---|
-| Lava Hound | 4% | 98 | 58% |
-| Elixir Golem | 5% | 87 | 62% |
-| Rage | 12% | 112 | 60% |
-| Fisherman | 12% | 86 | 62% |
-| Giant Snowball | 12% | 100 | 64% |
-| Ice Wizard | 18% | 82 | 76% |
-| Rune Giant | 20% | 82 | 72% |
-| Elite Barbarians | 21% | 92 | 59% |
-| Dark Prince | 21% | 92 | 64% |
-| Royal Giant | 21% | 91 | 63% |
+| Lava Hound | 5% | 184 | 56% |
+| Elixir Golem | 7% | 162 | 56% |
+| Rage | 10% | 194 | 58% |
+| Fisherman | 12% | 164 | 54% |
+| Giant Snowball | 12% | 200 | 57% |
+| Royal Giant | 17% | 174 | 55% |
+| Ice Wizard | 18% | 156 | 63% |
+| Elite Barbarians | 23% | 202 | 50% |
+| Dark Prince | 23% | 149 | 58% |
+| Ram Rider | 23% | 179 | 61% |
 
 ## What separates the top players from the field
 
@@ -42,23 +42,23 @@ tracked top players take it more often than the field does.
 
 | Card | Top | Field | Gap | Model strength |
 |---|---|---|---|---|
-| Knight | 74% | 53% | **+21%** | -0.03 |
-| Goblin Hut | 80% | 65% | **+15%** | +0.11 |
-| Suspicious Bush | 79% | 64% | **+15%** | +0.43 |
-| Three Musketeers | 62% | 47% | **+15%** | +0.06 |
-| The Log | 73% | 59% | **+14%** | +0.26 |
-| Poison | 86% | 74% | **+12%** | +0.20 |
+| Royal Hogs | 86% | 72% | **+14%** | +0.14 |
+| Knight | 69% | 55% | **+14%** | +0.03 |
+| Arrows | 76% | 63% | **+13%** | +0.11 |
+| Vines | 80% | 69% | **+12%** | +0.25 |
+| Poison | 87% | 75% | **+11%** | +0.21 |
+| Goblin Drill | 84% | 73% | **+11%** | +0.34 |
 
 Cards the top players avoid *more* than the field:
 
 | Card | Top | Field | Gap | Model strength |
 |---|---|---|---|---|
-| Lava Hound | 4% | 19% | **-15%** | -0.27 |
-| Dark Prince | 21% | 36% | **-15%** | -0.13 |
-| Hunter | 29% | 45% | **-16%** | -0.14 |
-| Flying Machine | 23% | 40% | **-16%** | -0.12 |
-| Elite Barbarians | 21% | 38% | **-18%** | -0.20 |
-| X-Bow | 28% | 49% | **-21%** | -0.36 |
+| Ice Wizard | 18% | 29% | **-11%** | -0.13 |
+| Hunter | 32% | 43% | **-11%** | -0.20 |
+| Dark Prince | 23% | 34% | **-12%** | -0.15 |
+| Lava Hound | 5% | 17% | **-12%** | -0.28 |
+| Elite Barbarians | 23% | 36% | **-14%** | -0.24 |
+| X-Bow | 26% | 46% | **-20%** | -0.33 |
 
 ## Draft-style outliers among the tracked players
 
@@ -67,33 +67,73 @@ Higher = more idiosyncratic. Needs 100+ decisions to mean much.
 
 | Player | Decisions | Deviation from consensus | Draft edge | Win rate |
 |---|---|---|---|---|
-| 凛冬Rintou✨卤蛋 | 116 | 0.206 | +0.147 | 72% |
-| OcT❤️Lev4ek | 124 | 0.193 | +0.164 | 74% |
-| Sam❤️Rehwald | 120 | 0.177 | +0.192 | 67% |
-| Busfahrer Dirk | 136 | 0.164 | +0.160 | 76% |
-| Asaf | 124 | 0.162 | +0.153 | 81% |
-| tiktok@kai_cr12 | 124 | 0.146 | +0.158 | 74% |
-| Eurus | 120 | 0.127 | +0.131 | 87% |
-| SK xopxsam | 536 | 0.098 | +0.166 | 86% |
-| batan | 1052 | 0.074 | +0.145 | 68% |
+| Arrrr＿ | 124 | 0.218 | +0.109 | 42% |
+| Reora. | 180 | 0.216 | +0.156 | 42% |
+| 凛冬Rintou✨卤蛋 | 188 | 0.212 | +0.142 | 60% |
+| RAIN | 148 | 0.205 | +0.156 | 57% |
+| 23BS6N | 124 | 0.203 | +0.131 | 61% |
+| Loris | 116 | 0.198 | +0.138 | 52% |
+| OcT❤️Lev4ek | 124 | 0.194 | +0.179 | 74% |
+| Sam❤️Rehwald | 120 | 0.187 | +0.210 | 67% |
+| leon | 140 | 0.185 | +0.134 | 51% |
+| MicinoCoccoloso | 192 | 0.180 | +0.129 | 46% |
+| Dread Unlock | 136 | 0.180 | +0.142 | 41% |
+| Batman | 188 | 0.179 | +0.148 | 53% |
+| Aʀоmaτ❤ | 168 | 0.175 | +0.113 | 40% |
+| SYX_OGtrooper | 176 | 0.174 | +0.138 | 57% |
+| Asaf | 124 | 0.172 | +0.166 | 81% |
+| Busfahrer Dirk | 136 | 0.169 | +0.173 | 76% |
+| 5>Niko✨Drill | 136 | 0.165 | +0.157 | 47% |
+| vicki£22 | 140 | 0.157 | +0.151 | 57% |
+| Hazy | 120 | 0.152 | +0.180 | 73% |
+| けーたいぷ✨ | 136 | 0.151 | +0.178 | 50% |
+| 郁白❤️时光☪ | 136 | 0.148 | +0.180 | 65% |
+| Tim f2p | 136 | 0.147 | +0.142 | 47% |
+| =★The Star★= | 152 | 0.147 | +0.152 | 47% |
+| Eurus | 120 | 0.139 | +0.134 | 87% |
+| tiktok@kai_cr12 | 124 | 0.136 | +0.162 | 74% |
+| カオス | 164 | 0.133 | +0.166 | 41% |
+| ΨΨΨ | 124 | 0.125 | +0.157 | 48% |
+| SK xopxsam | 536 | 0.115 | +0.184 | 86% |
+| batan | 1052 | 0.091 | +0.158 | 68% |
 
 ## Draft skill: capture rate
 
 Share of the strength that was actually on the table which the player took.
 'Available' is near-identical for everyone, so this isolates decision quality
-from luck of the draw. **Untracked field: 43.9%.**
+from luck of the draw. **Untracked field: 45.9%.**
 
 | Player | Games | Win rate | Capture | Available | Won draft | Lost draft |
 |---|---|---|---|---|---|---|
-| Sam❤️Rehwald | 30 | 67% | **88.5%** | 0.217 | 79% (19) | 45% (11) |
-| SK xopxsam | 134 | 86% | **81.4%** | 0.204 | 93% (86) | 73% (48) |
-| Busfahrer Dirk | 34 | 76% | **75.1%** | 0.213 | 83% (24) | 60% (10) |
-| Eurus | 30 | 87% | **71.2%** | 0.185 | 95% (20) | 70% (10) |
-| OcT❤️Lev4ek | 31 | 74% | **70.9%** | 0.231 | 81% (21) | 60% (10) |
-| Asaf | 31 | 81% | **66.1%** | 0.231 | 84% (19) | 75% (12) |
-| batan | 263 | 68% | **66.0%** | 0.220 | 81% (147) | 52% (116) |
-| tiktok@kai_cr12 | 31 | 74% | **65.6%** | 0.242 | 79% (19) | 67% (12) |
-| 凛冬Rintou✨卤蛋 | 29 | 72% | **65.5%** | 0.224 | 95% (20) | 22% (9) |
+| Sam❤️Rehwald | 30 | 67% | **90.2%** | 0.233 | 84% (19) | 36% (11) |
+| SK xopxsam | 134 | 86% | **84.0%** | 0.219 | 92% (89) | 73% (45) |
+| けーたいぷ✨ | 34 | 50% | **79.3%** | 0.224 | 72% (18) | 25% (16) |
+| Busfahrer Dirk | 34 | 76% | **77.1%** | 0.225 | 81% (26) | 62% (8) |
+| OcT❤️Lev4ek | 31 | 74% | **74.5%** | 0.241 | 78% (23) | 62% (8) |
+| カオス | 41 | 41% | **72.6%** | 0.228 | 40% (25) | 44% (16) |
+| 郁白❤️时光☪ | 34 | 65% | **72.1%** | 0.250 | 70% (23) | 55% (11) |
+| vicki£22 | 35 | 57% | **71.2%** | 0.211 | 82% (17) | 33% (18) |
+| 5>Niko✨Drill | 34 | 47% | **70.9%** | 0.222 | 75% (20) | 7% (14) |
+| Eurus | 30 | 87% | **70.5%** | 0.190 | 95% (19) | 73% (11) |
+| ΨΨΨ | 31 | 48% | **69.8%** | 0.226 | 56% (18) | 38% (13) |
+| batan | 263 | 68% | **68.1%** | 0.232 | 79% (152) | 53% (111) |
+| Hazy | 30 | 73% | **68.1%** | 0.264 | 78% (23) | 57% (7) |
+| Asaf | 31 | 81% | **68.0%** | 0.245 | 83% (18) | 77% (13) |
+| Reora. | 45 | 42% | **67.2%** | 0.232 | 64% (22) | 22% (23) |
+| Tim f2p | 34 | 47% | **67.1%** | 0.212 | 56% (16) | 39% (18) |
+| =★The Star★= | 38 | 47% | **66.8%** | 0.227 | 58% (19) | 37% (19) |
+| SYX_OGtrooper | 44 | 57% | **65.3%** | 0.211 | 71% (24) | 40% (20) |
+| RAIN | 37 | 57% | **64.4%** | 0.242 | 71% (21) | 38% (16) |
+| tiktok@kai_cr12 | 31 | 74% | **64.2%** | 0.252 | 83% (18) | 62% (13) |
+| Batman | 47 | 53% | **63.8%** | 0.232 | 67% (21) | 42% (26) |
+| MicinoCoccoloso | 48 | 46% | **63.2%** | 0.205 | 65% (23) | 28% (25) |
+| leon | 35 | 51% | **62.4%** | 0.215 | 71% (14) | 38% (21) |
+| Dread Unlock | 34 | 41% | **62.3%** | 0.228 | 60% (15) | 26% (19) |
+| 凛冬Rintou✨卤蛋 | 47 | 60% | **60.8%** | 0.233 | 88% (25) | 27% (22) |
+| Loris | 29 | 52% | **58.8%** | 0.235 | 79% (14) | 27% (15) |
+| Aʀоmaτ❤ | 42 | 40% | **57.9%** | 0.195 | 60% (10) | 34% (32) |
+| 23BS6N | 31 | 61% | **56.1%** | 0.233 | 70% (20) | 45% (11) |
+| Arrrr＿ | 31 | 42% | **54.7%** | 0.199 | 73% (11) | 25% (20) |
 
 ## Tracked players
 
@@ -101,31 +141,34 @@ from luck of the draw. **Untracked field: 43.9%.**
 |---|---|---|
 | batan *(your account)* | 263 | 68% |
 | SK xopxsam | 134 | 86% |
+| MicinoCoccoloso | 48 | 46% |
+| Batman | 47 | 53% |
+| 凛冬Rintou✨卤蛋 | 47 | 60% |
+| Reora. | 45 | 42% |
+| SYX_OGtrooper | 44 | 57% |
+| Aʀоmaτ❤ | 42 | 40% |
+| カオス | 41 | 41% |
+| =★The Star★= | 38 | 47% |
+| RAIN | 37 | 57% |
+| leon | 35 | 51% |
+| vicki£22 | 35 | 57% |
 | Busfahrer Dirk | 34 | 76% |
+| けーたいぷ✨ | 34 | 50% |
+| 郁白❤️时光☪ | 34 | 65% |
+| Tim f2p | 34 | 47% |
+| Dread Unlock | 34 | 41% |
+| 5>Niko✨Drill | 34 | 47% |
 | tiktok@kai_cr12 | 31 | 74% |
 | OcT❤️Lev4ek | 31 | 74% |
 | Asaf | 31 | 81% |
+| Arrrr＿ | 31 | 42% |
+| 23BS6N | 31 | 61% |
+| ΨΨΨ | 31 | 48% |
 | Eurus | 30 | 87% |
+| Hazy | 30 | 73% |
 | Sam❤️Rehwald | 30 | 67% |
-| 凛冬Rintou✨卤蛋 | 29 | 72% |
-| Batman | 16 | 25% |
+| Loris | 29 | 52% |
 | 老板 Ι Batan'宙斯 *(your account)* | 13 | 85% |
-| Reora. | 12 | 33% |
-| カオス | 11 | 45% |
-| MicinoCoccoloso | 11 | 27% |
-| Aʀоmaτ❤ | 9 | 22% |
-| Loris | 7 | 0% |
-| SYX_OGtrooper | 7 | 57% |
-| 郁白❤️时光☪ | 7 | 43% |
-| Tim f2p | 6 | 67% |
-| vicki£22 | 6 | 33% |
-| =★The Star★= | 6 | 33% |
-| leon | 5 | 20% |
-| Arrrr＿ | 5 | 40% |
-| けーたいぷ✨ | 4 | 50% |
-| Dread Unlock | 4 | 50% |
-| RAIN | 4 | 25% |
-| 5>Niko✨Drill | 4 | 0% |
-| Hazy | 3 | 100% |
-| ΨΨΨ | 3 | 33% |
-| 23BS6N | 2 | 50% |
+| イッシー | 9 | 44% |
+| Golem | 8 | 50% |
+| Metalfusion | 8 | 50% |
