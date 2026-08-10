@@ -225,6 +225,40 @@ custom date) in the match-category bar.
 - **inline** (`CRL_INLINE_ICONS=1`): base64, one portable offline file. The workflow builds
   this second for the downloadable artifact.
 
+## `chaos/` — Chaos Draft tracker (added 2026-08-09) — NOT part of the CRL project
+
+A separate, seasonal, personal-curiosity tracker that shares this repo but no data. It is
+deliberately isolated: **nothing in the CRL pipeline reads `chaos/`, and `chaos.yml` writes
+nothing outside it.** That's the third leg of the ownership rule.
+
+**Why the mode is interesting:** both players draft from one shared 16-card pool. Each makes
+4 choices between 2 cards; the card taken goes to their deck, the loser goes to the opponent.
+So every battle records what was *rejected*, not just what was played — a revealed preference,
+which beats a usage count.
+
+**The decode** (confirmed by Alexander against his in-game log, and self-consistent on the
+4 battles captured from both players' logs): `my[i]` pairs with `opp[9-i]` for all i. Positions
+1–4 are that player's picks in draft order; 5–8 are what the opponent passed on, in reverse.
+
+- `chaos/fetch_chaos.py` — chaos-only append-only archive. Roster auto-expands from opponents
+  seen, but a candidate needs **2+ sightings AND `CHAOS_MIN_TROPHIES` (2900) trophies**, capped
+  at `CHAOS_MAX_ROSTER` (100). The trophy bar exists because matchmaking pairs the top seeds
+  against far weaker players — sightings alone would fill the roster with noise. 2900 is ~the
+  99th percentile: of 334 opponents in the baseline only 3 clear it, 43 repeat opponents are
+  rejected on trophies. Lower to ~2800 if the roster stays too thin.
+- `chaos/analyze_chaos.py` — pick rate, win rate, picked-vs-passed, and a ridge logistic
+  card-strength model (a card's effect with the other 15 held fixed; ~64% in-sample accuracy).
+- `chaos/baseline_backfill.json` — **frozen** slimmed snapshot of the 2,667 chaos battles
+  already in the CRL archive. Never re-fetched; gives the tracker history from day one.
+- `chaos.yml` — 30-min cron, **auto-stops after `SEASON_END`** (currently 2026-08-18). Bump
+  the date to extend; it exists so a seasonal job doesn't outlive its season.
+
+**Findings so far** (2,667 battles, 20,232 decisions): offered pairs are statistically
+indistinguishable from random (elixir, rarity and spell-vs-spell rates all match a shuffled
+null), so there's no draft-order edge — only per-pair card value. Pick rate and modelled
+strength correlate r=0.73; the big disagreements are Ronin (73% picked, 58th strongest) and
+Suspicious Bush (62% picked, **strongest card in the mode**).
+
 ## Known history / gotchas
 
 - Card icons render via CSS classes, not inline images — an earlier inline approach made the

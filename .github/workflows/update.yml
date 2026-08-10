@@ -177,7 +177,10 @@ jobs:
           # them here would let the `-X ours` merge below overwrite battles fetched while
           # this (multi-minute) build was running -- silently undoing the whole point of the
           # 30-minute fetch cadence.
-          git add -A -- . ':!master_*.json' ':!fetch_log.json'
+          # chaos/ is excluded too: it belongs to chaos.yml (a separate side-project).
+          # In practice this job never modifies it, but `git add -A` is broad enough that
+          # the exclusion should be explicit rather than relying on that staying true.
+          git add -A -- . ':!master_*.json' ':!fetch_log.json' ':!chaos'
           if git diff --cached --quiet; then
             echo "No changes this run."; exit 0
           fi
