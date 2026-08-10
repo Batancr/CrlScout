@@ -86,7 +86,7 @@ MIN_TROPHIES_TO_PROMOTE = int(os.environ.get("CHAOS_MIN_TROPHIES", "2900"))
 SEED = {
     "#220PRU8YYY": "Eurus",
     "#2LQ2YP98":   "SK xopxsam",
-    "#VJ2J0P2R2":  "(unverified)",
+    "#VJ2J0P2R2":  "Sam❤️Rehwald",
     "#V9QYURLVC":  "凛冬Rintou✨卤蛋",
     "#YJP2RPUJJ":  "OcT❤️Lev4ek",
     "#PYYLQQ80R":  "Busfahrer Dirk",

@@ -46,7 +46,7 @@
 | OcT❤️Lev4ek | 31 | 74% |
 | Asaf | 31 | 81% |
 | Eurus | 30 | 87% |
-| (unverified) | 30 | 67% |
+| Sam❤️Rehwald | 30 | 67% |
 | 凛冬Rintou✨卤蛋 | 29 | 72% |
 | Batman | 16 | 25% |
 | 老板 Ι Batan'宙斯 *(your account)* | 13 | 85% |
