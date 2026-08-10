@@ -32,8 +32,21 @@ env:
 
 on:
   schedule:
-    - cron: '*/30 * * * *'      # every 30 minutes, same reasoning as the CRL fetcher:
-                                # the API only returns ~25-30 battles per player
+    # EVERY 2 HOURS, at :15 past. Two separate decisions are baked into that:
+    #
+    # WHY NOT SLOWER: the API returns only a player's last ~25-30 battles across ALL modes.
+    # Measured on the baseline archive, the busiest rolling 6-hour window was 80 chaos
+    # battles for Batan's alt and 51 for SK xopxsam -- so a 6-hourly fetch would silently
+    # drop most of the games from exactly the high-volume top-ladder players this tracker
+    # exists to measure. 2h keeps the worst case near the window edge instead of past it.
+    #
+    # WHY :15 AND NOT :00: fetch.yml runs at :00/:30 and update.yml at the top of every
+    # third hour. Sharing a slot would put this side-project in contention with the CRL
+    # tracker on two shared resources -- the RoyaleAPI proxy rate limit (same token, same
+    # IP) and pushes to main. Both have retries, so a collision is survivable rather than
+    # damaging, but CRL is competitive data whose losses are permanent and this is
+    # curiosity. Offsetting costs nothing, so CRL gets the clean slots.
+    - cron: '15 */2 * * *'
   workflow_dispatch: {}
 
 permissions:
