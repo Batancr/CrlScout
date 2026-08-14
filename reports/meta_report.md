@@ -1,29 +1,29 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-14 07:18 UTC · latest battle 2026-08-14 05:04 UTC
+Generated 2026-08-14 10:03 UTC · latest battle 2026-08-14 07:50 UTC
 
-**6,978 eligible games** · Practice 6,978
+**6,990 eligible games** · Practice 6,990
 
 > ⚠️ **No Official CRL games in this window** — everything below is practice data. Practice and bracket metas diverge, especially on blind Game-1 picks.
 
 ## Top win conditions
 
-Share is of the 6,944 games with a classified win condition.
+Share is of the 6,956 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Battle Ram | 823 | 11.9% | **60%** |
-| Mortar | 601 | 8.7% | **57%** |
+| Battle Ram | 826 | 11.9% | **60%** |
+| Mortar | 603 | 8.7% | **57%** |
 | Three Musketeers | 104 | 1.5% | **56%** |
-| Elite Barbarians | 1,148 | 16.5% | **55%** |
-| Skeleton Barrel | 482 | 6.9% | **55%** |
-| Giant | 198 | 2.9% | **55%** |
-| Royal Hogs | 735 | 10.6% | **53%** |
+| Elite Barbarians | 1,152 | 16.6% | **55%** |
+| Skeleton Barrel | 484 | 7.0% | **55%** |
+| Giant | 199 | 2.9% | **55%** |
+| Royal Hogs | 736 | 10.6% | **53%** |
 | Rune Giant | 593 | 8.5% | **53%** |
-| Hog Rider | 540 | 7.8% | **53%** |
+| Hog Rider | 541 | 7.8% | **53%** |
 | Golem | 228 | 3.3% | **53%** |
-| Goblin Barrel | 495 | 7.1% | **51%** |
-| Miner | 997 | 14.4% | **50%** |
+| Goblin Barrel | 496 | 7.1% | **51%** |
+| Miner | 998 | 14.3% | **50%** |
 
 ## Best decks (30+ games)
 
@@ -34,14 +34,14 @@ Share is of the 6,944 games with a classified win condition.
 | **81%** | 32 | noise | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
 | **72%** | 32 | noise | Barbarian Barrel, Electro Spirit, Elite Barbarians, Fireball, Goblin Cage, Heal Spirit, Phoenix, Royal Giant |
 | **70%** | 37 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
+| **65%** | 31 | noise | Berserker, Cannon Cart, Electro Spirit, Fireball, Minions, Mortar, Rascals, Skeleton Barrel |
 | **64%** | 136 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
-| **64%** | 146 | solid | Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies |
-| **63%** | 30 | noise | Berserker, Cannon Cart, Electro Spirit, Fireball, Minions, Mortar, Rascals, Skeleton Barrel |
+| **63%** | 147 | solid | Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies |
 | **62%** | 71 | thin | Berserker, Bomb Tower, Dart Goblin, Rascals, Royal Ghost, Skeleton Barrel, Suspicious Bush, Vines |
 | **60%** | 77 | thin | Barbarian Barrel, Berserker, Cannon Cart, Fireball, Minions, Mortar, Rascals, Skeleton Barrel |
 | **59%** | 169 | solid | Barbarian Barrel, Battle Ram, Elite Barbarians, Giant Skeleton, Mother Witch, Vines, Wizard, Zappies |
 | **55%** | 101 | solid | Archers, Barbarian Barrel, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Hogs, Skeletons |
-| **55%** | 104 | solid | Cannon, Dart Goblin, Goblin Barrel, Ice Spirit, Princess, Skeleton Army, Valkyrie, Wall Breakers |
+| **55%** | 105 | solid | Cannon, Dart Goblin, Goblin Barrel, Ice Spirit, Princess, Skeleton Army, Valkyrie, Wall Breakers |
 | **55%** | 33 | noise | Earthquake, Electro Spirit, Firecracker, Hog Rider, Mighty Miner, Skeletons, Tesla, The Log |
 
 ## First-2-game win-con pairs
@@ -52,7 +52,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
-| **60%** | 33% | 24 | thin | Battle Ram + Elite Barbarians + Mortar + Skeleton Barrel |
+| **60%** | 32% | 25 | thin | Battle Ram + Elite Barbarians + Mortar + Skeleton Barrel |
 | **59%** | 40% | 48 | solid | Battle Ram + Elite Barbarians + Royal Hogs |
 | **59%** | 35% | 23 | thin | Battle Ram + Elite Barbarians + Royal Giant |
 | **57%** | 33% | 15 | noise | Goblin Barrel + Royal Giant + Wall Breakers |
@@ -65,10 +65,10 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ### Most-used decks in the top pairs
 
-**Battle Ram + Elite Barbarians + Mortar + Skeleton Barrel** — 24 duels, 60% first-2
-- usual full set (4×): Battle Ram + Elite Barbarians + Goblin Drill + Mortar + Skeleton Barrel
+**Battle Ram + Elite Barbarians + Mortar + Skeleton Barrel** — 25 duels, 60% first-2
+- usual full set (5×): Battle Ram + Elite Barbarians + Goblin Drill + Mortar + Skeleton Barrel
+- 9× `Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies`
 - 8× `Berserker, Cannon Cart, Electro Spirit, Fireball, Minions, Mortar, Rascals, Skeleton Barrel`
-- 8× `Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies`
 
 **Battle Ram + Elite Barbarians + Royal Hogs** — 48 duels, 59% first-2
 - usual full set (7×): Battle Ram + Elite Barbarians + Goblin Drill + Royal Hogs
