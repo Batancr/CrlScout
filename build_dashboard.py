@@ -25,7 +25,7 @@ import json
 import os
 import re
 from collections import Counter, defaultdict
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import openpyxl
 
 XLSX_PATH = os.path.join(os.environ["CRL_HOME"], "CRL_Duel_Decks.xlsx") if os.environ.get("CRL_HOME") else "CRL_Duel_Decks.xlsx"
@@ -1678,19 +1678,47 @@ print("Duel-Set Record: " + ", ".join(
 # sets, and duel (deck) sets, computed separately per Match Category so the game-day view
 # never blends Practice and Official CRL results.
 best_picks = {}
+# PRESET PERIODS (added 2026-08-14)
+#
+# The free-form date picker deliberately does NOT drive win-con sets, duel sets or the
+# Deck Predictor -- those need duel grouping, which lives in Python and is not ported to
+# JS (see the DATE FILTER block). But that only rules out ARBITRARY user-chosen dates.
+# A FIXED set of cutoffs can simply be precomputed here, the same way the category slices
+# already are, and swapped client-side like any other prebuilt bucket.
+#
+# So Best Picks gets its own period selector covering the cuts that actually get asked for.
+# Set the patch date with CRL_PATCH_DATE; it drives the "since the last balance patch" cut.
+_patch_raw = os.environ.get("CRL_PATCH_DATE", "2026-08-05")
+try:
+    PATCH_DATE = datetime.strptime(_patch_raw, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+except ValueError:
+    print(f"WARNING: CRL_PATCH_DATE={_patch_raw!r} is not YYYY-MM-DD; using 2026-08-05.")
+    PATCH_DATE = datetime(2026, 8, 5, tzinfo=timezone.utc)
+_now = datetime.now(timezone.utc)
+BEST_PICKS_PERIODS = {
+    "all":   ("All time", None),
+    "patch": (f"Since the {PATCH_DATE:%b %-d} patch", PATCH_DATE),
+    "d30":   ("Last 30 days", _now - timedelta(days=30)),
+}
+
 for label, log_slice in (("all", combined_duel_log), ("practice", practice_only_log), ("official", official_only_log)):
-    duel_set_result = compute_best_duel_sets(log_slice)
-    best_picks[label] = {
-        "decks": compute_best_decks(log_slice),
-        "wincon_sets": compute_best_wincon_sets(log_slice),
-        "duel_sets": duel_set_result["rows"],
-        "duel_sets_threshold": duel_set_result["threshold_used"],
-    }
-print(f"Best Picks computed -- All: {len(best_picks['all']['decks'])} ranked decks, "
-      f"{len(best_picks['all']['wincon_sets'])} ranked win-con sets, "
-      f"{len(best_picks['all']['duel_sets'])} ranked duel sets "
-      f"(deck-overlap threshold {best_picks['all']['duel_sets_threshold']}/8 cards). "
-      f"Official CRL: {len(best_picks['official']['decks'])} ranked decks so far.")
+    best_picks[label] = {}
+    for pkey, (plabel, pfrom) in BEST_PICKS_PERIODS.items():
+        sl = log_slice if pfrom is None else [r for r in log_slice if r["battle_time"] >= pfrom]
+        duel_set_result = compute_best_duel_sets(sl)
+        best_picks[label][pkey] = {
+            "label": plabel,
+            "games": len(sl),
+            "decks": compute_best_decks(sl),
+            "wincon_sets": compute_best_wincon_sets(sl),
+            "duel_sets": duel_set_result["rows"],
+            "duel_sets_threshold": duel_set_result["threshold_used"],
+        }
+for _pk, (_pl, _) in BEST_PICKS_PERIODS.items():
+    _b = best_picks["all"][_pk]
+    print(f"Best Picks [{_pl}]: {_b['games']} games -> {len(_b['decks'])} decks, "
+          f"{len(_b['wincon_sets'])} win-con sets, {len(_b['duel_sets'])} duel sets "
+          f"(overlap {_b['duel_sets_threshold']}/8).")
 
 transitions = build_wincon_transitions(combined_duel_log)
 card_elixir = build_card_elixir()
@@ -1723,6 +1751,7 @@ data = {
     "group_a_duel_set_record": group_a_duel_set_record,
     "player_decks": player_decks,
     "best_picks": best_picks,
+    "best_picks_periods": {k: v[0] for k, v in BEST_PICKS_PERIODS.items()},
     "all_cards": all_cards,
     "wincon_sets_top": wincon_sets,
     "deck_stats_top": deck_stats,
@@ -2645,6 +2674,7 @@ html = """<!DOCTYPE html>
     <h3 class="table-title" style="margin:0 0 4px;">Best Picks <span class="table-note">quick reference for game day -- top win-rate decks, duel sets, and win-con sets</span></h3>
     <p class="predictor-sub">Ranked by win rate (best first). Use "Min times played" to hide small-sample rows -- a deck with 1 game and a lucky win otherwise shows as a "100% win rate" pick. "Top Duel Sets" compares which 3-deck combinations performed best together -- since exact full-deck repeats are rare, decks are grouped into near-duplicate "families" (sharing most of their 8 cards) so there's enough data to rank; the note under that table shows exactly how loose that comparison had to get.</p>
     <div class="match-category-bar">
+      <div class="category-tabs" id="bestPicksPeriodTabs" style="margin-bottom:6px;"></div>
       <div class="category-tabs" id="bestPicksCategoryTabs">
         <button class="category-tab active" data-category="all">All Games</button>
         <button class="category-tab" data-category="practice">Practice Only</button>
@@ -3976,6 +4006,11 @@ buildTable('deckTable', deckStats, r => `
 
 // ---------- Best Picks (game-day quick reference, added 2026-07-18) ----------
 const BEST_PICKS = DATA.best_picks || {};
+// Preset periods, precomputed in Python (see BEST_PICKS_PERIODS). Unlike the free-form
+// date picker these DO drive win-con sets and duel sets, because the duel grouping was
+// done at build time rather than needing a JS port.
+const BEST_PICKS_PERIODS = DATA.best_picks_periods || { all: 'All time' };
+let bestPicksPeriod = 'all';
 let bestPicksCategory = 'all';   // 'all' | 'practice' | 'official'
 let bestPicksView = 'decks';     // 'decks' | 'duel_sets' | 'wincon_sets'
 const bestPicksResultsEl = document.getElementById('bestPicksResults');
@@ -4028,7 +4063,11 @@ function limitRows(list) {
 }
 
 function renderBestPicks() {
-  const baseBucket = BEST_PICKS[bestPicksCategory] || { decks: [], wincon_sets: [], duel_sets: [], duel_sets_threshold: null };
+  const _cat = BEST_PICKS[bestPicksCategory] || {};
+  // Payload shape changed 2026-08-14: BEST_PICKS[category] is now keyed by period.
+  // Fall back to the older flat shape so a stale data blob still renders.
+  const baseBucket = _cat[bestPicksPeriod] || _cat.all ||
+                     { decks: [], wincon_sets: [], duel_sets: [], duel_sets_threshold: null };
   // Under a date cutoff the deck ranking is recomputed live; win-con sets and duel sets
   // stay all-time (they depend on duel grouping, which is not ported to JS) and the UI
   // labels them as such. Spread into a NEW object rather than assigning onto baseBucket --
@@ -4071,6 +4110,24 @@ function renderBestPicks() {
     ` : '<div class="empty-hint">Nothing to show yet.</div>';
   }
 }
+
+(function buildPeriodTabs() {
+  const wrap = document.getElementById('bestPicksPeriodTabs');
+  if (!wrap) return;
+  const keys = Object.keys(BEST_PICKS_PERIODS);
+  if (keys.length < 2) { wrap.style.display = 'none'; return; }
+  wrap.innerHTML = keys.map(k =>
+    `<button class="category-tab ${k === bestPicksPeriod ? 'active' : ''}" data-period="${k}">`
+    + `${BEST_PICKS_PERIODS[k]}</button>`).join('');
+  wrap.querySelectorAll('.category-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      wrap.querySelectorAll('.category-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      bestPicksPeriod = btn.dataset.period;
+      renderBestPicks();
+    });
+  });
+})();
 
 document.querySelectorAll('#bestPicksCategoryTabs .category-tab').forEach(btn => {
   btn.addEventListener('click', () => {

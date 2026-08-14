@@ -98,6 +98,9 @@ jobs:
       - name: Rebuild workbook + dashboard + change summary
         env:
           CRL_HOME: ${{ github.workspace }}
+          # Drives BOTH the Best Picks 'since the patch' period and meta_report.py.
+          # Bump this when a new balance patch lands.
+          CRL_PATCH_DATE: '2026-08-05'
         run: |
           set -e
           python build_duel_workbook.py
@@ -114,6 +117,7 @@ jobs:
           # of failing the whole rebuild + blocking the dashboard/commit.
           python recalc.py CRL_Duel_Decks.xlsx 1500 || echo "::warning::recalc timed out; dashboard rebuilt with last cached Win-Con/Deck-Stats values"
           python build_dashboard.py
+          python meta_report.py            # reports/meta_report.md + .html
           python compute_run_diff.py
 
       # Netlify deploys cost credits (free plan: ~20/month), so they run ONLY on a manual
