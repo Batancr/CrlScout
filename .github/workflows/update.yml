@@ -101,13 +101,18 @@ jobs:
         run: |
           set -e
           python build_duel_workbook.py
-          python recalc.py CRL_Duel_Decks.xlsx 300
           python add_ronin_analysis.py
           python add_group_a_analysis.py
           python add_batan_matchup_analysis.py
           python add_group_a_sequencing_analysis.py
           python add_group_a_matchup_prep.py
-          python recalc.py CRL_Duel_Decks.xlsx 300
+          # recalc only bakes formula VALUES into the two Practice-only browse tables
+          # (Win-Con Sets, Deck Stats); the rest of the dashboard is computed in Python from
+          # the masters. The old first recalc was redundant -- the add_* openpyxl saves wipe
+          # cached values, so only this final recalc matters. Timeout raised (workbook grows)
+          # and made non-fatal so a slow recalc leaves those two tables on last values instead
+          # of failing the whole rebuild + blocking the dashboard/commit.
+          python recalc.py CRL_Duel_Decks.xlsx 1500 || echo "::warning::recalc timed out; dashboard rebuilt with last cached Win-Con/Deck-Stats values"
           python build_dashboard.py
           python compute_run_diff.py
 
