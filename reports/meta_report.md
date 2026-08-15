@@ -1,24 +1,24 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-15 06:29 UTC · latest battle 2026-08-15 04:50 UTC
+Generated 2026-08-15 09:30 UTC · latest battle 2026-08-15 09:00 UTC
 
-**8,282 eligible games** · Practice 8,282
+**8,288 eligible games** · Practice 8,288
 
 > ⚠️ **No Official CRL games in this window** — everything below is practice data. Practice and bracket metas diverge, especially on blind Game-1 picks.
 
 ## Top win conditions
 
-Share is of the 8,239 games with a classified win condition.
+Share is of the 8,245 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Battle Ram | 974 | 11.8% | **59%** |
-| Mortar | 723 | 8.8% | **57%** |
-| Elite Barbarians | 1,391 | 16.9% | **55%** |
+| Battle Ram | 975 | 11.8% | **59%** |
+| Mortar | 724 | 8.8% | **57%** |
+| Elite Barbarians | 1,393 | 16.9% | **55%** |
 | Skeleton Barrel | 552 | 6.7% | **55%** |
 | Three Musketeers | 116 | 1.4% | **55%** |
 | Giant | 235 | 2.9% | **54%** |
-| Royal Hogs | 876 | 10.6% | **53%** |
+| Royal Hogs | 877 | 10.6% | **53%** |
 | Golem | 282 | 3.4% | **53%** |
 | Rune Giant | 669 | 8.1% | **53%** |
 | Hog Rider | 651 | 7.9% | **52%** |
@@ -39,8 +39,8 @@ Share is of the 8,239 games with a classified win condition.
 | **63%** | 178 | solid | Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies |
 | **61%** | 82 | thin | Berserker, Bomb Tower, Dart Goblin, Rascals, Royal Ghost, Skeleton Barrel, Suspicious Bush, Vines |
 | **57%** | 134 | solid | Cannon, Dart Goblin, Goblin Barrel, Ice Spirit, Princess, Skeleton Army, Valkyrie, Wall Breakers |
+| **57%** | 205 | solid | Barbarian Barrel, Battle Ram, Elite Barbarians, Giant Skeleton, Mother Witch, Vines, Wizard, Zappies |
 | **57%** | 86 | thin | Barbarian Barrel, Berserker, Cannon Cart, Fireball, Minions, Mortar, Rascals, Skeleton Barrel |
-| **57%** | 204 | solid | Barbarian Barrel, Battle Ram, Elite Barbarians, Giant Skeleton, Mother Witch, Vines, Wizard, Zappies |
 | **54%** | 119 | solid | Archers, Barbarian Barrel, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Hogs, Skeletons |
 | **53%** | 38 | noise | Earthquake, Electro Spirit, Firecracker, Hog Rider, Mighty Miner, Skeletons, Tesla, The Log |
 
