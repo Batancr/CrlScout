@@ -454,6 +454,10 @@ OFFICIAL_CRL_LIVE_CLUSTERS = [
     # set in-window is a clean Bo3 CRL round and no practice is caught. clanMate practice
     # (pre-14:00 warmups, post-19:30 blocks) is a different type and stays Practice.
     ("20260815T140000.000Z", "20260815T193000.000Z", "Aug 15 CRL Day 1 (9 rounds; validated 2026-08-16)"),
+    # Aug 16 CRL Day 2 -- same event, next day. friendly/Friendly cluster 12:37-17:39Z across
+    # 44 participants (median 7 opponents = the 7 Day-2 rounds; Batan's group 14:07-17:38Z).
+    # User confirmed 7 rounds, no practice noise. Validated 2026-08-16.
+    ("20260816T123000.000Z", "20260816T174500.000Z", "Aug 16 CRL Day 2 (7 rounds; validated 2026-08-16)"),
 ]
 
 
