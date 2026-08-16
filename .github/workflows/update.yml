@@ -55,8 +55,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends libreoffice-calc
 
       # Fetching now belongs to fetch.yml. If that workflow silently stops (expired
       # CR_API_TOKEN, a long GitHub Actions incident, a disabled schedule), this build would
@@ -109,13 +107,11 @@ jobs:
           python add_batan_matchup_analysis.py
           python add_group_a_sequencing_analysis.py
           python add_group_a_matchup_prep.py
-          # recalc only bakes formula VALUES into the two Practice-only browse tables
-          # (Win-Con Sets, Deck Stats); the rest of the dashboard is computed in Python from
-          # the masters. The old first recalc was redundant -- the add_* openpyxl saves wipe
-          # cached values, so only this final recalc matters. Timeout raised (workbook grows)
-          # and made non-fatal so a slow recalc leaves those two tables on last values instead
-          # of failing the whole rebuild + blocking the dashboard/commit.
-          python recalc.py CRL_Duel_Decks.xlsx 1500 || echo "::warning::recalc timed out; dashboard rebuilt with last cached Win-Con/Deck-Stats values"
+          # Bake the Win-Con Sets + Deck Stats aggregate columns as literal values in Python
+          # (replaces the old LibreOffice recalc, which grew slow enough to blow past the
+          # 60-min job ceiling). Validated cell-for-cell against a real recalced workbook.
+          # No LibreOffice needed anywhere in this job anymore.
+          python bake_values.py CRL_Duel_Decks.xlsx
           python build_dashboard.py
           python meta_report.py            # reports/meta_report.md + .html
           python compute_run_diff.py
