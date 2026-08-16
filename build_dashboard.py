@@ -1133,29 +1133,23 @@ print(f"Player pool built: {len(player_lookup)} total profiles "
 # (no more "reference" category this round -- fully replaced, not appended to)
 GROUP_A_ROSTER = [
     ("Batan", "#9RQ8YRYQL", True, "confirmed"),   # you
-    # --- Day 2 CRL group: tomorrow's 7 opponents, PINNED at the top ---
-    ("Guriko", "#2LJ0ULYCC", False, "day2"),
-    ("MH Axel", "#80ULUJLYY", False, "day2"),
-    ("RUBIZALEZ", "#LPRR9P", False, "day2"),
-    ("ZQuentino", "#RRLV0GQCV", False, "day2"),
-    ("Venpers", "#GU99JUJ", False, "day2"),
-    ("SK xopxsam2", "#Y99Y90VQV", False, "day2"),
-    ("RemiEli", "#2JRLG8PUQ", False, "day2"),
-    # --- Monthly Finals group: kept below for reference (unchanged) ---
-    ("Mugi", "#2CLV2RP0", False, "confirmed"),
-    ("SandBox", "#Y022GRCJQ", False, "confirmed"),
-    ("40k Oker", "#YLVV0JPQ", False, "confirmed"),
-    ("Mohamed Light", "#G9YV9GR8R", False, "confirmed"),
+    # --- Monthly Finals qualifiers (next month's top-16). ASCII fallback names; real names
+    #     come from player_lookup when the player has data. ---
+    ("Clown", "#GPPYR9JYR", False, "confirmed"),
+    ("Evolve", "#898Y8PGJ9", False, "confirmed"),
+    ("Guriko", "#2LJ0ULYCC", False, "confirmed"),
+    ("EGW", "#C88VYCJC", False, "confirmed"),
     ("Adriel", "#9CPCC890", False, "confirmed"),
-    ("Pedro", "#RJ88Y8U08", False, "on_deck"),
-    ("Asaf", "#RUQ0JU2P", False, "on_deck"),
-    ("Clown (KickAsh)", "#GPPYR9JYR", False, "on_deck"),
-    ("Vitor75", "#8LJ92G8UG", False, "on_deck"),
-    ("Sub", "#U890Q9UQ", False, "on_deck"),
-    ("SK Morten", "#R09228V", False, "on_deck"),
-    ("Polaris", "#U8RYGC8GU", False, "on_deck"),
-    ("JorZ", "#22LC8JG02", False, "on_deck"),
-    ("FrancoMedinaSL", "#UJQQCUCQ8", False, "on_deck"),
+    ("Sub", "#U890Q9UQ", False, "confirmed"),
+    ("Soudy", "#290UQY8C", False, "confirmed"),
+    ("Mohamed Light", "#G9YV9GR8R", False, "confirmed"),
+    ("SK Dominik", "#J0VU9CGP", False, "confirmed"),
+    ("Ardentoas", "#RP0L2Y8C9", False, "confirmed"),
+    ("Ryley", "#C0V0UQ9UY", False, "confirmed"),
+    ("Pedro", "#RJ88Y8U08", False, "confirmed"),
+    ("Asaf", "#RUQ0JU2P", False, "confirmed"),
+    ("Coco", "#2VGG29RJ2", False, "confirmed"),
+    ("Mugi", "#2CLV2RP0", False, "confirmed"),
 ]
 _lookup_by_tag = {}
 for row in player_lookup:
@@ -1183,7 +1177,7 @@ print(f"Group A panel: {sum(1 for g in group_a if g['has_data'])}/{len(group_a)}
 # games only (>= this cutoff), so an established player's months of pre-balance-change decks
 # don't dilute the read on what they actually run NOW. Established Monthly-Finals players
 # (confirmed / on_deck) stay all-time; the two brand-new Day-2 players are already recent-only.
-DAY2_TAGS = {g["tag"] for g in group_a if g["status"] == "day2"}
+DAY2_TAGS = {g["tag"] for g in group_a if not g["is_you"]}  # all finals opponents -> post-patch scoped
 DAY2_ANALYSIS_CUTOFF = datetime(2026, 8, 4, tzinfo=timezone.utc)
 def _day2_ok(r, tag):
     if tag not in DAY2_TAGS:
