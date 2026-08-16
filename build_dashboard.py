@@ -1179,6 +1179,18 @@ print(f"Group A panel: {sum(1 for g in group_a if g['has_data'])}/{len(group_a)}
       f"{sum(1 for g in group_a if g['status']=='on_deck')} on-deck, "
       f"{sum(1 for g in group_a if g['status']=='reference')} reference-only.")
 
+# Day-2 opponents' deck / counter / sequencing / duel-set analyses are scoped to POST-PATCH
+# games only (>= this cutoff), so an established player's months of pre-balance-change decks
+# don't dilute the read on what they actually run NOW. Established Monthly-Finals players
+# (confirmed / on_deck) stay all-time; the two brand-new Day-2 players are already recent-only.
+DAY2_TAGS = {g["tag"] for g in group_a if g["status"] == "day2"}
+DAY2_ANALYSIS_CUTOFF = datetime(2026, 8, 4, tzinfo=timezone.utc)
+def _day2_ok(r, tag):
+    if tag not in DAY2_TAGS:
+        return True
+    bt = r.get("battle_time")
+    return bt is not None and bt >= DAY2_ANALYSIS_CUTOFF
+
 # ---- Group A CRL duel history (added 2026-07-19, per user request: "for each player
 # show me all their crl game duel history ... I can click a tab or something and see all
 # the matchups they played, with decks visually shown") ----
@@ -1352,7 +1364,7 @@ for g in group_a:
     if g["is_you"] or not g["has_data"]:
         continue
     tag = g["tag"]
-    their_games = [r for r in combined_duel_log if r["player_tag"] == tag]
+    their_games = [r for r in combined_duel_log if r["player_tag"] == tag and _day2_ok(r, tag)]
     wincon_games = Counter()
     for r in their_games:
         for wc in (classify_deck(r["deck"]) or []):
@@ -1386,7 +1398,7 @@ MATCHUP_PREP_MIN_GAMES_WINCON = 5
 
 
 def compute_matchup_prep(duel_log, target_tag):
-    target_games = [r for r in duel_log if r["player_tag"] == target_tag and r["deck"] and len(r["deck"]) == 8]
+    target_games = [r for r in duel_log if r["player_tag"] == target_tag and _day2_ok(r, target_tag) and r["deck"] and len(r["deck"]) == 8]
     wincon_games = Counter()
     wincon_wins = Counter()
     for r in target_games:
@@ -1486,7 +1498,7 @@ SEQ_SPELL_CARDS = {
 
 
 def compute_group_a_sequencing(duel_log, target_tag):
-    player_games = [r for r in duel_log if r["player_tag"] == target_tag and r["deck"] and len(r["deck"]) == 8]
+    player_games = [r for r in duel_log if r["player_tag"] == target_tag and _day2_ok(r, target_tag) and r["deck"] and len(r["deck"]) == 8]
 
     combo_games, combo_wins = Counter(), Counter()
     for r in player_games:
@@ -1672,7 +1684,7 @@ group_a_duel_set_record = {}
 for g in group_a:
     if not g["has_data"]:
         continue
-    group_a_duel_set_record[g["tag"]] = compute_duel_set_record(combined_duel_log, g["tag"])
+    group_a_duel_set_record[g["tag"]] = compute_duel_set_record([r for r in combined_duel_log if _day2_ok(r, g["tag"])], g["tag"])
 print("Duel-Set Record: " + ", ".join(
     f"{g['name']} (CRL {group_a_duel_set_record[g['tag']]['crl']['sets']}s"
     + (f"/{group_a_duel_set_record[g['tag']]['crl']['win_rate']*100:.0f}%" if group_a_duel_set_record[g['tag']]['crl']['win_rate'] is not None else "")
