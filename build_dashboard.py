@@ -1740,7 +1740,11 @@ for _pk, (_pl, _) in BEST_PICKS_PERIODS.items():
           f"{len(_b['wincon_sets'])} win-con sets, {len(_b['duel_sets'])} duel sets "
           f"(overlap {_b['duel_sets_threshold']}/8).")
 
-transitions = build_wincon_transitions(combined_duel_log)
+# "What might follow" / Deck Predictor: scoped to POST-PATCH games only. The meta shifted
+# hard in early August, so pre-patch sequencing would mislead the predictor. Same Aug-4
+# cutoff as the Day-2 opponent analyses (DAY2_ANALYSIS_CUTOFF).
+transitions = build_wincon_transitions([r for r in combined_duel_log
+                                        if r.get("battle_time") and r["battle_time"] >= DAY2_ANALYSIS_CUTOFF])
 card_elixir = build_card_elixir()
 player_briefs = build_player_briefs(combined_duel_log, card_elixir, MIN_GAMES_FOR_WINRATE_RANKING)
 
@@ -3867,7 +3871,7 @@ function applyDateCutoff() {
 
   if (dateFilterActive()) {
     const total = glRows('all').length;
-    dfStatusEl.textContent = `Showing ${total.toLocaleString()} game${total !== 1 ? 's' : ''} since ${glISOFromDay(dateCutoffDay)}. Win-con sets, duel sets and the Deck Predictor remain all-time.`;
+    dfStatusEl.textContent = `Showing ${total.toLocaleString()} game${total !== 1 ? 's' : ''} since ${glISOFromDay(dateCutoffDay)}. Win-con sets and duel sets remain all-time; the Deck Predictor is fixed to post-patch (since Aug 4).`;
     dfStatusEl.classList.add('on');
     dfClearEl.style.display = '';
   } else {
