@@ -1132,19 +1132,27 @@ print(f"Player pool built: {len(player_lookup)} total profiles "
 #   "on_deck"   -- one of the 10 other possible Day 3 opponents
 # (no more "reference" category this round -- fully replaced, not appended to)
 GROUP_A_ROSTER = [
-    ("老板 Ι Batan’宙斯", "#9RQ8YRYQL", True, "confirmed"),   # you
+    ("Batan", "#9RQ8YRYQL", True, "confirmed"),   # you
+    # --- Day 2 CRL group: tomorrow's 7 opponents, PINNED at the top ---
+    ("Guriko", "#2LJ0ULYCC", False, "day2"),
+    ("MH Axel", "#80ULUJLYY", False, "day2"),
+    ("RUBIZALEZ", "#LPRR9P", False, "day2"),
+    ("ZQuentino", "#RRLV0GQCV", False, "day2"),
+    ("Venpers", "#GU99JUJ", False, "day2"),
+    ("SK xopxsam2", "#Y99Y90VQV", False, "day2"),
+    ("RemiEli", "#2JRLG8PUQ", False, "day2"),
+    # --- Monthly Finals group: kept below for reference (unchanged) ---
     ("Mugi", "#2CLV2RP0", False, "confirmed"),
     ("SandBox", "#Y022GRCJQ", False, "confirmed"),
     ("40k Oker", "#YLVV0JPQ", False, "confirmed"),
     ("Mohamed Light", "#G9YV9GR8R", False, "confirmed"),
     ("Adriel", "#9CPCC890", False, "confirmed"),
-    ("Pedro™️", "#RJ88Y8U08", False, "on_deck"),
+    ("Pedro", "#RJ88Y8U08", False, "on_deck"),
     ("Asaf", "#RUQ0JU2P", False, "on_deck"),
     ("Clown (KickAsh)", "#GPPYR9JYR", False, "on_deck"),
     ("Vitor75", "#8LJ92G8UG", False, "on_deck"),
     ("Sub", "#U890Q9UQ", False, "on_deck"),
     ("SK Morten", "#R09228V", False, "on_deck"),
-    ("Guriko", "#2LJ0ULYCC", False, "on_deck"),
     ("Polaris", "#U8RYGC8GU", False, "on_deck"),
     ("JorZ", "#22LC8JG02", False, "on_deck"),
     ("FrancoMedinaSL", "#UJQQCUCQ8", False, "on_deck"),
@@ -1452,7 +1460,7 @@ def compute_matchup_prep(duel_log, target_tag):
 
 group_a_matchup_prep = {}
 for g in group_a:
-    if g["is_you"] or not g["has_data"] or g["status"] not in ("confirmed", "on_deck"):
+    if g["is_you"] or not g["has_data"] or g["status"] not in ("confirmed", "on_deck", "day2"):
         continue
     group_a_matchup_prep[g["tag"]] = compute_matchup_prep(combined_duel_log, g["tag"])
 print("Group A Matchup Prep: " + ", ".join(
@@ -1555,7 +1563,7 @@ def compute_group_a_sequencing(duel_log, target_tag):
 
 group_a_sequencing = {}
 for g in group_a:
-    if g["is_you"] or not g["has_data"] or g["status"] not in ("confirmed", "on_deck"):
+    if g["is_you"] or not g["has_data"] or g["status"] not in ("confirmed", "on_deck", "day2"):
         continue
     group_a_sequencing[g["tag"]] = compute_group_a_sequencing(combined_duel_log, g["tag"])
 print("Group A Sequencing: " + ", ".join(
@@ -2449,6 +2457,9 @@ html = """<!DOCTYPE html>
   }
   .group-a-chip.on-deck { border-style: dashed; }
   .group-a-chip.reference { border-color: var(--text-muted); color: var(--text-muted); }
+  .group-a-chip.day2 { border-color: var(--series-blue); background: var(--series-blue); color: #fff; font-weight: 700; box-shadow: 0 1px 5px rgba(57,135,229,0.4); }
+  .group-a-chip.day2 .pending-note, .group-a-chip.day2 .day2-note { color: #eaf3ff; opacity: .95; }
+  .day2-tag { display:inline-block; background: var(--series-blue); color:#fff; font-size:11px; font-weight:700; padding:1px 8px; border-radius:999px; }
   .reco-section {
     border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px 14px;
     margin-bottom: 6px; background: var(--page-plane);
@@ -3121,8 +3132,11 @@ function renderGroupA() {
     const b = document.createElement('button');
     b.className = 'group-a-chip' + (g.is_you ? ' is-you' : '') + (g.has_data ? '' : ' pending')
       + (g.status === 'on_deck' ? ' on-deck' : '')
-      + (g.status === 'reference' ? ' reference' : '');
-    const statusNote = g.status === 'on_deck'
+      + (g.status === 'reference' ? ' reference' : '')
+      + (g.status === 'day2' ? ' day2' : '');
+    const statusNote = g.status === 'day2'
+      ? ' <span class="pending-note day2-note" title="One of your Day 2 CRL opponents -- playing tomorrow.">(Day 2 \u2014 tomorrow)</span>'
+      : g.status === 'on_deck'
       ? ' <span class="pending-note" title="Not yet a confirmed Group A member -- scouted ahead of time in case disqualifications reshuffle the group before Day 2.">(on deck)</span>'
       : g.status === 'reference'
       ? ' <span class="pending-note" title="Not actually in your group -- kept here only for your own reference.">(reference only)</span>'
@@ -3427,7 +3441,9 @@ function renderHistoryToggle(g) {
 }
 function openHistoryModal(g) {
   _histMode = 'crl';
-  const statusTag = g.status === 'on_deck'
+  const statusTag = g.status === 'day2'
+    ? '<span class="day2-tag" title="Day 2 CRL opponent -- playing tomorrow.">Day 2</span> '
+    : g.status === 'on_deck'
     ? '<span class="scouted-tag" title="Not yet a confirmed Group A member -- scouted ahead of time in case disqualifications reshuffle the group before Day 2.">on deck</span> '
     : g.status === 'reference'
     ? '<span class="shadow-tag" title="Not actually in your group -- kept here only for your own reference.">reference only</span> '
