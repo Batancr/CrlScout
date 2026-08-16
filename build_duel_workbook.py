@@ -447,6 +447,13 @@ OFFICIAL_CRL_LIVE_CLUSTERS = [
     # 15 tracked players from 14:05:42Z to 17:42:57Z -- same dramatic signal shape as
     # the Day 1 discovery (one big simultaneous cluster vs. scattered noise elsewhere).
     ("20260719T140542.000Z", "20260719T174257.000Z", "Day 2 (live, single cluster found 2026-07-19)"),
+    # Aug 15 CRL (Season event, Day 1) -- confirmed by user. Games arrive as friendly/Friendly
+    # (same signal as the July CRL days), NOT the clanMate type the Monthly Finals used.
+    # Validated 2026-08-16: within 14:00-19:30Z the 79 tracked participants each played a
+    # median of 9 opponents (the 9 rounds) with ZERO pairs exceeding 3 games, so every friendly
+    # set in-window is a clean Bo3 CRL round and no practice is caught. clanMate practice
+    # (pre-14:00 warmups, post-19:30 blocks) is a different type and stays Practice.
+    ("20260815T140000.000Z", "20260815T193000.000Z", "Aug 15 CRL Day 1 (9 rounds; validated 2026-08-16)"),
 ]
 
 

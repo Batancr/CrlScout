@@ -66,6 +66,9 @@ except ImportError:
 
 # Confirmed player roster (name -> tag). Edit freely to add/remove players.
 PLAYER_TAGS = {
+    # Day-2 CRL group opponents (added 2026-08-16)
+    "SK xopxsam2": "#Y99Y90VQV",   # the '2' account Batan faces Day 2 (distinct from tracked SK xopxsam #2LQ2YP98)
+    "RemiEli": "#2JRLG8PUQ",
     "Adriel": "#9CPCC890",
     "Asaf": "#RUQ0JU2P",
     "Betfas": "#V0L800PUJ",
