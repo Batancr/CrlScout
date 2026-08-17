@@ -280,6 +280,7 @@ Ice Spirit,Mother Witch,148,40,108,27.0%
 Goblin Giant,Musketeer,148,13,135,8.8%
 Inferno Tower,Rage,148,107,41,72.3%
 Executioner,Ronin,148,29,119,19.6%
+Ronin,Royal Delivery,148,142,6,95.9%
 Hunter,P.E.K.K.A,147,84,63,57.1%
 Giant,Mega Knight,147,16,131,10.9%
 Berserker,Graveyard,147,84,63,57.1%
@@ -307,7 +308,6 @@ Royal Giant,Tombstone,147,28,119,19.0%
 Executioner,Goblin Hut,147,33,114,22.4%
 Flying Machine,Night Witch,147,66,81,44.9%
 Flying Machine,Zap,147,87,60,59.2%
-Ronin,Royal Delivery,147,141,6,95.9%
 Fireball,Graveyard,147,123,24,83.7%
 Inferno Dragon,The Log,146,43,103,29.5%
 Goblin Demolisher,Skeleton Barrel,146,85,61,58.2%
@@ -321,6 +321,7 @@ Poison,Tesla,146,135,11,92.5%
 Rascals,Three Musketeers,146,53,93,36.3%
 Bandit,Hunter,146,100,46,68.5%
 Goblin Giant,Hunter,146,55,91,37.7%
+Ram Rider,Tesla,146,25,121,17.1%
 Goblin Demolisher,Musketeer,146,128,18,87.7%
 Bandit,Goblin Demolisher,146,2,144,1.4%
 Electro Wizard,Royal Delivery,146,133,13,91.1%
@@ -347,7 +348,6 @@ Goblin Drill,Wizard,145,130,15,89.7%
 Witch,Zap,145,123,22,84.8%
 Elixir Golem,Knight,145,1,144,0.7%
 Rascals,Royal Giant,145,134,11,92.4%
-Ram Rider,Tesla,145,25,120,17.2%
 Mother Witch,Royal Delivery,145,105,40,72.4%
 Elite Barbarians,Ronin,145,8,137,5.5%
 Elixir Golem,Flying Machine,145,17,128,11.7%
@@ -541,6 +541,7 @@ Graveyard,Heal Spirit,140,125,15,89.3%
 Barbarian Barrel,The Log,140,84,56,60.0%
 Executioner,Heal Spirit,140,125,15,89.3%
 Tesla,Wizard,140,65,75,46.4%
+Firecracker,Fisherman,140,135,5,96.4%
 Flying Machine,Suspicious Bush,140,24,116,17.1%
 Three Musketeers,Witch,140,45,95,32.1%
 Electro Spirit,Inferno Dragon,140,38,102,27.1%
@@ -583,12 +584,12 @@ Electro Spirit,Fireball,139,1,138,0.7%
 Ice Wizard,Rascals,139,14,125,10.1%
 Knight,Skeleton Army,139,2,137,1.4%
 Barbarian Barrel,Valkyrie,139,129,10,92.8%
-Firecracker,Fisherman,139,135,4,97.1%
 Heal Spirit,Zap,139,19,120,13.7%
 Rage,The Log,139,3,136,2.2%
 Goblin Giant,Rune Giant,139,94,45,67.6%
 Executioner,Mortar,139,98,41,70.5%
 Royal Delivery,Zappies,139,29,110,20.9%
+Berserker,Rascals,139,116,23,83.5%
 Elite Barbarians,Graveyard,139,22,117,15.8%
 Rocket,Royal Delivery,139,85,54,61.2%
 Night Witch,Royal Giant,139,122,17,87.8%
@@ -630,7 +631,6 @@ Fisherman,Witch,138,5,133,3.6%
 Musketeer,Skeleton Army,138,9,129,6.5%
 Berserker,Electro Spirit,138,138,0,100.0%
 Firecracker,Inferno Dragon,138,102,36,73.9%
-Berserker,Rascals,138,116,22,84.1%
 Night Witch,Skeleton Army,138,6,132,4.3%
 Executioner,Musketeer,137,24,113,17.5%
 Giant,Night Witch,137,81,56,59.1%
@@ -707,6 +707,7 @@ Bandit,Tombstone,136,96,40,70.6%
 Royal Delivery,The Log,136,8,128,5.9%
 Firecracker,Inferno Tower,136,111,25,81.6%
 Knight,Tesla,136,92,44,67.6%
+Mother Witch,Tombstone,136,126,10,92.6%
 Rune Giant,Suspicious Bush,136,10,126,7.4%
 Golem,Ice Wizard,136,130,6,95.6%
 Heal Spirit,Tombstone,136,20,116,14.7%
@@ -764,7 +765,6 @@ Royal Delivery,Tesla,135,19,116,14.1%
 Flying Machine,Tombstone,135,63,72,46.7%
 Flying Machine,Ice Wizard,135,112,23,83.0%
 Flying Machine,Ronin,135,15,120,11.1%
-Mother Witch,Tombstone,135,125,10,92.6%
 Fisherman,Tesla,135,16,119,11.9%
 Bandit,Giant,135,57,78,42.2%
 Valkyrie,Zap,135,49,86,36.3%
@@ -1513,6 +1513,7 @@ Mega Knight,Mortar,120,111,9,92.5%
 Knight,Suspicious Bush,120,62,58,51.7%
 Rage,Rascals,120,16,104,13.3%
 Barbarian Hut,P.E.K.K.A,120,81,39,67.5%
+Electro Wizard,Elixir Golem,120,119,1,99.2%
 Baby Dragon,Wizard,120,72,48,60.0%
 Mortar,Tombstone,120,60,60,50.0%
 Barbarian Hut,Inferno Dragon,120,63,57,52.5%
@@ -1549,7 +1550,6 @@ Night Witch,X-Bow,119,63,56,52.9%
 Firecracker,Princess,119,98,21,82.4%
 Barbarian Barrel,Dark Prince,119,112,7,94.1%
 Furnace,Giant Snowball,119,109,10,91.6%
-Electro Wizard,Elixir Golem,119,118,1,99.2%
 Berserker,Lava Hound,119,113,6,95.0%
 Inferno Dragon,Ram Rider,119,95,24,79.8%
 Wizard,Zappies,119,84,35,70.6%
@@ -1742,6 +1742,7 @@ Goblin Barrel,Tombstone,114,110,4,96.5%
 Electro Wizard,Goblin Hut,114,35,79,30.7%
 Barbarian Barrel,Royal Giant,114,107,7,93.9%
 Dark Prince,Furnace,114,18,96,15.8%
+Skeleton Barrel,X-Bow,114,109,5,95.6%
 Dark Prince,Princess,114,17,97,14.9%
 Mega Knight,Suspicious Bush,114,81,33,71.1%
 Barbarian Hut,Goblin Demolisher,114,9,105,7.9%
@@ -1768,7 +1769,6 @@ Princess,Tombstone,113,78,35,69.0%
 Golem,Musketeer,113,93,20,82.3%
 Firecracker,Goblin Demolisher,113,6,107,5.3%
 Lava Hound,X-Bow,113,15,98,13.3%
-Skeleton Barrel,X-Bow,113,109,4,96.5%
 Golem,Royal Hogs,113,42,71,37.2%
 Ram Rider,Royal Hogs,113,2,111,1.8%
 Goblin Hut,Mortar,113,97,16,85.8%
@@ -2086,6 +2086,7 @@ Furnace,Goblin Hut,98,16,82,16.3%
 Baby Dragon,Rocket,98,77,21,78.6%
 Arrows,Electro Wizard,98,61,37,62.2%
 Furnace,Zappies,98,53,45,54.1%
+Goblin Hut,Suspicious Bush,98,75,23,76.5%
 Barbarian Hut,Electro Wizard,98,29,69,29.6%
 Dark Prince,Firecracker,98,6,92,6.1%
 Skeleton Army,X-Bow,98,96,2,98.0%
@@ -2099,7 +2100,6 @@ Bandit,Vines,97,12,85,12.4%
 Rune Giant,X-Bow,97,41,56,42.3%
 Fisherman,X-Bow,97,36,61,37.1%
 Suspicious Bush,Vines,97,29,68,29.9%
-Goblin Hut,Suspicious Bush,97,75,22,77.3%
 Goblin Hut,Zappies,96,84,12,87.5%
 Golem,X-Bow,96,95,1,99.0%
 Tesla,X-Bow,96,60,36,62.5%
