@@ -24,3 +24,9 @@ _chaos_draft/
 
 # Excel lock files (created while a workbook is open, deleted on close)
 ~$*
+
+# Season archive of the Chaos Draft side-project (keep locally, do not commit)
+chaos_draft_archive_*.tar.gz
+
+# Chaos Draft — retired 2026-08-18, see chaos_draft_archive_final_*.tar.gz
+chaos/
