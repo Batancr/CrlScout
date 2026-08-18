@@ -1,43 +1,43 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-18 19:11 UTC · latest battle 2026-08-18 18:30 UTC
+Generated 2026-08-18 21:20 UTC · latest battle 2026-08-18 20:44 UTC
 
-**11,778 eligible games** · Practice 9,322 · Official CRL 2,456
+**11,841 eligible games** · Practice 9,385 · Official CRL 2,456
 
 ## Top win conditions
 
-Share is of the 11,708 games with a classified win condition.
+Share is of the 11,770 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,077 | 9.2% | **61%** |
-| Battle Ram | 1,461 | 12.5% | **60%** |
-| Elite Barbarians | 2,082 | 17.8% | **58%** |
+| Mortar | 1,081 | 9.2% | **61%** |
+| Battle Ram | 1,464 | 12.4% | **60%** |
+| Elite Barbarians | 2,091 | 17.8% | **58%** |
 | Three Musketeers | 137 | 1.2% | **57%** |
-| Royal Hogs | 1,404 | 12.0% | **57%** |
-| Hog Rider | 1,009 | 8.6% | **55%** |
-| Skeleton Barrel | 732 | 6.3% | **55%** |
-| Giant | 288 | 2.5% | **55%** |
-| Golem | 437 | 3.7% | **53%** |
-| Rune Giant | 791 | 6.8% | **53%** |
-| Goblin Barrel | 784 | 6.7% | **52%** |
-| Graveyard | 918 | 7.8% | **52%** |
+| Royal Hogs | 1,414 | 12.0% | **57%** |
+| Hog Rider | 1,015 | 8.6% | **55%** |
+| Giant | 290 | 2.5% | **55%** |
+| Skeleton Barrel | 733 | 6.2% | **55%** |
+| Rune Giant | 793 | 6.7% | **53%** |
+| Golem | 440 | 3.7% | **53%** |
+| Graveyard | 924 | 7.9% | **52%** |
+| Goblin Barrel | 787 | 6.7% | **52%** |
 
 ## Best decks (30+ games)
 
-43 decks qualify. **Confidence** flags sample size — treat *noise* rows as unproven no matter how high the win rate looks.
+45 decks qualify. **Confidence** flags sample size — treat *noise* rows as unproven no matter how high the win rate looks.
 
 | Win rate | Games | Confidence | Deck |
 |---|---|---|---|
-| **79%** | 106 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
-| **76%** | 45 | noise | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
+| **80%** | 108 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
+| **74%** | 46 | noise | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
 | **71%** | 41 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
-| **70%** | 46 | noise | Baby Dragon, Barbarian Barrel, Furnace, Golem, Lightning, Tombstone, Tornado, Valkyrie |
-| **68%** | 53 | thin | Cannon, Earthquake, Electro Spirit, Firecracker, Hog Rider, Mighty Miner, Skeletons, The Log |
+| **69%** | 54 | thin | Cannon, Earthquake, Electro Spirit, Firecracker, Hog Rider, Mighty Miner, Skeletons, The Log |
 | **68%** | 31 | noise | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log |
 | **67%** | 33 | noise | Electro Spirit, Elite Barbarians, Fireball, Hog Rider, Musketeer, Skeletons, Tesla, The Log |
-| **66%** | 204 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
-| **65%** | 55 | thin | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies |
+| **67%** | 48 | noise | Baby Dragon, Barbarian Barrel, Furnace, Golem, Lightning, Tombstone, Tornado, Valkyrie |
+| **66%** | 56 | thin | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies |
+| **66%** | 205 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
 | **64%** | 253 | solid | Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies |
 | **63%** | 41 | noise | Berserker, Cannon Cart, Electro Spirit, Fireball, Minions, Mortar, Rascals, Skeleton Barrel |
 | **63%** | 30 | noise | Berserker, Bomb Tower, Goblin Demolisher, Goblin Drill, Magic Archer, Skeletons, The Log, Tornado |
@@ -46,7 +46,7 @@ Share is of the 11,708 games with a classified win condition.
 
 Grouped on the win conditions of the duel's **first two** games. Winning those two ends the set, so this measures the opener rather than the whole trio — and pairing on two decks instead of three roughly doubles the usable sample.
 
-41 pairs have 15+ duels.
+42 pairs have 15+ duels.
 
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
@@ -80,20 +80,20 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-10 lists, 568 games, 57% combined.
+10 lists, 571 games, 57% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **68%** | 31 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Coco |
-| **65%** | 55 | thin | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, NK Tanjiro |
-| **65%** | 20 | noise | — | Barbarian Barrel, Berserker, Electro Spirit, Furnace, Lightning, Royal Hogs, Skeletons, Tesla | Clown, Ryley |
+| **66%** | 56 | thin | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, NK Tanjiro |
+| **62%** | 21 | noise | — | Barbarian Barrel, Berserker, Electro Spirit, Furnace, Lightning, Royal Hogs, Skeletons, Tesla | Clown, Ryley |
 | **60%** | 15 | noise | — | Barbarian Barrel, Berserker, Electro Spirit, Lightning, Royal Hogs, Skeleton Dragons, Skeletons, Tesla | JL Viiper, Clown |
-| **59%** | 193 | solid | — | Archers, Barbarian Barrel, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Hogs, Skeletons | Coco, Clown |
+| **59%** | 194 | solid | — | Archers, Barbarian Barrel, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Hogs, Skeletons | Coco, Clown |
 | **56%** | 125 | solid | — | Barbarian Barrel, Berserker, Electro Spirit, Fireball, Furnace, Goblin Hut, Royal Ghost, Royal Hogs | ぐりてゃん, Steeef |
 
 ## Miner decks (15+ games)
 
-15 lists, 474 games, 54% combined.
+15 lists, 479 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -106,7 +106,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Goblin Drill decks (15+ games)
 
-10 lists, 273 games, 45% combined.
+10 lists, 274 games, 45% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -119,7 +119,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Rune Giant decks (15+ games)
 
-12 lists, 376 games, 53% combined.
+12 lists, 377 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
