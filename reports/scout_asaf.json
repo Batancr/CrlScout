@@ -1,0 +1,555 @@
+{
+ "player": "Asaf",
+ "framings": [
+  {
+   "label": "post-patch, CRL + practice",
+   "n_duels": 35,
+   "n_games": 94,
+   "pool_size": 78,
+   "concentration": 0.1595744680851064,
+   "entropy": 0.9643314436019679,
+   "conc_pctile": 73.91304347826087,
+   "entropy_pctile": 43.47826086956522,
+   "g1": [
+    [
+     "Elite Barbarians",
+     13
+    ],
+    [
+     "Wall Breakers",
+     8
+    ],
+    [
+     "Mortar",
+     7
+    ],
+    [
+     "Goblin Barrel",
+     5
+    ],
+    [
+     "Battle Ram",
+     5
+    ],
+    [
+     "Skeleton Barrel",
+     4
+    ],
+    [
+     "Miner",
+     4
+    ],
+    [
+     "Goblin Drill",
+     4
+    ]
+   ],
+   "trans": [
+    [
+     "Elite Barbarians",
+     "Goblin Drill",
+     6,
+     17
+    ],
+    [
+     "Miner",
+     "Elite Barbarians",
+     3,
+     7
+    ],
+    [
+     "Miner",
+     "Battle Ram",
+     3,
+     7
+    ],
+    [
+     "Wall Breakers",
+     "Elite Barbarians",
+     3,
+     13
+    ],
+    [
+     "Elite Barbarians",
+     "Wall Breakers",
+     3,
+     17
+    ],
+    [
+     "Skeleton Barrel",
+     "Wall Breakers",
+     2,
+     5
+    ],
+    [
+     "Skeleton Barrel",
+     "Goblin Barrel",
+     2,
+     5
+    ],
+    [
+     "Wall Breakers",
+     "Mortar",
+     2,
+     13
+    ],
+    [
+     "Wall Breakers",
+     "Miner",
+     2,
+     13
+    ],
+    [
+     "Goblin Barrel",
+     "Mortar",
+     2,
+     8
+    ],
+    [
+     "Goblin Barrel",
+     "Miner",
+     2,
+     8
+    ],
+    [
+     "Goblin Drill",
+     "Rune Giant",
+     2,
+     9
+    ],
+    [
+     "Goblin Drill",
+     "Elite Barbarians",
+     2,
+     9
+    ],
+    [
+     "Elite Barbarians",
+     "Royal Hogs",
+     2,
+     17
+    ]
+   ],
+   "seqs": [
+    [
+     [
+      "Battle Ram / Elite Barbarians",
+      "Goblin Drill",
+      "Goblin Barrel"
+     ],
+     2
+    ]
+   ]
+  },
+  {
+   "label": "post-patch, Official CRL only",
+   "n_duels": 16,
+   "n_games": 38,
+   "pool_size": 28,
+   "concentration": 0.3157894736842105,
+   "entropy": 0.9575344864044105,
+   "conc_pctile": 90.0,
+   "entropy_pctile": 72.5,
+   "g1": [
+    [
+     "Elite Barbarians",
+     9
+    ],
+    [
+     "Mortar",
+     4
+    ],
+    [
+     "Battle Ram",
+     3
+    ],
+    [
+     "Wall Breakers",
+     3
+    ],
+    [
+     "Goblin Drill",
+     3
+    ],
+    [
+     "Miner",
+     2
+    ],
+    [
+     "Goblin Barrel",
+     1
+    ],
+    [
+     "Skeleton Barrel",
+     1
+    ]
+   ],
+   "trans": [
+    [
+     "Elite Barbarians",
+     "Goblin Drill",
+     4,
+     13
+    ],
+    [
+     "Elite Barbarians",
+     "Wall Breakers",
+     3,
+     13
+    ],
+    [
+     "Wall Breakers",
+     "Elite Barbarians",
+     3,
+     6
+    ],
+    [
+     "Elite Barbarians",
+     "Miner",
+     2,
+     13
+    ],
+    [
+     "Battle Ram",
+     "Miner",
+     2,
+     5
+    ],
+    [
+     "Miner",
+     "Elite Barbarians",
+     2,
+     4
+    ],
+    [
+     "Miner",
+     "Battle Ram",
+     2,
+     4
+    ],
+    [
+     "Wall Breakers",
+     "Battle Ram",
+     2,
+     6
+    ],
+    [
+     "Mortar",
+     "Goblin Drill",
+     2,
+     5
+    ],
+    [
+     "Goblin Drill",
+     "Elite Barbarians",
+     2,
+     6
+    ],
+    [
+     "Battle Ram",
+     "Goblin Drill",
+     1,
+     5
+    ],
+    [
+     "Battle Ram",
+     "Wall Breakers",
+     1,
+     5
+    ],
+    [
+     "Wall Breakers",
+     "Mortar",
+     1,
+     6
+    ],
+    [
+     "Goblin Barrel",
+     "Mortar",
+     1,
+     2
+    ]
+   ],
+   "seqs": []
+  },
+  {
+   "label": "all time, CRL + practice",
+   "n_duels": 74,
+   "n_games": 199,
+   "pool_size": 168,
+   "concentration": 0.08040201005025126,
+   "entropy": 0.965628692314844,
+   "conc_pctile": 33.333333333333336,
+   "entropy_pctile": 31.03448275862069,
+   "g1": [
+    [
+     "Wall Breakers",
+     24
+    ],
+    [
+     "Goblin Barrel",
+     17
+    ],
+    [
+     "Elite Barbarians",
+     13
+    ],
+    [
+     "Goblin Drill",
+     11
+    ],
+    [
+     "Mortar",
+     9
+    ],
+    [
+     "Miner",
+     8
+    ],
+    [
+     "Royal Hogs",
+     7
+    ],
+    [
+     "Skeleton Barrel",
+     6
+    ]
+   ],
+   "trans": [
+    [
+     "Elite Barbarians",
+     "Goblin Drill",
+     6,
+     17
+    ],
+    [
+     "Wall Breakers",
+     "Mortar",
+     5,
+     32
+    ],
+    [
+     "Wall Breakers",
+     "Goblin Drill",
+     5,
+     32
+    ],
+    [
+     "Wall Breakers",
+     "Royal Hogs",
+     4,
+     32
+    ],
+    [
+     "Goblin Barrel",
+     "Mortar",
+     4,
+     22
+    ],
+    [
+     "Goblin Barrel",
+     "Royal Hogs",
+     4,
+     22
+    ],
+    [
+     "Royal Hogs",
+     "Goblin Drill",
+     3,
+     9
+    ],
+    [
+     "Goblin Barrel",
+     "Goblin Drill",
+     3,
+     22
+    ],
+    [
+     "Miner",
+     "Elite Barbarians",
+     3,
+     12
+    ],
+    [
+     "Miner",
+     "Battle Ram",
+     3,
+     12
+    ],
+    [
+     "Goblin Drill",
+     "Goblin Barrel",
+     3,
+     17
+    ],
+    [
+     "Mortar",
+     "Goblin Drill",
+     3,
+     10
+    ],
+    [
+     "Elite Barbarians",
+     "Wall Breakers",
+     3,
+     17
+    ],
+    [
+     "Hog Rider",
+     "Miner",
+     2,
+     7
+    ]
+   ],
+   "seqs": [
+    [
+     [
+      "Royal Hogs",
+      "Goblin Drill",
+      "Royal Giant"
+     ],
+     2
+    ],
+    [
+     [
+      "Battle Ram / Elite Barbarians",
+      "Goblin Drill",
+      "Goblin Barrel"
+     ],
+     2
+    ]
+   ]
+  },
+  {
+   "label": "all time, Official CRL only",
+   "n_duels": 38,
+   "n_games": 93,
+   "pool_size": 76,
+   "concentration": 0.13978494623655913,
+   "entropy": 0.9501582600190928,
+   "conc_pctile": 39.50617283950617,
+   "entropy_pctile": 82.71604938271605,
+   "g1": [
+    [
+     "Wall Breakers",
+     15
+    ],
+    [
+     "Goblin Barrel",
+     9
+    ],
+    [
+     "Goblin Drill",
+     9
+    ],
+    [
+     "Elite Barbarians",
+     9
+    ],
+    [
+     "Miner",
+     6
+    ],
+    [
+     "Mortar",
+     5
+    ],
+    [
+     "Battle Ram",
+     3
+    ],
+    [
+     "Hog Rider",
+     2
+    ]
+   ],
+   "trans": [
+    [
+     "Wall Breakers",
+     "Mortar",
+     4,
+     21
+    ],
+    [
+     "Elite Barbarians",
+     "Goblin Drill",
+     4,
+     13
+    ],
+    [
+     "Wall Breakers",
+     "Skeleton Barrel",
+     3,
+     21
+    ],
+    [
+     "Wall Breakers",
+     "Goblin Drill",
+     3,
+     21
+    ],
+    [
+     "Goblin Barrel",
+     "Mortar",
+     3,
+     12
+    ],
+    [
+     "Goblin Barrel",
+     "Hog Rider",
+     3,
+     12
+    ],
+    [
+     "Goblin Drill",
+     "Goblin Barrel",
+     3,
+     13
+    ],
+    [
+     "Mortar",
+     "Goblin Drill",
+     3,
+     6
+    ],
+    [
+     "Elite Barbarians",
+     "Wall Breakers",
+     3,
+     13
+    ],
+    [
+     "Goblin Barrel",
+     "Skeleton Barrel",
+     2,
+     12
+    ],
+    [
+     "Miner",
+     "Goblin Drill",
+     2,
+     9
+    ],
+    [
+     "Miner",
+     "Elite Barbarians",
+     2,
+     9
+    ],
+    [
+     "Miner",
+     "Battle Ram",
+     2,
+     9
+    ],
+    [
+     "Goblin Drill",
+     "Hog Rider",
+     2,
+     13
+    ]
+   ],
+   "seqs": []
+  }
+ ]
+}

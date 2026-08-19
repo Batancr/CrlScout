@@ -165,11 +165,26 @@ def is_real_practice_session(category, complete_sets_in_session, games_in_sessio
     return games_in_session >= MIN_GAMES_PER_PRACTICE_SESSION
 
 
+MIN_DISTINCT_DECKS_FOR_ANY_DUEL = 2
+
+
 def is_stats_eligible(category, duel_start, distinct_game_count):
     """Should this duel's games count toward aggregate deck / win-con / win-rate stats?
 
-    Only Practice duels starting on or after the cutoff are gated, and only for being
-    short. Everything else -- all Official CRL, everything before the cutoff -- stays in."""
+    Two gates:
+
+    1. A ONE-DECK "duel" is never a duel (added 2026-08-19). A set has at least two games,
+       so a single captured game is a truncated capture, not a result -- true for Official
+       CRL as much as Practice. This is deliberately NOT the same as the completeness rule
+       below: an Official CRL 2-0 sweep IS a complete set and must stay in (gating those
+       was the bug fixed on 2026-08-06, which discarded 22 real sweeps).
+
+    2. Post-cutoff Practice must be a full 3-deck Bo3. Practice sets are always best-of-3,
+       so a short one means games were lost to the API window. Official CRL and anything
+       before the cutoff are exempt.
+    """
+    if distinct_game_count < MIN_DISTINCT_DECKS_FOR_ANY_DUEL:
+        return False
     cutoff = _completeness_cutoff()
     if cutoff is None:
         return True
@@ -801,6 +816,32 @@ def build_dataset():
     for r in rows:
         by_pair[(r["player_tag"], r["opponent_tag"], r["match_category"])].append(r)
 
+    # DUEL-ID COLLISION GUARD (added 2026-08-19).
+    # by_pair and duel_counters are keyed on TAGS, but duel_id/session_id were rendered from
+    # DISPLAY NAMES. When one name maps to several tags -- alt accounts, or two players who
+    # happen to share a name -- two genuinely different pairs rendered the SAME duel_id, and
+    # every downstream consumer that groups by duel_id silently merged them into one "duel".
+    # That produced impossible sets: Ian77_vs_Ryley_D1 held a 3-game set from 08-06 AND
+    # another from 08-18, six games with duplicate game numbers and overlapping cards.
+    # Found via "Ryley", which maps to three tags. Name changes cause the mirror-image
+    # problem: 11 tags in the archive have used more than one display name.
+    # Fix: disambiguate with a tag fragment, but ONLY for names that are actually ambiguous,
+    # so the overwhelming majority of duel_ids keep their existing readable form.
+    _name_tags = defaultdict(set)
+    for r in rows:
+        _name_tags[r["player_name"]].add(r["player_tag"])
+        _name_tags[r["opponent_name"]].add(r["opponent_tag"])
+    ambiguous_names = {n for n, tags in _name_tags.items() if len(tags) > 1}
+    if ambiguous_names:
+        print(f"Ambiguous display names (disambiguating duel IDs by tag): "
+              f"{sorted(ambiguous_names)}")
+
+    def _label(name, tag):
+        """Readable name, plus a tag fragment only when that name is ambiguous."""
+        if name in ambiguous_names and tag:
+            return f"{name}({tag.lstrip('#')[-4:]})"
+        return name
+
     duel_log = []   # one row per game
     duel_summary = []  # one row per duel
     duel_counters = defaultdict(int)  # per pair, for Duel ID numbering
@@ -829,9 +870,12 @@ def build_dataset():
             duel_num = duel_counters[pair]
             player_name = duel[0]["player_name"]
             opp_name = duel[0]["opponent_name"]
-            duel_id = f"{player_name}_vs_{opp_name}_D{duel_num}{id_suffix}".replace(" ", "")
+            # Tag-disambiguated labels -- see the ambiguous_names note in build_dataset().
+            p_label = _label(player_name, duel[0]["player_tag"])
+            o_label = _label(opp_name, duel[0]["opponent_tag"])
+            duel_id = f"{p_label}_vs_{o_label}_D{duel_num}{id_suffix}".replace(" ", "")
             session_num = duel_to_session_num[id(duel)]
-            session_id = f"{player_name}_vs_{opp_name}_S{session_num}{id_suffix}".replace(" ", "")
+            session_id = f"{p_label}_vs_{o_label}_S{session_num}{id_suffix}".replace(" ", "")
             uncertain = (i == 0)  # first duel for this pair: no visibility before fetch window
             # Completeness must be known BEFORE the per-game rows are built, so each game
             # row can carry the flag the aggregations filter on. See is_stats_eligible().

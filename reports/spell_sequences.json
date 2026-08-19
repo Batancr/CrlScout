@@ -1,0 +1,1174 @@
+{
+ "Post-patch (Aug 5+) \u2014 CRL + practice": {
+  "rows": [
+   {
+    "ctx": "Fireball + Zap",
+    "tgt": "Goblin Curse + Rage",
+    "n": 127,
+    "c": 5,
+    "rate": 0.03937007874015748,
+    "base": 0.0032916392363396972,
+    "lift": 11.960629921259843,
+    "p": 7.038222564694813e-05,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows + Giant Snowball",
+    "tgt": "Barbarian Barrel + Void",
+    "n": 61,
+    "c": 5,
+    "rate": 0.08196721311475409,
+    "base": 0.01085915043117215,
+    "lift": 7.548216007714561,
+    "p": 0.0005419954585000139,
+    "sig": true
+   },
+   {
+    "ctx": "Lightning + Royal Delivery",
+    "tgt": "Barbarian Barrel",
+    "n": 24,
+    "c": 6,
+    "rate": 0.25,
+    "base": 0.04673182651191203,
+    "lift": 5.34967320261438,
+    "p": 0.0006755335921405286,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Lightning",
+    "tgt": "Tornado + Void",
+    "n": 419,
+    "c": 10,
+    "rate": 0.02386634844868735,
+    "base": 0.005850091407678245,
+    "lift": 4.079653937947493,
+    "p": 0.0002235638006634171,
+    "sig": true
+   },
+   {
+    "ctx": "Lightning + Tornado",
+    "tgt": "Fireball + Zap",
+    "n": 28,
+    "c": 5,
+    "rate": 0.17857142857142858,
+    "base": 0.045440589499539455,
+    "lift": 3.9297779922779923,
+    "p": 0.007929122233718668,
+    "sig": true
+   },
+   {
+    "ctx": "Void + Zap",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 28,
+    "c": 7,
+    "rate": 0.25,
+    "base": 0.06906392694063927,
+    "lift": 3.6198347107438016,
+    "p": 0.002432473877726348,
+    "sig": true
+   },
+   {
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel + Void",
+    "n": 170,
+    "c": 6,
+    "rate": 0.03529411764705882,
+    "base": 0.010059171597633136,
+    "lift": 3.508650519031142,
+    "p": 0.00785626611327585,
+    "sig": true
+   },
+   {
+    "ctx": "Fireball",
+    "tgt": "Barbarian Barrel",
+    "n": 32,
+    "c": 5,
+    "rate": 0.15625,
+    "base": 0.04473684210526316,
+    "lift": 3.4926470588235294,
+    "p": 0.013145774604415919,
+    "sig": true
+   },
+   {
+    "ctx": "Rage + Void + Zap",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 26,
+    "c": 6,
+    "rate": 0.23076923076923078,
+    "base": 0.07012460156476384,
+    "lift": 3.290845518118245,
+    "p": 0.008062986011791225,
+    "sig": true
+   },
+   {
+    "ctx": "Lightning + Tornado",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 28,
+    "c": 9,
+    "rate": 0.32142857142857145,
+    "base": 0.09947804728277557,
+    "lift": 3.2311507936507935,
+    "p": 0.0011291528835966603,
+    "sig": true
+   },
+   {
+    "ctx": "Giant Snowball + Poison + Royal Delivery",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 29,
+    "c": 7,
+    "rate": 0.2413793103448276,
+    "base": 0.07629255989911728,
+    "lift": 3.163864348817327,
+    "p": 0.005241444010727755,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel",
+    "tgt": "Fireball",
+    "n": 296,
+    "c": 13,
+    "rate": 0.04391891891891892,
+    "base": 0.015335463258785943,
+    "lift": 2.8638795045045047,
+    "p": 0.0007756110226701127,
+    "sig": true
+   },
+   {
+    "ctx": "Royal Delivery",
+    "tgt": "Barbarian Barrel",
+    "n": 68,
+    "c": 7,
+    "rate": 0.10294117647058823,
+    "base": 0.0385002516356316,
+    "lift": 2.673779315647828,
+    "p": 0.015639297194280647,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Poison",
+    "tgt": "Lightning + Tornado",
+    "n": 191,
+    "c": 8,
+    "rate": 0.041884816753926704,
+    "base": 0.01687289088863892,
+    "lift": 2.4823734729493894,
+    "p": 0.016562893101358393,
+    "sig": true
+   },
+   {
+    "ctx": "Fireball + The Log",
+    "tgt": "Barbarian Barrel + Lightning + Tornado",
+    "n": 165,
+    "c": 15,
+    "rate": 0.09090909090909091,
+    "base": 0.036942209217264085,
+    "lift": 2.4608460846084608,
+    "p": 0.0012808955478908319,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "The Log + Void",
+    "n": 546,
+    "c": 22,
+    "rate": 0.040293040293040296,
+    "base": 0.01781652767247915,
+    "lift": 2.2615540487880916,
+    "p": 0.000428291979723673,
+    "sig": true
+   },
+   {
+    "ctx": "Goblin Curse + Zap",
+    "tgt": "Barbarian Barrel",
+    "n": 151,
+    "c": 14,
+    "rate": 0.09271523178807947,
+    "base": 0.041508410200759634,
+    "lift": 2.23364930961347,
+    "p": 0.004313363173406027,
+    "sig": true
+   },
+   {
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel",
+    "n": 170,
+    "c": 17,
+    "rate": 0.1,
+    "base": 0.04526627218934911,
+    "lift": 2.2091503267973858,
+    "p": 0.0019573768320765915,
+    "sig": true
+   }
+  ],
+  "rows2": [
+   {
+    "wc": "Giant",
+    "ctx": "Arrows + Giant Snowball",
+    "tgt": "Barbarian Barrel + Void",
+    "n": 59,
+    "c": 5,
+    "rate": 0.0847457627118644,
+    "base": 0.01085915043117215,
+    "lift": 7.80408773678963,
+    "p": 0.0004643471125872786,
+    "sig": true
+   },
+   {
+    "wc": "Graveyard",
+    "ctx": "Arrows + Giant Snowball",
+    "tgt": "Barbarian Barrel + Void",
+    "n": 60,
+    "c": 5,
+    "rate": 0.08333333333333333,
+    "base": 0.01085915043117215,
+    "lift": 7.674019607843136,
+    "p": 0.0005020442583607265,
+    "sig": true
+   },
+   {
+    "wc": "X-Bow",
+    "ctx": "Fireball + The Log",
+    "tgt": "Barbarian Barrel + Lightning + Tornado",
+    "n": 32,
+    "c": 8,
+    "rate": 0.25,
+    "base": 0.036942209217264085,
+    "lift": 6.767326732673267,
+    "p": 1.6440395529479905e-05,
+    "sig": true
+   },
+   {
+    "wc": "Mortar",
+    "ctx": "Barbarian Barrel + Lightning",
+    "tgt": "Tornado + Void",
+    "n": 159,
+    "c": 5,
+    "rate": 0.031446540880503145,
+    "base": 0.005850091407678245,
+    "lift": 5.375393081761006,
+    "p": 0.002587501972588688,
+    "sig": true
+   },
+   {
+    "wc": "Golem",
+    "ctx": "Lightning + Tornado",
+    "tgt": "Fireball + Zap",
+    "n": 22,
+    "c": 5,
+    "rate": 0.22727272727272727,
+    "base": 0.045440589499539455,
+    "lift": 5.0015356265356266,
+    "p": 0.002663480943154027,
+    "sig": true
+   },
+   {
+    "wc": "Royal Hogs",
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "The Log + Void",
+    "n": 126,
+    "c": 11,
+    "rate": 0.0873015873015873,
+    "base": 0.01781652767247915,
+    "lift": 4.900033772374198,
+    "p": 1.7801785380372144e-05,
+    "sig": true
+   },
+   {
+    "wc": "Graveyard",
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel",
+    "n": 28,
+    "c": 6,
+    "rate": 0.21428571428571427,
+    "base": 0.04526627218934911,
+    "lift": 4.733893557422969,
+    "p": 0.0013682791422139275,
+    "sig": true
+   },
+   {
+    "wc": "Royal Hogs",
+    "ctx": "Lightning + Royal Delivery",
+    "tgt": "Barbarian Barrel",
+    "n": 23,
+    "c": 5,
+    "rate": 0.21739130434782608,
+    "base": 0.04673182651191203,
+    "lift": 4.651889741403808,
+    "p": 0.0036963387840647233,
+    "sig": true
+   },
+   {
+    "wc": "Lava Hound",
+    "ctx": "Goblin Curse + Zap",
+    "tgt": "Barbarian Barrel + Poison",
+    "n": 37,
+    "c": 6,
+    "rate": 0.16216216216216217,
+    "base": 0.04042322300596853,
+    "lift": 4.011608924360602,
+    "p": 0.0034450645058471947,
+    "sig": true
+   },
+   {
+    "wc": "Skeleton Barrel",
+    "ctx": "Fireball",
+    "tgt": "Barbarian Barrel",
+    "n": 29,
+    "c": 5,
+    "rate": 0.1724137931034483,
+    "base": 0.04473684210526316,
+    "lift": 3.85395537525355,
+    "p": 0.008657694607135488,
+    "sig": true
+   },
+   {
+    "wc": "Elite Barbarians",
+    "ctx": "Fireball + The Log",
+    "tgt": "Barbarian Barrel + Lightning + Tornado",
+    "n": 52,
+    "c": 7,
+    "rate": 0.1346153846153846,
+    "base": 0.036942209217264085,
+    "lift": 3.6439451637471434,
+    "p": 0.0029186361329795684,
+    "sig": true
+   },
+   {
+    "wc": "Skeleton Barrel",
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "The Log + Void",
+    "n": 108,
+    "c": 7,
+    "rate": 0.06481481481481481,
+    "base": 0.01781652767247915,
+    "lift": 3.6379038613081165,
+    "p": 0.003322550315071386,
+    "sig": true
+   },
+   {
+    "wc": "Royal Hogs",
+    "ctx": "Barbarian Barrel + Lightning",
+    "tgt": "Tornado + Void",
+    "n": 235,
+    "c": 5,
+    "rate": 0.02127659574468085,
+    "base": 0.005850091407678245,
+    "lift": 3.636968085106383,
+    "p": 0.012991895824527738,
+    "sig": true
+   },
+   {
+    "wc": "Mortar",
+    "ctx": "Fireball",
+    "tgt": "Barbarian Barrel",
+    "n": 31,
+    "c": 5,
+    "rate": 0.16129032258064516,
+    "base": 0.04473684210526316,
+    "lift": 3.605313092979127,
+    "p": 0.011507162618675348,
+    "sig": true
+   },
+   {
+    "wc": "Goblin Drill",
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel + Void",
+    "n": 142,
+    "c": 5,
+    "rate": 0.035211267605633804,
+    "base": 0.010059171597633136,
+    "lift": 3.5004142502071254,
+    "p": 0.014866874272878533,
+    "sig": true
+   },
+   {
+    "wc": "Goblin Barrel",
+    "ctx": "Royal Delivery",
+    "tgt": "Barbarian Barrel",
+    "n": 47,
+    "c": 6,
+    "rate": 0.1276595744680851,
+    "base": 0.0385002516356316,
+    "lift": 3.315811430955361,
+    "p": 0.009027158979154373,
+    "sig": true
+   },
+   {
+    "wc": "Elite Barbarians",
+    "ctx": "Rage + Void + Zap",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 26,
+    "c": 6,
+    "rate": 0.23076923076923078,
+    "base": 0.07012460156476384,
+    "lift": 3.290845518118245,
+    "p": 0.008062986011791225,
+    "sig": true
+   },
+   {
+    "wc": "Royal Hogs",
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "Lightning + Tornado",
+    "n": 126,
+    "c": 7,
+    "rate": 0.05555555555555555,
+    "base": 0.017058377558756634,
+    "lift": 3.2567901234567898,
+    "p": 0.006097924141065252,
+    "sig": true
+   }
+  ],
+  "rows3": [
+   {
+    "ctx": "Poison + The Log",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 17,
+    "c": 6,
+    "rate": 0.35294117647058826,
+    "base": 0.053700361010830325,
+    "lift": 6.5724172021749885,
+    "p": 0.00017722319269988768,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Lightning + The Log",
+    "tgt": "Giant Snowball + Poison + Royal Delivery",
+    "n": 50,
+    "c": 5,
+    "rate": 0.1,
+    "base": 0.020771513353115726,
+    "lift": 4.814285714285715,
+    "p": 0.0037686247714735603,
+    "sig": true
+   },
+   {
+    "ctx": "Giant Snowball + Lightning + Poison + The Log",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 18,
+    "c": 7,
+    "rate": 0.3888888888888889,
+    "base": 0.08358570563294973,
+    "lift": 4.652576489533011,
+    "p": 0.000395643675168354,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows + Lightning + The Log",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 36,
+    "c": 11,
+    "rate": 0.3055555555555556,
+    "base": 0.07520435967302452,
+    "lift": 4.063003220611916,
+    "p": 4.438768791196802e-05,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows + Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 28,
+    "c": 7,
+    "rate": 0.25,
+    "base": 0.06371191135734072,
+    "lift": 3.9239130434782608,
+    "p": 0.0015315693436119228,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows + Lightning + The Log",
+    "tgt": "Barbarian Barrel + Poison",
+    "n": 36,
+    "c": 5,
+    "rate": 0.1388888888888889,
+    "base": 0.03760217983651226,
+    "lift": 3.6936392914653786,
+    "p": 0.010720140969864613,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball + Giant Snowball",
+    "tgt": "Lightning + The Log",
+    "n": 14,
+    "c": 6,
+    "rate": 0.42857142857142855,
+    "base": 0.11657754010695187,
+    "lift": 3.676277850589777,
+    "p": 0.0032713558018074387,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows + Poison + The Log",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 20,
+    "c": 5,
+    "rate": 0.25,
+    "base": 0.07155742633794347,
+    "lift": 3.4936974789915967,
+    "p": 0.011714327153310073,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 37,
+    "c": 5,
+    "rate": 0.13513513513513514,
+    "base": 0.04131944444444444,
+    "lift": 3.270497388144447,
+    "p": 0.017441899350763027,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball + Giant Snowball + Poison",
+    "tgt": "Lightning + Tornado",
+    "n": 70,
+    "c": 6,
+    "rate": 0.08571428571428572,
+    "base": 0.026519337016574586,
+    "lift": 3.232142857142857,
+    "p": 0.010733324840625872,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball + Lightning + The Log",
+    "tgt": "Arrows + Rage",
+    "n": 177,
+    "c": 5,
+    "rate": 0.02824858757062147,
+    "base": 0.008786381109280615,
+    "lift": 3.215042372881356,
+    "p": 0.020741059694317027,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows + Barbarian Barrel + Poison",
+    "tgt": "Fireball + Zap",
+    "n": 50,
+    "c": 7,
+    "rate": 0.14,
+    "base": 0.04389994895354773,
+    "lift": 3.1890697674418607,
+    "p": 0.0059728939111674305,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows + Barbarian Barrel + Lightning + Tornado",
+    "tgt": "Earthquake + The Log",
+    "n": 30,
+    "c": 5,
+    "rate": 0.16666666666666666,
+    "base": 0.052884615384615384,
+    "lift": 3.1515151515151514,
+    "p": 0.019480831013501343,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Goblin Curse + Lightning + Zap",
+    "tgt": "Fireball + The Log",
+    "n": 31,
+    "c": 10,
+    "rate": 0.3225806451612903,
+    "base": 0.10413761041376104,
+    "lift": 3.097638248847926,
+    "p": 0.0008414866941427856,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Poison",
+    "tgt": "Fireball + The Log",
+    "n": 29,
+    "c": 8,
+    "rate": 0.27586206896551724,
+    "base": 0.08931419457735247,
+    "lift": 3.0886699507389164,
+    "p": 0.0031251585797813486,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Giant Snowball + Poison",
+    "tgt": "Goblin Curse + Zap",
+    "n": 37,
+    "c": 5,
+    "rate": 0.13513513513513514,
+    "base": 0.04483695652173913,
+    "lift": 3.0139230139230144,
+    "p": 0.023897932697384026,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Giant Snowball + Lightning + Poison",
+    "tgt": "Fireball + The Log",
+    "n": 49,
+    "c": 17,
+    "rate": 0.3469387755102041,
+    "base": 0.11851851851851852,
+    "lift": 2.9272959183673466,
+    "p": 2.6882144413194664e-05,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball + Lightning + The Log",
+    "tgt": "Earthquake + Royal Delivery",
+    "n": 177,
+    "c": 5,
+    "rate": 0.02824858757062147,
+    "base": 0.009884678747940691,
+    "lift": 2.8578154425612055,
+    "p": 0.032116514011519964,
+    "sig": true
+   }
+  ],
+  "pool": [
+   [
+    "Arrows",
+    0.09759547383309759
+   ],
+   [
+    "Barbarian Barrel + Fireball",
+    0.07637906647807638
+   ],
+   [
+    "Giant Snowball + Poison",
+    0.07072135785007072
+   ],
+   [
+    "Lightning + The Log",
+    0.06930693069306931
+   ],
+   [
+    "Fireball + The Log",
+    0.05752003771805752
+   ],
+   [
+    "Barbarian Barrel + Lightning",
+    0.05704856199905705
+   ],
+   [
+    "(no spells)",
+    0.05304101838755304
+   ],
+   [
+    "Barbarian Barrel",
+    0.03606789250353607
+   ],
+   [
+    "Barbarian Barrel + Poison",
+    0.035124941065535126
+   ],
+   [
+    "Fireball + Zap",
+    0.03488920320603489
+   ]
+  ],
+  "n_duels": 4242
+ },
+ "Post-patch (Aug 5+) \u2014 Official CRL only": {
+  "rows": [
+   {
+    "ctx": "Fireball + Zap",
+    "tgt": "Barbarian Barrel",
+    "n": 23,
+    "c": 6,
+    "rate": 0.2608695652173913,
+    "base": 0.07552447552447553,
+    "lift": 3.4541062801932365,
+    "p": 0.0060923668457001185,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel",
+    "tgt": "Fireball",
+    "n": 102,
+    "c": 5,
+    "rate": 0.049019607843137254,
+    "base": 0.016172506738544475,
+    "lift": 3.031045751633987,
+    "p": 0.025388784990637195,
+    "sig": true
+   },
+   {
+    "ctx": "Tornado + Zap",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 32,
+    "c": 10,
+    "rate": 0.3125,
+    "base": 0.10438908659549229,
+    "lift": 2.9936079545454546,
+    "p": 0.0011315192571762242,
+    "sig": true
+   },
+   {
+    "ctx": "Arrows",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 63,
+    "c": 16,
+    "rate": 0.25396825396825395,
+    "base": 0.10068649885583524,
+    "lift": 2.5223665223665224,
+    "p": 0.00039843539761054154,
+    "sig": true
+   },
+   {
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 52,
+    "c": 8,
+    "rate": 0.15384615384615385,
+    "base": 0.06265356265356266,
+    "lift": 2.455505279034691,
+    "p": 0.01504959962325727,
+    "sig": true
+   },
+   {
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 52,
+    "c": 13,
+    "rate": 0.25,
+    "base": 0.10810810810810811,
+    "lift": 2.3125,
+    "p": 0.0029881986378665825,
+    "sig": true
+   },
+   {
+    "ctx": "Lightning + The Log",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 68,
+    "c": 20,
+    "rate": 0.29411764705882354,
+    "base": 0.1423948220064725,
+    "lift": 2.0655080213903743,
+    "p": 0.0009556487004327722,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Lightning + Tornado",
+    "tgt": "Fireball + The Log",
+    "n": 51,
+    "c": 13,
+    "rate": 0.2549019607843137,
+    "base": 0.12962962962962962,
+    "lift": 1.9663865546218486,
+    "p": 0.011540328763919831,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "Lightning + The Log",
+    "n": 176,
+    "c": 60,
+    "rate": 0.3409090909090909,
+    "base": 0.19669421487603306,
+    "lift": 1.7331932773109242,
+    "p": 5.0604440573595036e-06,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Lightning",
+    "tgt": "Fireball + The Log",
+    "n": 119,
+    "c": 23,
+    "rate": 0.19327731092436976,
+    "base": 0.11945392491467577,
+    "lift": 1.6180072028811525,
+    "p": 0.013354577945149519,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel",
+    "tgt": "Lightning + The Log",
+    "n": 102,
+    "c": 25,
+    "rate": 0.24509803921568626,
+    "base": 0.16037735849056603,
+    "lift": 1.5282583621683967,
+    "p": 0.017721589810578316,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Lightning",
+    "tgt": "Arrows",
+    "n": 119,
+    "c": 25,
+    "rate": 0.21008403361344538,
+    "base": 0.13822525597269625,
+    "lift": 1.519867206141716,
+    "p": 0.020360689578064466,
+    "sig": true
+   },
+   {
+    "ctx": "Earthquake + The Log",
+    "tgt": "Barbarian Barrel",
+    "n": 25,
+    "c": 5,
+    "rate": 0.2,
+    "base": 0.07637906647807638,
+    "lift": 2.6185185185185187,
+    "p": 0.03808682101536056,
+    "sig": false
+   },
+   {
+    "ctx": "Lightning + Tornado",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 16,
+    "c": 5,
+    "rate": 0.3125,
+    "base": 0.12273361227336123,
+    "lift": 2.5461647727272725,
+    "p": 0.037941140017022895,
+    "sig": false
+   },
+   {
+    "ctx": "Arrows",
+    "tgt": "Fireball + Zap",
+    "n": 63,
+    "c": 5,
+    "rate": 0.07936507936507936,
+    "base": 0.041189931350114416,
+    "lift": 1.9268077601410933,
+    "p": 0.117647908285644,
+    "sig": false
+   },
+   {
+    "ctx": "Arrows",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 63,
+    "c": 7,
+    "rate": 0.1111111111111111,
+    "base": 0.05835240274599542,
+    "lift": 1.904139433551198,
+    "p": 0.07364912428723516,
+    "sig": false
+   },
+   {
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel",
+    "n": 52,
+    "c": 6,
+    "rate": 0.11538461538461539,
+    "base": 0.06633906633906633,
+    "lift": 1.7393162393162396,
+    "p": 0.12879761578550872,
+    "sig": false
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "Poison + The Log",
+    "n": 176,
+    "c": 6,
+    "rate": 0.03409090909090909,
+    "base": 0.021487603305785124,
+    "lift": 1.5865384615384615,
+    "p": 0.17980760873982105,
+    "sig": false
+   }
+  ],
+  "rows2": [
+   {
+    "wc": "Elite Barbarians",
+    "ctx": "Barbarian Barrel",
+    "tgt": "Fireball",
+    "n": 96,
+    "c": 5,
+    "rate": 0.052083333333333336,
+    "base": 0.016172506738544475,
+    "lift": 3.220486111111111,
+    "p": 0.020143561927755158,
+    "sig": true
+   },
+   {
+    "wc": "Balloon",
+    "ctx": "Tornado + Zap",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 31,
+    "c": 10,
+    "rate": 0.3225806451612903,
+    "base": 0.10438908659549229,
+    "lift": 3.090175953079179,
+    "p": 0.0008575704506149661,
+    "sig": true
+   },
+   {
+    "wc": "Miner",
+    "ctx": "Tornado + Zap",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 31,
+    "c": 10,
+    "rate": 0.3225806451612903,
+    "base": 0.10438908659549229,
+    "lift": 3.090175953079179,
+    "p": 0.0008575704506149661,
+    "sig": true
+   },
+   {
+    "wc": "Battle Ram",
+    "ctx": "Barbarian Barrel",
+    "tgt": "Fireball",
+    "n": 101,
+    "c": 5,
+    "rate": 0.04950495049504951,
+    "base": 0.016172506738544475,
+    "lift": 3.061056105610561,
+    "p": 0.024459825607375255,
+    "sig": true
+   },
+   {
+    "wc": "Goblin Drill",
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 43,
+    "c": 8,
+    "rate": 0.18604651162790697,
+    "base": 0.06265356265356266,
+    "lift": 2.9694482444140444,
+    "p": 0.00476883514651384,
+    "sig": true
+   },
+   {
+    "wc": "Golem",
+    "ctx": "Lightning + Tornado",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 15,
+    "c": 5,
+    "rate": 0.3333333333333333,
+    "base": 0.12273361227336123,
+    "lift": 2.715909090909091,
+    "p": 0.028937945748401726,
+    "sig": true
+   },
+   {
+    "wc": "Hog Rider",
+    "ctx": "Earthquake + The Log",
+    "tgt": "Barbarian Barrel",
+    "n": 25,
+    "c": 5,
+    "rate": 0.2,
+    "base": 0.07637906647807638,
+    "lift": 2.6185185185185187,
+    "p": 0.03808682101536056,
+    "sig": true
+   },
+   {
+    "wc": "Battle Ram",
+    "ctx": "Arrows",
+    "tgt": "Barbarian Barrel + Lightning",
+    "n": 49,
+    "c": 7,
+    "rate": 0.14285714285714285,
+    "base": 0.05835240274599542,
+    "lift": 2.448179271708683,
+    "p": 0.022904852430513233,
+    "sig": true
+   },
+   {
+    "wc": "Battle Ram",
+    "ctx": "Arrows",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 49,
+    "c": 12,
+    "rate": 0.24489795918367346,
+    "base": 0.10068649885583524,
+    "lift": 2.4322820037105752,
+    "p": 0.0028460446010378344,
+    "sig": true
+   },
+   {
+    "wc": "Goblin Drill",
+    "ctx": "Giant Snowball + Poison",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 43,
+    "c": 11,
+    "rate": 0.2558139534883721,
+    "base": 0.10810810810810811,
+    "lift": 2.3662790697674416,
+    "p": 0.00504719470860915,
+    "sig": true
+   },
+   {
+    "wc": "Hog Rider",
+    "ctx": "Lightning + The Log",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 24,
+    "c": 8,
+    "rate": 0.3333333333333333,
+    "base": 0.1423948220064725,
+    "lift": 2.340909090909091,
+    "p": 0.014769138975090591,
+    "sig": true
+   },
+   {
+    "wc": "Royal Hogs",
+    "ctx": "Lightning + The Log",
+    "tgt": "Barbarian Barrel + Fireball",
+    "n": 33,
+    "c": 11,
+    "rate": 0.3333333333333333,
+    "base": 0.1423948220064725,
+    "lift": 2.340909090909091,
+    "p": 0.004537985001493469,
+    "sig": true
+   },
+   {
+    "wc": "Golem",
+    "ctx": "Barbarian Barrel + Lightning + Tornado",
+    "tgt": "Fireball + The Log",
+    "n": 34,
+    "c": 9,
+    "rate": 0.2647058823529412,
+    "base": 0.12962962962962962,
+    "lift": 2.0420168067226894,
+    "p": 0.02593775292161644,
+    "sig": true
+   },
+   {
+    "wc": "Elite Barbarians",
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "Lightning + The Log",
+    "n": 88,
+    "c": 35,
+    "rate": 0.3977272727272727,
+    "base": 0.19669421487603306,
+    "lift": 2.0220588235294117,
+    "p": 1.1298715775877438e-05,
+    "sig": true
+   },
+   {
+    "wc": "Mortar",
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "Lightning + The Log",
+    "n": 77,
+    "c": 30,
+    "rate": 0.38961038961038963,
+    "base": 0.19669421487603306,
+    "lift": 1.9807923169267707,
+    "p": 7.299433831457682e-05,
+    "sig": true
+   },
+   {
+    "wc": "Royal Giant",
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "Lightning + The Log",
+    "n": 76,
+    "c": 27,
+    "rate": 0.35526315789473684,
+    "base": 0.19669421487603306,
+    "lift": 1.806169836355595,
+    "p": 0.0009070992071161332,
+    "sig": true
+   },
+   {
+    "wc": "Royal Hogs",
+    "ctx": "Barbarian Barrel + Lightning",
+    "tgt": "Arrows",
+    "n": 77,
+    "c": 18,
+    "rate": 0.23376623376623376,
+    "base": 0.13822525597269625,
+    "lift": 1.6911976911976911,
+    "p": 0.01622632841760664,
+    "sig": true
+   },
+   {
+    "wc": "Royal Hogs",
+    "ctx": "Barbarian Barrel + Lightning",
+    "tgt": "Fireball + The Log",
+    "n": 77,
+    "c": 15,
+    "rate": 0.19480519480519481,
+    "base": 0.11945392491467577,
+    "lift": 1.6307977736549166,
+    "p": 0.03766206301457833,
+    "sig": true
+   }
+  ],
+  "rows3": [
+   {
+    "ctx": "Barbarian Barrel + Fireball",
+    "tgt": "Lightning + The Log",
+    "n": 14,
+    "c": 5,
+    "rate": 0.35714285714285715,
+    "base": 0.11076923076923077,
+    "lift": 3.2242063492063493,
+    "p": 0.014120194577446657,
+    "sig": true
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball + Lightning + The Log",
+    "tgt": "Giant Snowball + Poison",
+    "n": 45,
+    "c": 12,
+    "rate": 0.26666666666666666,
+    "base": 0.1703056768558952,
+    "lift": 1.5658119658119658,
+    "p": 0.06970160800099034,
+    "sig": false
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball + Lightning + The Log",
+    "tgt": "Arrows",
+    "n": 45,
+    "c": 9,
+    "rate": 0.2,
+    "base": 0.18340611353711792,
+    "lift": 1.0904761904761904,
+    "p": 0.44605114046298744,
+    "sig": false
+   },
+   {
+    "ctx": "Barbarian Barrel + Fireball + Lightning + The Log",
+    "tgt": "(no spells)",
+    "n": 45,
+    "c": 6,
+    "rate": 0.13333333333333333,
+    "base": 0.14410480349344978,
+    "lift": 0.9252525252525252,
+    "p": 0.645741970182561,
+    "sig": false
+   }
+  ],
+  "pool": [
+   [
+    "Lightning + The Log",
+    0.11971830985915492
+   ],
+   [
+    "Barbarian Barrel + Fireball",
+    0.08853118712273642
+   ],
+   [
+    "Arrows",
+    0.08148893360160966
+   ],
+   [
+    "Giant Snowball + Poison",
+    0.07645875251509054
+   ],
+   [
+    "Fireball + The Log",
+    0.07042253521126761
+   ],
+   [
+    "Barbarian Barrel",
+    0.05432595573440644
+   ],
+   [
+    "Barbarian Barrel + Lightning",
+    0.05130784708249497
+   ],
+   [
+    "(no spells)",
+    0.04527162977867203
+   ],
+   [
+    "Fireball + Zap",
+    0.03621730382293763
+   ],
+   [
+    "Earthquake + The Log",
+    0.029175050301810865
+   ]
+  ],
+  "n_duels": 994
+ }
+}

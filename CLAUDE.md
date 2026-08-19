@@ -152,6 +152,62 @@ Implemented as `is_stats_eligible()` in `build_duel_workbook.py`, which stamps e
 `is_set_complete()` in `build_dashboard.py` fixed a related bug: Best Picks required 3 games
 and so discarded every legitimate Official-CRL 2-0 sweep (22 sets on the 07-27 archive).
 
+## Duel format: decks are picked BETWEEN games (confirmed by Alexander 2026-08-18)
+
+**Players do NOT lock three decks before the set.** After each game finishes both players get
+a **2-minute break to choose their next deck**. Alexander confirms this has always been the
+format for the whole archive, and that it applies to **Practice duels as well as Official CRL**.
+
+Consequences, and they are load-bearing for any sequencing work:
+
+- **Game-2 and game-3 picks are reactive.** An opponent can and does respond to what you just
+  showed them. Modelling their game 2 as a pre-committed slot in a fixed order is wrong.
+- **The game-1 RESULT is a legitimate predictor.** Who won (and by how many crowns) is known
+  to the picker at decision time. `crowns_for` / `crowns_against` are on every `duel_log` row
+  and were unused until 2026-08-18.
+- **Your own game-1 deck is legitimate context** for predicting their game 2 — the basis of
+  `wincon_joint_patterns.py`.
+- Result-conditioning is the clean test for reaction vs. population artifact: the same two
+  players and the same decks, with only the winner varying, cannot be explained by
+  matchmaking clustering.
+
+Do not reintroduce the "both players lock 3 decks up front" assumption — it was asserted in
+analysis on 2026-08-18 and corrected by Alexander the same day.
+
+## Duel-ID collision + one-deck duels (fixed 2026-08-19)
+
+Two data-integrity bugs found by auditing the invariant "every stats-eligible duel is a set of
+distinct decks with no repeated cards."
+
+**1. Duel-ID collision.** `by_pair` and `duel_counters` are keyed on TAGS, but `duel_id` /
+`session_id` were rendered from DISPLAY NAMES. When one name maps to several tags, two
+genuinely different pairs produced the same `duel_id`, and everything that groups by duel_id
+merged them. `Ian77_vs_Ryley_D1` held a 3-game set from 08-06 **and** another from 08-18 — six
+games, duplicate game numbers, overlapping cards.
+
+- Found via **"Ryley", which maps to three tags** (`#20PYYV8U2U`, `#C0V0UQ9UY`, `#R90PRV0PY`).
+- The mirror problem also exists: **11 tags have used more than one display name** (e.g.
+  `#U890Q9UQ` = "CAL Sub ™✨杰克" and "CAL Sub ™️✨Kun").
+- Fix: `_label()` in `build_dataset()` appends a 4-char tag fragment **only for ambiguous
+  names**, so the vast majority of duel IDs keep their readable form. 9 collisions / 25 merged
+  rows before; 0 after.
+- **If you add a player whose name duplicates an existing one, this handles it automatically.**
+
+**2. One-deck "duels".** `MIN_DISTINCT_DECKS_FOR_ANY_DUEL = 2` in `is_stats_eligible()`. A set
+has at least two games, so a single captured game is a truncated capture, not a result — true
+for Official CRL as much as Practice. This is **not** the completeness rule: an Official CRL
+**2-0 sweep is complete and must stay in** (gating those was the 2026-08-06 bug that discarded
+22 real sweeps).
+
+Post-fix audit: **6,835 stats-eligible duels, 100% with ≥2 distinct decks and zero shared
+cards between games.** 5,609 of them are full 3-deck sets.
+
+**Identical-deck duels are NOT discarded** (considered and rejected 2026-08-19). Zero duels
+have unflagged identical decks — `is_rematch` already catches every "forgot to switch decks"
+case, excludes that game from distinct-deck analysis, and lets the set still reach 3 decks.
+245 duels contain a flagged rematch and **164 of those still yield 3 clean decks**; discarding
+them would destroy valid data to fix a problem that does not exist.
+
 ## Practice-session rule (added 2026-08-07)
 
 Alexander's rule: **a clan/friendly battle is not practice just because it was friendly.**

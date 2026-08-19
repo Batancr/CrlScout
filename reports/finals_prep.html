@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Finals Prep — Asaf scouting &amp; spell sequencing</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin:0; padding:20px; background:#f7f8fa; color:#16181d;
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+h1 { font-size:21px; margin:0 0 4px; }
+h2 { font-size:16px; margin:22px 0 8px; }
+.sub { color:#5f6672; font-size:13px; margin-bottom:16px; }
+.tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; border-bottom:1px solid #e2e5ea; }
+.tab { padding:8px 14px; border:1px solid transparent; border-bottom:none; border-radius:7px 7px 0 0;
+  background:none; cursor:pointer; font-size:13px; color:#5f6672; }
+.tab.active { background:#fff; border-color:#e2e5ea; color:#1668dc; font-weight:600; }
+.panel { display:none; } .panel.active { display:block; }
+.card { background:#fff; border:1px solid #e2e5ea; border-radius:10px; padding:16px; margin-bottom:14px; }
+table { border-collapse:collapse; width:100%; font-size:13px; }
+th,td { text-align:left; padding:7px 9px; border-bottom:1px solid #eef0f3; vertical-align:top; }
+th { color:#5f6672; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.03em; }
+tr:last-child td { border-bottom:none; }
+.tgt { font-weight:600; color:#0f4c9a; }
+.lift { font-weight:600; }
+.big { color:#0a7c3f; }
+.pill { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:600; }
+.warn { background:#fff3cd; color:#8a6100; }
+.ok { background:#e3f5ea; color:#0a7c3f; }
+.info { background:#e8f0fe; color:#1668dc; }
+.metric { display:flex; gap:20px; flex-wrap:wrap; margin:10px 0 4px; }
+.metric div { min-width:130px; }
+.metric .v { font-size:22px; font-weight:700; }
+.metric .l { font-size:11px; color:#5f6672; text-transform:uppercase; letter-spacing:.03em; }
+input,select { padding:7px 10px; border:1px solid #d4d8de; border-radius:7px; font-size:13px; background:#fff; }
+input { min-width:230px; }
+.controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+.note { background:#f0f4f9; border-left:3px solid #1668dc; padding:10px 13px; border-radius:0 7px 7px 0;
+  font-size:13px; color:#333a45; margin:12px 0; }
+.caveat { background:#fff8e6; border-left:3px solid #e0a800; padding:10px 13px; border-radius:0 7px 7px 0;
+  font-size:13px; color:#4a3c10; margin:12px 0; }
+.empty { color:#8b929e; font-style:italic; padding:14px 0; }
+</style>
+</head>
+<body>
+<h1>Finals prep — Asaf scouting &amp; spell sequencing</h1>
+<div class="sub">Built from the CRL archive through 2026-08-18. All lift figures are measured against a
+<strong>constraint-aware baseline</strong> and corrected for multiple comparisons (Benjamini-Hochberg, q=0.10).
+Only statistically surviving rows are shown.</div>
+
+<div class="tabs">
+  <button class="tab active" data-p="asaf">Asaf profile</button>
+  <button class="tab" data-p="spell2">Spell lookup — game 2</button>
+  <button class="tab" data-p="spell3">Spell lookup — game 3</button>
+  <button class="tab" data-p="method">Method &amp; caveats</button>
+</div>
+
+<div class="panel active" id="asaf"></div>
+<div class="panel" id="spell2"></div>
+<div class="panel" id="spell3"></div>
+
+<div class="panel" id="method">
+  <div class="card">
+    <h2>How to read this</h2>
+    <div class="note"><strong>Lift is preference, not arithmetic.</strong> Cards cannot repeat inside a duel
+    set, so a game-1 Lightning + Barb Barrel <em>mechanically</em> guarantees game 2 has neither. Comparing
+    against overall spell popularity would just rediscover that rule. Every baseline here is renormalised over
+    only the packages still <em>legal</em> given what earlier games burned, so a 3x lift means they genuinely
+    prefer it among what remains available.</div>
+    <div class="note"><strong>Significance.</strong> Hundreds of context/outcome cells were scanned, so an
+    uncorrected p&lt;0.05 would be meaningless — roughly 15 false hits per 300 rows. Each row gets an exact
+    binomial test against its legal-pool baseline, then Benjamini-Hochberg FDR at q=0.10. Rows that failed are
+    excluded from this artifact entirely.</div>
+    <div class="caveat"><strong>What this cannot tell you.</strong> These are population-level tendencies across
+    the whole tracked roster, not reads on one specific opponent. Sample sizes per cell (the <em>n</em> column)
+    range from 14 to 546 — prefer high-n rows. And a surviving pattern is a correlation: it does not prove the
+    player is reasoning the way you'd guess.</div>
+    <div class="caveat"><strong>Asaf's entropy figures are unreliable at this sample size.</strong> With 16–74
+    duels most win-condition transitions occur once, and a table of one-counts always looks maximally random.
+    The <em>concentration</em> percentile is the trustworthy metric; treat entropy as directional only.</div>
+    <div class="caveat"><strong>A related test came back null.</strong> Whether an opponent won or lost game 1
+    does <em>not</em> measurably change which win condition they bring next (296 cells scanned, 0 survived FDR).
+    So don't re-plan your read just because game 1 went badly.</div>
+  </div>
+</div>
+
+<script>
+const SPELL = {"Post-patch (Aug 5+) — CRL + practice":{"g2":[["Fireball + Zap","Goblin Curse + Rage","4%","0%","11.96x","127","0.0001"],["Arrows + Giant Snowball","Barbarian Barrel + Void","8%","1%","7.55x","61","0.0005"],["Lightning + Royal Delivery","Barbarian Barrel","25%","5%","5.35x","24","0.0007"],["Barbarian Barrel + Lightning","Tornado + Void","2%","1%","4.08x","419","0.0002"],["Lightning + Tornado","Fireball + Zap","18%","5%","3.93x","28","0.0079"],["Void + Zap","Barbarian Barrel + Lightning","25%","7%","3.62x","28","0.0024"],["Giant Snowball + Poison","Barbarian Barrel + Void","4%","1%","3.51x","170","0.0079"],["Fireball","Barbarian Barrel","16%","4%","3.49x","32","0.0131"],["Rage + Void + Zap","Barbarian Barrel + Lightning","23%","7%","3.29x","26","0.0081"],["Lightning + Tornado","Barbarian Barrel + Fireball","32%","10%","3.23x","28","0.0011"],["Giant Snowball + Poison + Royal Delivery","Barbarian Barrel + Lightning","24%","8%","3.16x","29","0.0052"],["Barbarian Barrel","Fireball","4%","2%","2.86x","296","0.0008"]],"g2wc":[["Giant","Arrows + Giant Snowball","Barbarian Barrel + Void","8%","1%","7.80x","59","0.0005"],["Graveyard","Arrows + Giant Snowball","Barbarian Barrel + Void","8%","1%","7.67x","60","0.0005"],["X-Bow","Fireball + The Log","Barbarian Barrel + Lightning + Tornado","25%","4%","6.77x","32","0.0000"],["Mortar","Barbarian Barrel + Lightning","Tornado + Void","3%","1%","5.38x","159","0.0026"],["Golem","Lightning + Tornado","Fireball + Zap","23%","5%","5.00x","22","0.0027"],["Royal Hogs","Barbarian Barrel + Fireball","The Log + Void","9%","2%","4.90x","126","0.0000"],["Graveyard","Giant Snowball + Poison","Barbarian Barrel","21%","5%","4.73x","28","0.0014"],["Royal Hogs","Lightning + Royal Delivery","Barbarian Barrel","22%","5%","4.65x","23","0.0037"],["Lava Hound","Goblin Curse + Zap","Barbarian Barrel + Poison","16%","4%","4.01x","37","0.0034"],["Skeleton Barrel","Fireball","Barbarian Barrel","17%","4%","3.85x","29","0.0087"],["Elite Barbarians","Fireball + The Log","Barbarian Barrel + Lightning + Tornado","13%","4%","3.64x","52","0.0029"],["Skeleton Barrel","Barbarian Barrel + Fireball","The Log + Void","6%","2%","3.64x","108","0.0033"],["Royal Hogs","Barbarian Barrel + Lightning","Tornado + Void","2%","1%","3.64x","235","0.0130"],["Royal Hogs","Barbarian Barrel + Fireball","Lightning + Tornado","6%","2%","3.26x","126","0.0061"],["Elite Barbarians","Barbarian Barrel","Fireball","5%","2%","3.24x","262","0.0002"]],"g3":[["Poison + The Log","Barbarian Barrel + Lightning","35%","5%","6.57x","17","0.0002"],["Barbarian Barrel + Lightning + The Log","Giant Snowball + Poison + Royal Delivery","10%","2%","4.81x","50","0.0038"],["Giant Snowball + Lightning + Poison + The Log","Barbarian Barrel + Fireball","39%","8%","4.65x","18","0.0004"],["Arrows + Lightning + The Log","Barbarian Barrel + Fireball","31%","8%","4.06x","36","0.0000"],["Arrows + Giant Snowball + Poison","Barbarian Barrel + Fireball","25%","6%","3.92x","28","0.0015"],["Arrows + Lightning + The Log","Barbarian Barrel + Poison","14%","4%","3.69x","36","0.0107"],["Barbarian Barrel + Fireball + Giant Snowball","Lightning + The Log","43%","12%","3.68x","14","0.0033"],["Arrows + Poison + The Log","Barbarian Barrel + Lightning","25%","7%","3.49x","20","0.0117"],["Arrows","Barbarian Barrel + Lightning","14%","4%","3.27x","37","0.0174"],["Barbarian Barrel + Fireball + Giant Snowball + Poison","Lightning + Tornado","9%","3%","3.23x","70","0.0107"],["Barbarian Barrel + Fireball + Lightning + The Log","Arrows + Rage","3%","1%","3.22x","177","0.0207"],["Arrows + Barbarian Barrel + Poison","Fireball + Zap","14%","4%","3.19x","50","0.0060"],["Barbarian Barrel + Goblin Curse + Lightning + Zap","Fireball + The Log","32%","10%","3.10x","31","0.0008"],["Barbarian Barrel + Poison","Fireball + The Log","28%","9%","3.09x","29","0.0031"],["Barbarian Barrel + Giant Snowball + Lightning + Poison","Fireball + The Log","35%","12%","2.93x","49","0.0000"]]},"Post-patch (Aug 5+) — Official CRL only":{"g2":[["Fireball + Zap","Barbarian Barrel","26%","8%","3.45x","23","0.0061"],["Barbarian Barrel","Fireball","5%","2%","3.03x","102","0.0254"],["Tornado + Zap","Barbarian Barrel + Fireball","31%","10%","2.99x","32","0.0011"],["Arrows","Barbarian Barrel + Fireball","25%","10%","2.52x","63","0.0004"],["Giant Snowball + Poison","Barbarian Barrel + Lightning","15%","6%","2.46x","52","0.0150"],["Giant Snowball + Poison","Barbarian Barrel + Fireball","25%","11%","2.31x","52","0.0030"],["Lightning + The Log","Barbarian Barrel + Fireball","29%","14%","2.07x","68","0.0010"],["Barbarian Barrel + Lightning + Tornado","Fireball + The Log","25%","13%","1.97x","51","0.0115"],["Barbarian Barrel + Fireball","Lightning + The Log","34%","20%","1.73x","176","0.0000"],["Barbarian Barrel + Lightning","Fireball + The Log","19%","12%","1.62x","119","0.0134"],["Barbarian Barrel","Lightning + The Log","25%","16%","1.53x","102","0.0177"],["Barbarian Barrel + Lightning","Arrows","21%","14%","1.52x","119","0.0204"]],"g2wc":[["Elite Barbarians","Barbarian Barrel","Fireball","5%","2%","3.22x","96","0.0201"],["Balloon","Tornado + Zap","Barbarian Barrel + Fireball","32%","10%","3.09x","31","0.0009"],["Miner","Tornado + Zap","Barbarian Barrel + Fireball","32%","10%","3.09x","31","0.0009"],["Battle Ram","Barbarian Barrel","Fireball","5%","2%","3.06x","101","0.0245"],["Goblin Drill","Giant Snowball + Poison","Barbarian Barrel + Lightning","19%","6%","2.97x","43","0.0048"],["Golem","Lightning + Tornado","Barbarian Barrel + Fireball","33%","12%","2.72x","15","0.0289"],["Hog Rider","Earthquake + The Log","Barbarian Barrel","20%","8%","2.62x","25","0.0381"],["Battle Ram","Arrows","Barbarian Barrel + Lightning","14%","6%","2.45x","49","0.0229"],["Battle Ram","Arrows","Barbarian Barrel + Fireball","24%","10%","2.43x","49","0.0028"],["Goblin Drill","Giant Snowball + Poison","Barbarian Barrel + Fireball","26%","11%","2.37x","43","0.0050"],["Hog Rider","Lightning + The Log","Barbarian Barrel + Fireball","33%","14%","2.34x","24","0.0148"],["Royal Hogs","Lightning + The Log","Barbarian Barrel + Fireball","33%","14%","2.34x","33","0.0045"]],"g3":[["Barbarian Barrel + Fireball","Lightning + The Log","36%","11%","3.22x","14","0.0141"]]}};
+
+const ASAF = [
+ {label:"Post-patch (Aug 5+) — CRL + practice", n:35, games:97, pool:29, conc:0.16, pct:74,
+  g1:[["Elite Barbarians",13],["Wall Breakers",8],["Mortar",7],["Goblin Barrel",5],["Battle Ram",5]],
+  trans:[["Elite Barbarians","Goblin Drill",6,17],["Miner","Elite Barbarians",3,7],["Miner","Battle Ram",3,7],["Wall Breakers","Elite Barbarians",3,13],["Elite Barbarians","Wall Breakers",3,17]],
+  seqs:[["Battle Ram / Elite Barbarians","Goblin Drill","Goblin Barrel",2]]},
+ {label:"Post-patch (Aug 5+) — Official CRL only", n:16, games:44, pool:14, conc:0.32, pct:90,
+  g1:[["Elite Barbarians",9],["Mortar",4],["Battle Ram",3],["Wall Breakers",3],["Goblin Drill",3]],
+  trans:[["Elite Barbarians","Goblin Drill",4,13],["Elite Barbarians","Wall Breakers",3,13],["Wall Breakers","Elite Barbarians",3,6],["Elite Barbarians","Miner",2,13],["Battle Ram","Miner",2,5]],
+  seqs:[]},
+ {label:"All time — CRL + practice", n:74, games:203, pool:62, conc:0.08, pct:33,
+  g1:[["Wall Breakers",24],["Goblin Barrel",17],["Elite Barbarians",13],["Goblin Drill",11],["Mortar",9]],
+  trans:[["Elite Barbarians","Goblin Drill",6,17],["Wall Breakers","Mortar",5,32],["Wall Breakers","Goblin Drill",5,32],["Wall Breakers","Royal Hogs",4,32],["Goblin Barrel","Mortar",4,22]],
+  seqs:[["Royal Hogs","Goblin Drill","Royal Giant",2],["Battle Ram / Elite Barbarians","Goblin Drill","Goblin Barrel",2]]},
+ {label:"All time — Official CRL only", n:38, games:104, pool:37, conc:0.14, pct:40,
+  g1:[["Wall Breakers",15],["Goblin Barrel",9],["Goblin Drill",9],["Elite Barbarians",9],["Miner",6]],
+  trans:[["Wall Breakers","Mortar",4,21],["Elite Barbarians","Goblin Drill",4,13],["Wall Breakers","Skeleton Barrel",3,21],["Wall Breakers","Goblin Drill",3,21],["Goblin Barrel","Mortar",3,12]],
+  seqs:[]}
+];
+
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const liftCls = l => parseFloat(l) >= 3 ? 'lift big' : 'lift';
+
+function renderAsaf() {
+  let h = `<div class="card"><h2>Is Asaf predictable?</h2>
+  <div class="note"><strong>Half right — and the half that's true is the useful half.</strong>
+  Post-patch his deck pool is narrow: in Official CRL his top 3 decks cover <strong>32%</strong> of games,
+  more concentrated than <strong>90%</strong> of the roster. But <em>which</em> deck follows which is close to
+  random. So prep against his pool, not against a sequence. All-time he looks unremarkable (33rd–40th
+  percentile), meaning the narrowing is recent — consistent with him settling on a finals set.</div></div>`;
+
+  for (const f of ASAF) {
+    h += `<div class="card"><h2>${esc(f.label)}</h2>`;
+    if (f.n < 20) h += `<span class="pill warn">⚠ only ${f.n} duels — indicative, not established</span>`;
+    h += `<div class="metric">
+      <div><div class="v">${f.n}</div><div class="l">duels</div></div>
+      <div><div class="v">${f.games}</div><div class="l">games</div></div>
+      <div><div class="v">${f.pool}</div><div class="l">distinct decks</div></div>
+      <div><div class="v">${Math.round(f.conc*100)}%</div><div class="l">top-3 concentration</div></div>
+      <div><div class="v">${f.pct}<span style="font-size:13px">th</span></div><div class="l">percentile vs roster</div></div>
+    </div>`;
+    h += `<h2>Opens game 1 with</h2><table><tr><th>win condition</th><th>games</th></tr>`;
+    for (const [w,c] of f.g1) h += `<tr><td>${esc(w)}</td><td>${c}</td></tr>`;
+    h += `</table>`;
+    h += `<h2>Game 1 → game 2</h2><table><tr><th>after opening</th><th>follows with</th><th>n</th><th>share</th></tr>`;
+    for (const [a,b,c,tot] of f.trans)
+      h += `<tr><td>${esc(a)}</td><td class="tgt">${esc(b)}</td><td>${c}</td><td>${Math.round(100*c/tot)}%</td></tr>`;
+    h += `</table>`;
+    if (f.seqs.length) {
+      h += `<h2>3-game sequences seen more than once</h2><table><tr><th>game 1</th><th>game 2</th><th>game 3</th><th>times</th></tr>`;
+      for (const s of f.seqs) h += `<tr><td>${esc(s[0])}</td><td>${esc(s[1])}</td><td>${esc(s[2])}</td><td>${s[3]}</td></tr>`;
+      h += `</table>`;
+    } else {
+      h += `<div class="empty">No exact 3-game sequence repeated — his ordering is not scripted.</div>`;
+    }
+    h += `</div>`;
+  }
+  document.getElementById('asaf').innerHTML = h;
+}
+
+function scopeSelect(id) {
+  return `<select id="${id}">${Object.keys(SPELL).map(k=>`<option>${esc(k)}</option>`).join('')}</select>`;
+}
+
+function renderSpell2() {
+  document.getElementById('spell2').innerHTML = `<div class="card">
+    <h2>What spells follow their game-1 spells?</h2>
+    <div class="controls">${scopeSelect('sc2')}
+      <input id="q2" placeholder="filter — e.g. lightning, poison, royal hogs">
+      <span class="pill info">significant rows only</span></div>
+    <div id="t2a"></div>
+    <h2 style="margin-top:24px">Adding their game-1 win condition</h2>
+    <div class="sub" style="margin:0 0 10px">Your hypothesis: once Royal Hogs is spent, the biggest spell-bait
+    threat is gone and their next spell choice should move. It does — see the Royal Hogs rows.</div>
+    <div id="t2b"></div></div>`;
+  const draw = () => {
+    const sc = document.getElementById('sc2').value, q = document.getElementById('q2').value.toLowerCase();
+    const f = r => !q || r.join(' ').toLowerCase().includes(q);
+    let a = SPELL[sc].g2.filter(f), b = SPELL[sc].g2wc.filter(f);
+    document.getElementById('t2a').innerHTML = a.length ? `<table>
+      <tr><th>they opened with</th><th>they follow with</th><th>rate</th><th>legal base</th><th>lift</th><th>n</th></tr>
+      ${a.map(r=>`<tr><td>${esc(r[0])}</td><td class="tgt">${esc(r[1])}</td><td>${r[2]}</td><td>${r[3]}</td>
+      <td class="${liftCls(r[4])}">${r[4]}</td><td>${r[5]}</td></tr>`).join('')}</table>`
+      : `<div class="empty">No significant rows match.</div>`;
+    document.getElementById('t2b').innerHTML = b.length ? `<table>
+      <tr><th>g1 win con</th><th>g1 spells</th><th>g2 spells</th><th>rate</th><th>legal base</th><th>lift</th><th>n</th></tr>
+      ${b.map(r=>`<tr><td><strong>${esc(r[0])}</strong></td><td>${esc(r[1])}</td><td class="tgt">${esc(r[2])}</td>
+      <td>${r[3]}</td><td>${r[4]}</td><td class="${liftCls(r[5])}">${r[5]}</td><td>${r[6]}</td></tr>`).join('')}</table>`
+      : `<div class="empty">No significant rows match.</div>`;
+  };
+  document.getElementById('sc2').onchange = draw;
+  document.getElementById('q2').oninput = draw;
+  draw();
+}
+
+function renderSpell3() {
+  document.getElementById('spell3').innerHTML = `<div class="card">
+    <h2>Game 3 — the most constrained slot</h2>
+    <div class="note">By game 3 up to four spells are burned, so the legal pool is small. This is where spell
+    reading pays off most: lifts here reach 6.6x on a baseline that already accounts for what's unavailable.</div>
+    <div class="controls">${scopeSelect('sc3')}
+      <input id="q3" placeholder="filter — e.g. arrows, lightning"></div>
+    <div id="t3"></div></div>`;
+  const draw = () => {
+    const sc = document.getElementById('sc3').value, q = document.getElementById('q3').value.toLowerCase();
+    const rows = SPELL[sc].g3.filter(r => !q || r.join(' ').toLowerCase().includes(q));
+    document.getElementById('t3').innerHTML = rows.length ? `<table>
+      <tr><th>spells already used (g1+g2)</th><th>game 3 spells</th><th>rate</th><th>legal base</th><th>lift</th><th>n</th></tr>
+      ${rows.map(r=>`<tr><td>${esc(r[0])}</td><td class="tgt">${esc(r[1])}</td><td>${r[2]}</td><td>${r[3]}</td>
+      <td class="${liftCls(r[4])}">${r[4]}</td><td>${r[5]}</td></tr>`).join('')}</table>`
+      : `<div class="empty">No significant rows match. (Official-CRL-only has just 1 surviving game-3 row —
+         994 duels isn't enough for this slot.)</div>`;
+  };
+  document.getElementById('sc3').onchange = draw;
+  document.getElementById('q3').oninput = draw;
+  draw();
+}
+
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById(t.dataset.p).classList.add('active');
+});
+
+renderAsaf(); renderSpell2(); renderSpell3();
+</script>
+</body>
+</html>
