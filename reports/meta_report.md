@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-20 06:32 UTC · latest battle 2026-08-20 00:21 UTC
+Generated 2026-08-20 09:31 UTC · latest battle 2026-08-20 08:02 UTC
 
-**12,480 eligible games** · Practice 10,062 · Official CRL 2,418
+**12,487 eligible games** · Practice 10,069 · Official CRL 2,418
 
 ## Top win conditions
 
-Share is of the 12,408 games with a classified win condition.
+Share is of the 12,415 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
 | Mortar | 1,133 | 9.1% | **61%** |
-| Battle Ram | 1,525 | 12.3% | **60%** |
-| Elite Barbarians | 2,212 | 17.8% | **58%** |
+| Battle Ram | 1,526 | 12.3% | **60%** |
+| Elite Barbarians | 2,214 | 17.8% | **58%** |
 | Three Musketeers | 140 | 1.1% | **57%** |
-| Royal Hogs | 1,490 | 12.0% | **57%** |
-| Giant | 304 | 2.5% | **56%** |
-| Hog Rider | 1,074 | 8.7% | **55%** |
+| Royal Hogs | 1,491 | 12.0% | **57%** |
+| Giant | 304 | 2.4% | **56%** |
+| Hog Rider | 1,076 | 8.7% | **55%** |
 | Skeleton Barrel | 758 | 6.1% | **54%** |
 | Rune Giant | 826 | 6.7% | **53%** |
 | Golem | 469 | 3.8% | **52%** |
-| Graveyard | 969 | 7.8% | **52%** |
-| Goblin Barrel | 832 | 6.7% | **51%** |
+| Graveyard | 970 | 7.8% | **52%** |
+| Goblin Barrel | 833 | 6.7% | **51%** |
 
 ## Best decks (30+ games)
 
@@ -39,7 +39,7 @@ Share is of the 12,408 games with a classified win condition.
 | **66%** | 209 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
 | **65%** | 31 | noise | Cannon, Dart Goblin, Rascals, Skeleton Army, Skeleton Barrel, Skeleton King, Suspicious Bush, Vines |
 | **63%** | 41 | noise | Berserker, Cannon Cart, Electro Spirit, Fireball, Minions, Mortar, Rascals, Skeleton Barrel |
-| **63%** | 270 | solid | Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies |
+| **63%** | 271 | solid | Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies |
 | **62%** | 63 | thin | Baby Dragon, Barbarian Barrel, Furnace, Golem, Lightning, Tombstone, Tornado, Valkyrie |
 
 ## First-2-game win-con pairs
