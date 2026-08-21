@@ -286,6 +286,10 @@ BEST_PICKS_MIN_DECK_GAMES = 1        # a deck needs at least this many games to 
 BEST_PICKS_MIN_WINCON_SET_DUELS = 1  # a win-con set needs at least this many duels
 BEST_PICKS_MIN_DUELSET_DUELS = 3    # a duel-set cluster needs at least this many duels to
                                      # count toward the clustering-threshold decision below
+DUEL_SET_OVERLAP = 6                # two decks count as "the same deck" at 6 of 8 shared
+                                    # cards (Alexander, 2026-08-21). Requires the seed-based
+                                    # clustering in _cluster_decks_by_overlap -- union-find
+                                    # collapses 90% of the archive into one family at 6/8.
 BEST_PICKS_MIN_CLUSTERS_TARGET = 5  # keep loosening the deck-overlap threshold until at
                                      # least this many duel-set clusters qualify
 
@@ -342,6 +346,13 @@ def compute_best_wincon_sets(duel_log, min_duels=BEST_PICKS_MIN_WINCON_SET_DUELS
     set_duels = Counter()
     set_games = Counter()
     set_wins = Counter()
+    # WHICH DECK ACTUALLY CARRIES EACH WIN CONDITION (added 2026-08-21, per Alexander:
+    # "for top win-con sets, include the most commonly used decks in each set underneath
+    # the icons of each win condition"). A win-con set like Ebarbs+Hog+Golem says nothing
+    # about WHICH Ebarbs list is meant, so this records every deck seen playing each win
+    # condition inside that set, then reports the most common one.
+    set_wc_decks = defaultdict(lambda: defaultdict(Counter))
+    set_wc_record = defaultdict(lambda: defaultdict(lambda: [0, 0]))
     for duel_id, games in by_duel.items():
         if games[0]["uncertain_start"]:
             continue
@@ -353,6 +364,15 @@ def compute_best_wincon_sets(duel_log, min_duels=BEST_PICKS_MIN_WINCON_SET_DUELS
             wincon_set.update(classify_deck(g["deck"]))
         key = "+".join(sorted(wincon_set)) if wincon_set else "(none classified)"
         set_duels[key] += 1
+        for g in non_rematch:
+            if len(g["deck"]) != 8:
+                continue
+            dk = ", ".join(sorted(g["deck"]))
+            won = g["crowns_for"] > g["crowns_against"]
+            for wc in classify_deck(g["deck"]):
+                set_wc_decks[key][wc][dk] += 1
+                set_wc_record[key][wc][0] += 1
+                set_wc_record[key][wc][1] += won
         for g in games:
             set_games[key] += 1
             if g["crowns_for"] > g["crowns_against"]:
@@ -364,9 +384,30 @@ def compute_best_wincon_sets(duel_log, min_duels=BEST_PICKS_MIN_WINCON_SET_DUELS
             continue
         g = set_games[key]
         w = set_wins[key]
+        # For each win condition in the set, cluster its decks at the same 6/8 tolerance
+        # used by Top Duel Sets and surface the biggest family's seed list.
+        decks_by_wc = []
+        for wc in sorted(set_wc_decks[key]):
+            freq = set_wc_decks[key][wc]
+            fams = _cluster_decks_by_overlap(set(freq), DUEL_SET_OVERLAP, freq)
+            if not fams:
+                continue
+            seed, members = max(fams.items(), key=lambda kv: sum(freq[m] for m in kv[1]))
+            n_games = sum(freq[m] for m in members)
+            plays, wins = set_wc_record[key][wc]
+            decks_by_wc.append({
+                "wincon": wc,
+                "deck": seed,
+                "games": n_games,
+                "variants": len(members),
+                "share": n_games / plays if plays else 0.0,
+                "wc_games": plays,
+                "wc_win_rate": wins / plays if plays else 0.0,
+            })
         rows.append({
             "wincon_set": key, "duels": d, "games": g, "wins": w,
             "win_rate": w / g if g else 0.0,
+            "decks_by_wincon": decks_by_wc,
         })
     rows.sort(key=lambda r: (-r["win_rate"], -r["duels"]))
     return rows
@@ -376,31 +417,42 @@ def _deck_overlap(deck_key_a, deck_key_b):
     return len(set(deck_key_a.split(", ")) & set(deck_key_b.split(", ")))
 
 
-def _cluster_decks_by_overlap(deck_keys, threshold):
-    """Union-find over the deck-key set: two decks are merged into the same family if they
-    share at least `threshold` of their 8 cards. Returns {family_root: [deck_key, ...]}."""
-    parent = {d: d for d in deck_keys}
+def _cluster_decks_by_overlap(deck_keys, threshold, deck_freq=None):
+    """Group near-duplicate decks into families sharing at least `threshold` of 8 cards.
 
-    def find(x):
-        while parent[x] != x:
-            parent[x] = parent[parent[x]]
-            x = parent[x]
-        return x
+    SEED-BASED, NOT UNION-FIND (rewritten 2026-08-21). The old implementation used
+    union-find, which chains: A shares 6 cards with B, B shares 6 with C, so A and C were
+    merged even when they share only 4. Measured on the real archive that was catastrophic
+    at the threshold Alexander actually wants --
 
-    def union(a, b):
-        ra, rb = find(a), find(b)
-        if ra != rb:
-            parent[ra] = rb
+        union-find  6/8  ->    372 families, largest holds 5,956 of 6,623 decks (90%)
+        union-find  7/8  ->  1,821 families, largest holds 1,127
+        seed-based  6/8  ->  1,503 families, largest holds 153 decks / 683 games
+        seed-based  7/8  ->  3,366 families, largest holds 31
 
-    deck_list = list(deck_keys)
-    for i in range(len(deck_list)):
-        for j in range(i + 1, len(deck_list)):
-            if _deck_overlap(deck_list[i], deck_list[j]) >= threshold:
-                union(deck_list[i], deck_list[j])
+    Chaining is why the adaptive threshold kept falling back to an exact 8/8 match and why
+    the sample sizes were tiny.
 
-    families = defaultdict(list)
-    for d in deck_list:
-        families[find(d)].append(d)
+    The seed version instead picks the MOST-PLAYED unassigned deck as a family
+    representative and absorbs only decks that share `threshold` cards with THAT seed. No
+    transitivity, so a family is always "these are all variants of this specific list",
+    which is what a player means by "the same deck".
+
+    Returns {seed_deck_key: [deck_key, ...]}, seeds ordered most-played first.
+    """
+    freq = deck_freq or {}
+    order = sorted(deck_keys, key=lambda d: (-freq.get(d, 0), d))
+    card_sets = {d: set(d.split(", ")) for d in order}
+
+    unassigned = set(order)
+    families = {}
+    for seed in order:
+        if seed not in unassigned:
+            continue
+        s = card_sets[seed]
+        members = [d for d in unassigned if len(card_sets[d] & s) >= threshold]
+        families[seed] = members
+        unassigned.difference_update(members)
     return families
 
 
@@ -440,19 +492,33 @@ def compute_best_duel_sets(duel_log, min_duels=BEST_PICKS_MIN_DUELSET_DUELS):
         return {"threshold_used": None, "rows": []}
 
     all_deck_keys = {dk for decks in duel_decksets.values() for dk in decks}
+    deck_freq = Counter(dk for decks in duel_decksets.values() for dk in decks)
 
     chosen = None
-    for threshold in (8, 7, 6, 5, 4):
-        families = _cluster_decks_by_overlap(all_deck_keys, threshold)
+    # FIXED at 6/8 (2026-08-21, per Alexander): "requiring all 8/8 exact cards gives too
+    # small a sample size -- 6/8 matching should count as the same deck." The old adaptive
+    # ladder (8,7,6,5,4) is gone: with seed-based clustering 6/8 behaves sensibly, and
+    # letting the threshold drift meant the same duel set could be grouped differently
+    # between runs. 5 and 4 remain as emergency fallbacks only if 6 yields nothing at all.
+    for threshold in (DUEL_SET_OVERLAP, 5, 4):
+        families = _cluster_decks_by_overlap(all_deck_keys, threshold, deck_freq)
         deck_to_family = {m: root for root, members in families.items() for m in members}
 
         cluster_duels = Counter()
         cluster_games = Counter()
         cluster_wins = Counter()
         cluster_example = {}
+        # ORDER-INDEPENDENT GROUPING (2026-08-21, per Alexander): "in a duel set the order
+        # does not matter -- as long as those 3 similar decks appear, group them; display
+        # in the order they most commonly appear." fam_ids is sorted, so g1/g2/g3 orderings
+        # of the same three families collapse into one row; cluster_orders then votes on
+        # which play order to actually show.
+        cluster_orders = defaultdict(Counter)
         for duel_id, deck_keys in duel_decksets.items():
-            fam_ids = tuple(sorted(deck_to_family[dk] for dk in deck_keys))
+            fams = [deck_to_family[dk] for dk in deck_keys]
+            fam_ids = tuple(sorted(fams))
             cluster_duels[fam_ids] += 1
+            cluster_orders[fam_ids][tuple(fams)] += 1
             cluster_example.setdefault(fam_ids, deck_keys)
             for g in by_duel[duel_id]:
                 cluster_games[fam_ids] += 1
@@ -468,9 +534,16 @@ def compute_best_duel_sets(duel_log, min_duels=BEST_PICKS_MIN_DUELSET_DUELS):
         for fam_ids, d in cluster_duels.items():
             g = cluster_games[fam_ids]
             w = cluster_wins[fam_ids]
+            # Display in the play order this trio most often actually appeared in, and use
+            # each family's SEED (its most-played member) as the representative list rather
+            # than whichever variant happened to be seen first.
+            best_order = cluster_orders[fam_ids].most_common(1)[0][0]
+            order_votes = cluster_orders[fam_ids].most_common(1)[0][1]
             rows.append({
-                "example_decks": cluster_example[fam_ids],
-                "family_sizes": [len(families[fid]) for fid in fam_ids],
+                "example_decks": list(best_order),
+                "family_sizes": [len(families[fid]) for fid in best_order],
+                "order_share": order_votes / d if d else 0.0,
+                "orders_seen": len(cluster_orders[fam_ids]),
                 "duels": d, "games": g, "wins": w,
                 "win_rate": w / g if g else 0.0,
             })
@@ -2189,6 +2262,9 @@ html = """<!DOCTYPE html>
     border: 1px solid var(--border);
     font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-right: 8px;
   }
+  .wcset-decks { margin-top: 8px; padding-left: 2px; display: flex; flex-direction: column; gap: 7px; }
+  .wcset-deck { border-left: 2px solid var(--border); padding-left: 8px; }
+  .wcset-deck-head { font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; font-weight: 600; }
   .duelset-decks { display: flex; flex-direction: column; gap: 6px; }
   .duelset-decks .deck-card { margin: 0; }
   .predictor-controls select {
@@ -4053,8 +4129,22 @@ function bestPicksDeckRow(row, i) {
 
 function bestPicksWinconSetRow(row, i) {
   const cards = row.wincon_set.split('+');
+  // Under each win-condition icon, show the deck most commonly used to play it inside this
+  // set (Alexander, 2026-08-21). A set like Ebarbs+Hog+Golem doesn't say WHICH Ebarbs list
+  // is meant; this does. Decks are clustered at the same 6/8 tolerance as Top Duel Sets.
+  const perWc = (row.decks_by_wincon || []).map(d => {
+    const varNote = d.variants > 1
+      ? ` <span class="table-note" style="font-size:10px;">+${d.variants - 1} variant${d.variants - 1 === 1 ? '' : 's'}</span>` : '';
+    return `<div class="wcset-deck">
+      <div class="wcset-deck-head">${d.wincon}
+        <span class="table-note" style="font-size:10px;">${Math.round(d.share * 100)}% of its ${d.wc_games} game${d.wc_games === 1 ? '' : 's'} · ${Math.round(d.wc_win_rate * 100)}% WR</span>${varNote}
+      </div>
+      ${cardIconStrip(d.deck.split(', '), 20)}
+    </div>`;
+  }).join('');
   return `<tr>
-    <td><span class="best-picks-rank">${i + 1}</span>${cardIconStrip(cards, 26)}<div class="row-label">${row.wincon_set}</div></td>
+    <td><span class="best-picks-rank">${i + 1}</span>${cardIconStrip(cards, 26)}<div class="row-label">${row.wincon_set}</div>
+      ${perWc ? `<div class="wcset-decks">${perWc}</div>` : ''}</td>
     <td class="num">${row.duels}</td>
     <td class="num">${row.games}</td>
     <td class="num">${wrBar(row.win_rate)}</td>
