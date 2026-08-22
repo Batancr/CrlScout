@@ -1,26 +1,26 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-22 15:17 UTC · latest battle 2026-08-22 13:46 UTC
+Generated 2026-08-22 18:21 UTC · latest battle 2026-08-22 15:12 UTC
 
-**13,794 eligible games** · Practice 11,376 · Official CRL 2,418
+**13,806 eligible games** · Practice 11,388 · Official CRL 2,418
 
 ## Top win conditions
 
-Share is of the 13,708 games with a classified win condition.
+Share is of the 13,720 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,244 | 9.1% | **61%** |
-| Battle Ram | 1,664 | 12.1% | **60%** |
-| Elite Barbarians | 2,456 | 17.9% | **58%** |
+| Mortar | 1,245 | 9.1% | **60%** |
+| Battle Ram | 1,665 | 12.1% | **60%** |
+| Elite Barbarians | 2,457 | 17.9% | **58%** |
 | Three Musketeers | 148 | 1.1% | **57%** |
-| Royal Hogs | 1,654 | 12.1% | **56%** |
-| Giant | 330 | 2.4% | **55%** |
-| Hog Rider | 1,197 | 8.7% | **54%** |
+| Royal Hogs | 1,656 | 12.1% | **56%** |
+| Giant | 331 | 2.4% | **55%** |
+| Hog Rider | 1,199 | 8.7% | **54%** |
 | Skeleton Barrel | 815 | 5.9% | **54%** |
 | Rune Giant | 894 | 6.5% | **53%** |
-| Graveyard | 1,066 | 7.8% | **52%** |
-| Golem | 533 | 3.9% | **52%** |
+| Golem | 534 | 3.9% | **52%** |
+| Graveyard | 1,067 | 7.8% | **52%** |
 | Ram Rider | 184 | 1.3% | **51%** |
 
 ## Best decks (30+ games)
@@ -93,7 +93,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Miner decks (15+ games)
 
-17 lists, 552 games, 55% combined.
+17 lists, 553 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
