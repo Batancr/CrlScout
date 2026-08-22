@@ -1,26 +1,26 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-22 18:21 UTC · latest battle 2026-08-22 15:12 UTC
+Generated 2026-08-22 21:18 UTC · latest battle 2026-08-22 20:39 UTC
 
-**13,806 eligible games** · Practice 11,388 · Official CRL 2,418
+**13,810 eligible games** · Practice 11,392 · Official CRL 2,418
 
 ## Top win conditions
 
-Share is of the 13,720 games with a classified win condition.
+Share is of the 13,724 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,245 | 9.1% | **60%** |
+| Mortar | 1,247 | 9.1% | **61%** |
 | Battle Ram | 1,665 | 12.1% | **60%** |
-| Elite Barbarians | 2,457 | 17.9% | **58%** |
+| Elite Barbarians | 2,459 | 17.9% | **58%** |
 | Three Musketeers | 148 | 1.1% | **57%** |
 | Royal Hogs | 1,656 | 12.1% | **56%** |
 | Giant | 331 | 2.4% | **55%** |
 | Hog Rider | 1,199 | 8.7% | **54%** |
 | Skeleton Barrel | 815 | 5.9% | **54%** |
 | Rune Giant | 894 | 6.5% | **53%** |
+| Graveyard | 1,068 | 7.8% | **52%** |
 | Golem | 534 | 3.9% | **52%** |
-| Graveyard | 1,067 | 7.8% | **52%** |
 | Ram Rider | 184 | 1.3% | **51%** |
 
 ## Best decks (30+ games)
@@ -30,7 +30,7 @@ Share is of the 13,720 games with a classified win condition.
 | Win rate | Games | Confidence | Deck |
 |---|---|---|---|
 | **76%** | 34 | noise | Arrows, Bandit, Battle Ram, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons, Zappies |
-| **74%** | 141 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
+| **74%** | 143 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **73%** | 74 | thin | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
 | **71%** | 42 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **67%** | 33 | noise | Electro Spirit, Elite Barbarians, Fireball, Hog Rider, Musketeer, Skeletons, Tesla, The Log |
@@ -46,7 +46,7 @@ Share is of the 13,720 games with a classified win condition.
 
 Grouped on the win conditions of the duel's **first two** games. Winning those two ends the set, so this measures the opener rather than the whole trio — and pairing on two decks instead of three roughly doubles the usable sample.
 
-56 pairs have 15+ duels.
+57 pairs have 15+ duels.
 
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
@@ -59,7 +59,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **58%** | 36% | 42 | solid | Battle Ram + Elite Barbarians + Royal Giant |
 | **58%** | 28% | 18 | noise | Goblin Barrel + Hog Rider + Wall Breakers |
 | **57%** | 27% | 15 | noise | Goblin Barrel + Graveyard + Wall Breakers |
-| **57%** | 33% | 15 | noise | Lava Hound + Miner + Mortar + Rune Giant |
+| **57%** | 27% | 15 | noise | Elite Barbarians + Goblin Drill + Mortar |
 
 ### Most-used decks in the top pairs
 
