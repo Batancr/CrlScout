@@ -1,25 +1,25 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-23 00:43 UTC · latest battle 2026-08-22 23:44 UTC
+Generated 2026-08-23 03:48 UTC · latest battle 2026-08-23 00:02 UTC
 
-**13,880 eligible games** · Practice 11,462 · Official CRL 2,418
+**13,886 eligible games** · Practice 11,468 · Official CRL 2,418
 
 ## Top win conditions
 
-Share is of the 13,794 games with a classified win condition.
+Share is of the 13,800 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,253 | 9.1% | **61%** |
-| Battle Ram | 1,671 | 12.1% | **60%** |
-| Elite Barbarians | 2,473 | 17.9% | **58%** |
+| Mortar | 1,254 | 9.1% | **61%** |
+| Battle Ram | 1,672 | 12.1% | **60%** |
+| Elite Barbarians | 2,474 | 17.9% | **58%** |
 | Three Musketeers | 148 | 1.1% | **57%** |
 | Royal Hogs | 1,665 | 12.1% | **56%** |
 | Giant | 334 | 2.4% | **55%** |
-| Hog Rider | 1,205 | 8.7% | **54%** |
+| Hog Rider | 1,206 | 8.7% | **54%** |
 | Skeleton Barrel | 817 | 5.9% | **54%** |
 | Rune Giant | 897 | 6.5% | **53%** |
-| Graveyard | 1,074 | 7.8% | **52%** |
+| Graveyard | 1,075 | 7.8% | **52%** |
 | Golem | 537 | 3.9% | **52%** |
 | Ram Rider | 184 | 1.3% | **51%** |
 
@@ -56,8 +56,8 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **63%** | 40% | 15 | noise | Goblin Drill + Mortar + Skeleton Barrel |
 | **61%** | 40% | 95 | solid | Battle Ram + Elite Barbarians + Royal Hogs |
 | **61%** | 32% | 19 | noise | Hog Rider + Mortar + Skeleton Barrel |
-| **58%** | 36% | 42 | solid | Battle Ram + Elite Barbarians + Royal Giant |
 | **58%** | 28% | 18 | noise | Goblin Barrel + Hog Rider + Wall Breakers |
+| **58%** | 35% | 43 | solid | Battle Ram + Elite Barbarians + Royal Giant |
 | **57%** | 27% | 15 | noise | Goblin Barrel + Graveyard + Wall Breakers |
 | **57%** | 27% | 15 | noise | Elite Barbarians + Goblin Drill + Mortar |
 
@@ -106,11 +106,11 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Goblin Drill decks (15+ games)
 
-10 lists, 338 games, 42% combined.
+10 lists, 339 games, 42% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
-| **60%** | 40 | thin | — | Berserker, Bomb Tower, Goblin Demolisher, Goblin Drill, Magic Archer, Skeletons, The Log, Tornado | CAL Sub ™️✨Kun, RemiEli |
+| **59%** | 41 | thin | — | Berserker, Bomb Tower, Goblin Demolisher, Goblin Drill, Magic Archer, Skeletons, The Log, Tornado | CAL Sub ™️✨Kun, RemiEli |
 | **50%** | 22 | noise | — | Archer Queen, Bomb Tower, Fire Spirit, Giant Snowball, Goblin Drill, Poison, Ronin, Skeletons | Turan✨, たぁ |
 | **46%** | 28 | thin | — | Berserker, Bomber, Fire Spirit, Giant Snowball, Goblin Drill, Goblins, Poison, Tesla | INA.BenZerRidel, evolve✨律师 |
 | **45%** | 67 | solid | — | Berserker, Bomber, Fire Spirit, Giant Snowball, Goblin Drill, Poison, Skeletons, Tesla | CAL Sub ™️✨Kun, Clown |
