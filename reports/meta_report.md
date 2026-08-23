@@ -1,6 +1,6 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-23 06:29 UTC · latest battle 2026-08-23 00:02 UTC
+Generated 2026-08-23 09:24 UTC · latest battle 2026-08-23 00:02 UTC
 
 **13,886 eligible games** · Practice 11,468 · Official CRL 2,418
 
