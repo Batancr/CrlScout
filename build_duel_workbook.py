@@ -562,6 +562,54 @@ def _is_confirmed_crl(p_tag, o_tag, battle_time):
     return False
 
 
+
+# ---- Bo5 CRL finals (added 1970 — grand finals are best-of-5 and are
+# EXCLUDED from the normal Bo3 pool entirely, per user decision). Same (date, pair, window)
+# shape as CRL_MATCH_OVERRIDES; a game matching one of these is dropped in load_rows.
+BO5_FINALS_OVERRIDES = [
+    ("20260823", frozenset({"#2CLV2RP0", "#9CPCC890"}), ("20260823T174614.000Z","20260823T180756.000Z")),   # Mugi vs Adriel
+    ("20260823", frozenset({"#9CPCC890", "#J0VU9CGP"}), ("20260823T181952.000Z","20260823T184127.000Z")),   # Adriel vs SKDominik
+    ("20260823", frozenset({"#2CLV2RP0", "#J0VU9CGP"}), ("20260823T185002.000Z","20260823T192427.000Z")),   # Mugi vs SKDominik
+    ("20260726", frozenset({"#G9YV9GR8R", "#GPPYR9JYR"}), None),   # MohLight vs Clown
+]
+def _is_bo5_final(p_tag, o_tag, battle_time):
+    pair = frozenset({p_tag, o_tag}); day = battle_time.strftime("%Y%m%d")
+    for od, opair, window in BO5_FINALS_OVERRIDES:
+        if od == day and opair == pair:
+            if window is None: return True
+            if parse_time(window[0]) <= battle_time <= parse_time(window[1]): return True
+    return False
+
+# ---- Aug 2026 Monthly Finals — Bo3 matches (clanMate/Friendly, auto-detected as short
+# finalist-vs-finalist blocks; practice long-blocks in the same window are NOT listed).
+CRL_MATCH_OVERRIDES += [
+    ("20260822", frozenset({"#2CLV2RP0", "#GPPYR9JYR"}), ("20260822T141132.000Z","20260822T141928.000Z")),   # Mugi vs Clown
+    ("20260822", frozenset({"#290UQY8C", "#U890Q9UQ"}), ("20260822T145233.000Z","20260822T145936.000Z")),   # Soudy vs Sub
+    ("20260822", frozenset({"#G9YV9GR8R", "#J0VU9CGP"}), ("20260822T150702.000Z","20260822T151450.000Z")),   # MohLight vs SKDominik
+    ("20260822", frozenset({"#9RQ8YRYQL", "#RUQ0JU2P"}), ("20260822T152816.000Z","20260822T154636.000Z")),   # Batan vs Asaf
+    ("20260822", frozenset({"#2LJ0ULYCC", "#RJ88Y8U08"}), ("20260822T155446.000Z","20260822T161106.000Z")),   # Guriko vs Pedro
+    ("20260822", frozenset({"#C0V0UQ9UY", "#C88VYCJC"}), ("20260822T161827.000Z","20260822T163535.000Z")),   # Ryley vs EGW
+    ("20260822", frozenset({"#9CPCC890", "#RP0L2Y8C9"}), ("20260822T164434.000Z","20260822T170210.000Z")),   # Adriel vs Ardentoas
+    ("20260822", frozenset({"#898Y8PGJ9", "#GPPYR9JYR"}), ("20260822T171327.000Z","20260822T172154.000Z")),   # evolve vs Clown
+    ("20260822", frozenset({"#290UQY8C", "#J0VU9CGP"}), ("20260822T172853.000Z","20260822T173659.000Z")),   # Soudy vs SKDominik
+    ("20260822", frozenset({"#2LJ0ULYCC", "#9RQ8YRYQL"}), ("20260822T174358.000Z","20260822T175242.000Z")),   # Guriko vs Batan
+    ("20260822", frozenset({"#C0V0UQ9UY", "#RP0L2Y8C9"}), ("20260822T180159.000Z","20260822T181833.000Z")),   # Ryley vs Ardentoas
+    ("20260822", frozenset({"#2CLV2RP0", "#2VGG29RJ2"}), ("20260822T182751.000Z","20260822T183624.000Z")),   # Mugi vs Coco
+    ("20260822", frozenset({"#G9YV9GR8R", "#U890Q9UQ"}), ("20260822T184306.000Z","20260822T190015.000Z")),   # MohLight vs Sub
+    ("20260822", frozenset({"#RJ88Y8U08", "#RUQ0JU2P"}), ("20260822T190930.000Z","20260822T191654.000Z")),   # Pedro vs Asaf
+    ("20260822", frozenset({"#9CPCC890", "#C88VYCJC"}), ("20260822T192607.000Z","20260822T194458.000Z")),   # Adriel vs EGW
+    ("20260823", frozenset({"#J0VU9CGP", "#U890Q9UQ"}), ("20260823T163626.000Z","20260823T165341.000Z")),   # SKDominik vs Sub
+    ("20260823", frozenset({"#2VGG29RJ2", "#C0V0UQ9UY"}), ("20260823T141124.000Z","20260823T141916.000Z")),   # Coco vs Ryley
+    ("20260823", frozenset({"#2LJ0ULYCC", "#G9YV9GR8R"}), ("20260823T142852.000Z","20260823T143625.000Z")),   # Guriko vs MohLight
+    ("20260823", frozenset({"#898Y8PGJ9", "#C88VYCJC"}), ("20260823T144443.000Z","20260823T145903.000Z")),   # evolve vs EGW
+    ("20260823", frozenset({"#2VGG29RJ2", "#G9YV9GR8R"}), ("20260823T150855.000Z","20260823T151412.000Z")),   # Coco vs MohLight
+    ("20260823", frozenset({"#C88VYCJC", "#J0VU9CGP"}), ("20260823T152304.000Z","20260823T153916.000Z")),   # EGW vs SKDominik
+    ("20260823", frozenset({"#2CLV2RP0", "#U890Q9UQ"}), ("20260823T154827.000Z","20260823T155643.000Z")),   # Mugi vs Sub
+    ("20260823", frozenset({"#9CPCC890", "#RJ88Y8U08"}), ("20260823T160513.000Z","20260823T162359.000Z")),   # Adriel vs Pedro
+    ("20260823", frozenset({"#G9YV9GR8R", "#RJ88Y8U08"}), ("20260823T170338.000Z","20260823T171914.000Z")),   # MohLight vs Pedro
+    ("20260823", frozenset({"#J0VU9CGP", "#RJ88Y8U08"}), ("20260823T172845.000Z","20260823T173614.000Z")),   # SKDominik vs Pedro
+]
+
 def classify_match_category(battle_type, mode_name, battle_time, opponent_tag=None, roster_tags=None):
     """Returns 'Official CRL', 'Practice', or None (not a relevant type/mode at all --
     ranked ladder, 2v2 team wars, the trail/Showdown_Friendly event mode, etc. -- these
@@ -650,6 +698,8 @@ def load_rows():
             o_name = canon_name(o_tag, o_name); o_tag = canon_tag(o_tag)
             # Manually-confirmed Official CRL matches (e.g. Monthly Finals that arrived as
             # clanMate/Friendly, indistinguishable from practice) -- promote them here.
+            if _is_bo5_final(p_tag, o_tag, battle_time):
+                continue
             if category != "Official CRL" and _is_confirmed_crl(p_tag, o_tag, battle_time):
                 category = "Official CRL"
             rows.append({

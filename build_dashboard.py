@@ -584,8 +584,8 @@ def build_wincon_transitions(duel_log):
     excluded_uncertain_duel_ids = set()
     by_duel = dd(list)
     for r in duel_log:
-        if r.get("match_category") not in (None, "Practice"):
-            continue
+        if r.get("match_category") not in (None, "Practice", "Official CRL"):
+            continue  # CRL now blended in with practice (was practice-only), per backtest 2026-08
         if r["uncertain_start"]:
             excluded_uncertain_duel_ids.add(r["duel_id"])
             continue
