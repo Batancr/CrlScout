@@ -27,6 +27,7 @@ import re
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta, timezone
 import openpyxl
+import duel_recommender  # set-aware duel recommendation engine
 
 XLSX_PATH = os.path.join(os.environ["CRL_HOME"], "CRL_Duel_Decks.xlsx") if os.environ.get("CRL_HOME") else "CRL_Duel_Decks.xlsx"
 
@@ -1564,6 +1565,21 @@ SEQ_SPELL_CARDS = {
 }
 
 
+# ---- Set-aware duel recommendations (added 2026-08-24 per user request) ----
+# Per opponent: their win-con usage split by duel-set position (game 1/2/3), plus a
+# duel-legal 3-deck counter set from our own pool, each deck chosen to beat that set's
+# win-con mix by real matchup win rate. Replaces the old win-rate-in-a-slice ranking as
+# the primary recommendation. Wrapped so a failure never breaks the dashboard build.
+try:
+    _dr_opp_tags = [gg['tag'] for gg in group_a if not gg['is_you'] and gg['has_data']]
+    _dr_all, _dr_meta = duel_recommender.build_all(
+        combined_duel_log, '#9RQ8YRYQL', _dr_opp_tags, classify_deck, SEQ_SPELL_CARDS)
+    for _dt, _drec in _dr_all.items():
+        group_a_recommendations.setdefault(_dt, {'top_wincons': []})['set_aware'] = _drec
+    print('set-aware recs:', _dr_meta)
+except Exception as _dre:
+    print('set-aware recs skipped:', _dre)
+
 def compute_group_a_sequencing(duel_log, target_tag):
     player_games = [r for r in duel_log if r["player_tag"] == target_tag and _day2_ok(r, target_tag) and r["deck"] and len(r["deck"]) == 8]
 
@@ -2546,6 +2562,26 @@ html = """<!DOCTYPE html>
   .group-a-chip.day2 { border-color: var(--series-blue); background: var(--series-blue); color: #fff; font-weight: 700; box-shadow: 0 1px 5px rgba(57,135,229,0.4); }
   .group-a-chip.day2 .pending-note, .group-a-chip.day2 .day2-note { color: #eaf3ff; opacity: .95; }
   .day2-tag { display:inline-block; background: var(--series-blue); color:#fff; font-size:11px; font-weight:700; padding:1px 8px; border-radius:999px; }
+  /* set-aware recommendation section (added 2026-08-24) */
+  .set-usage-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .set-usage-row:last-of-type { border-bottom: none; }
+  .set-lab { font-size: 12.5px; font-weight: 700; min-width: 92px; }
+  .set-n { font-size: 10.5px; font-weight: 500; color: var(--text-muted); margin-left: 4px; }
+  .mu-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .mu-chip { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px 2px 3px; }
+  .mu-chip b { font-weight: 700; }
+  .set-empty { font-size: 12px; color: var(--text-muted); font-style: italic; }
+  .set-deck { border: 1px solid var(--border); border-radius: 9px; padding: 9px 11px; margin: 8px 0; background: var(--surface-1); }
+  .set-deck-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .set-badge { font-size: 11px; font-weight: 800; color: #fff; background: var(--series-blue); border-radius: 5px; padding: 2px 8px; }
+  .set-wc { font-size: 13.5px; font-weight: 700; }
+  .set-sp { font-size: 12px; color: var(--text-muted); }
+  .cov { margin-left: auto; font-size: 15px; font-weight: 800; display: inline-flex; align-items: baseline; gap: 5px; }
+  .cov-l { font-size: 10px; font-weight: 500; color: var(--text-muted); }
+  .cov-good { color: var(--good); } .cov-mid { color: var(--warning); } .cov-low { color: var(--serious); }
+  .ov-warn { font-size: 11px; font-weight: 700; color: var(--serious); background: rgba(236,131,90,0.12); border-radius: 5px; padding: 2px 7px; }
+  .ov-ok { font-size: 11px; font-weight: 700; color: var(--good); background: rgba(12,163,12,0.10); border-radius: 5px; padding: 2px 7px; }
+  .reco-method { font-size: 11px; color: var(--text-muted); margin: 8px 0 0; line-height: 1.45; }
   .reco-section {
     border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px 14px;
     margin-bottom: 6px; background: var(--page-plane);
@@ -3302,30 +3338,44 @@ function recoDuelSetRow(row) {
 }
 function renderRecommendationSection(g) {
   const reco = (DATA.group_a_recommendations && DATA.group_a_recommendations[g.tag]) || null;
-  if (!reco || !reco.top_wincons || !reco.top_wincons.length) {
+  const sa = reco && reco.set_aware;
+  if (!sa || !sa.set_decks || !sa.set_decks.length) {
     return `<div class="reco-section"><div class="reco-heading">Recommended for Tomorrow</div>
-      <div class="history-empty">Not enough classified win-condition data on ${g.name} yet to build a recommendation.</div></div>`;
+      <div class="history-empty">Not enough set-classified duel data on ${g.name} yet to build a set-aware recommendation.</div></div>`;
   }
-  const sampleNote = `Based on their top win-con${reco.top_wincons.length > 1 ? 's' : ''} -- <b>${reco.top_wincons.join(', ')}</b> --
-    filtered across our whole tracked pool (Practice + Official CRL combined): <b>${reco.sample_size}</b> of our
-    own games faced an opponent playing one of those win conditions.`;
-  if (!reco.sample_size) {
-    return `<div class="reco-section"><div class="reco-heading">Recommended for Tomorrow</div>
-      <p class="modal-subtitle" style="margin:0 0 8px;">${sampleNote}</p>
-      <div class="history-empty">No games in our pool have faced this win-con archetype yet -- no recommendation possible.</div></div>`;
-  }
+  const wcChip = (wc, pct) => `<span class="mu-chip">${cardIconStrip([wc], 20)}<b>${wc}</b> ${pct}%</span>`;
+  let usageHtml = '';
+  [1, 2, 3].forEach(pos => {
+    const u = sa.per_set_usage[String(pos)];
+    if (!u || !u.top || !u.top.length) {
+      usageHtml += `<div class="set-usage-row"><span class="set-lab">Set ${pos}</span><span class="set-empty">too few sets logged</span></div>`;
+      return;
+    }
+    usageHtml += `<div class="set-usage-row"><span class="set-lab">Set ${pos} <span class="set-n">${u.n} decks</span></span><span class="mu-chips">${u.top.map(t => wcChip(t[0], t[1])).join('')}</span></div>`;
+  });
+  const deckBlock = sd => {
+    const d = sd.deck;
+    const cov = Math.round(sd.coverage);
+    const covClass = cov >= 58 ? 'cov-good' : (cov >= 50 ? 'cov-mid' : 'cov-low');
+    const spells = d.spells.length ? d.spells.join(', ') : 'no spell';
+    const overlapNote = sd.overlap > 0
+      ? `<span class="ov-warn" title="Shares ${(sd.shared || []).join(', ')} with an earlier deck in this set -- not duel-legal as-is; swap ${sd.overlap} card${sd.overlap > 1 ? 's' : ''}">&#9888; shares ${sd.overlap} card${sd.overlap > 1 ? 's' : ''}</span>`
+      : `<span class="ov-ok">&#10003; duel-legal</span>`;
+    return `<div class="set-deck">
+      <div class="set-deck-head"><span class="set-badge">Set ${sd.set}</span>
+        <span class="set-wc">${d.wcs.join(' + ')}</span><span class="set-sp">+ ${spells}</span>
+        <span class="cov ${covClass}">${cov}%<span class="cov-l">vs their set-${sd.set} win-cons</span></span>${overlapNote}</div>
+      ${cardIconStrip(d.cards, 30)}
+    </div>`;
+  };
   return `<div class="reco-section">
-    <div class="reco-heading">Recommended for Tomorrow <span class="reco-heading-note">data-driven, from our entire tracked pool -- not theorycrafted</span></div>
-    <p class="modal-subtitle" style="margin:0 0 10px;">${sampleNote}</p>
-    <div class="reco-col-label">Best deck to bring (min 3 games)</div>
-    ${reco.best_decks && reco.best_decks.length ? reco.best_decks.map(recoDeckRow).join('') : '<div class="history-empty">No single deck reaches the 3-game minimum yet.</div>'}
-    <div class="reco-col-label">Best win-con set to bring (min 3 games)</div>
-    ${reco.best_wincon_sets && reco.best_wincon_sets.length ? reco.best_wincon_sets.map(recoWinconRow).join('') : '<div class="history-empty">No win-con set reaches the 3-game minimum yet.</div>'}
-    <div class="reco-col-label">Best duel-set -- decks used together vs this archetype (min 3 games)</div>
-    ${reco.best_duel_sets && reco.best_duel_sets.length ? reco.best_duel_sets.map(recoDuelSetRow).join('') : '<div class="history-empty">No duel-set combination reaches the 3-game minimum yet.</div>'}
+    <div class="reco-heading">Their win conditions by set <span class="reco-heading-note">what ${g.name} opens, follows &amp; closes with -- share of that set's decks running each win-con</span></div>
+    ${usageHtml}
+    <div class="reco-heading" style="margin-top:16px">Counter decks by set <span class="reco-heading-note">a duel-legal 3-deck set from your own pool -- each deck picked to beat that set's win-con mix</span></div>
+    ${sa.set_decks.map(deckBlock).join('')}
+    <p class="modal-subtitle reco-method">Coverage = your deck's win rate (by win condition, refined by its spell where the sample allows) against that set's win-con pool, usage-weighted, from the whole tracked pool since Aug 4. Decks are drawn from your own played decks. A lower set-3 number usually means the duel-legal "no card reused across the three decks" rule forced a weaker third deck.</p>
   </div>`;
 }
-
 // ---- Matchup Prep (added 2026-07-19) -- the flip side of "Recommended for Tomorrow":
 // what's most likely to beat THEM, and what already has, instead of what WE should bring.
 // Mirrors the Excel "Group A Matchup Prep" sheet. Scoped to the same 7 confirmed+on_deck
