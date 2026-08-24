@@ -1,11 +1,267 @@
 [
  {
+  "label": "Finals window (Aug 16+) \u2014 CRL + practice",
+  "n_duels": 7,
+  "n_games": 16,
+  "n_pkgs": 9,
+  "conc": 0.625,
+  "pct": 100.0,
+  "pkg": [
+   [
+    "Barbarian Barrel + Fireball",
+    4
+   ],
+   [
+    "Giant Snowball + Poison",
+    4
+   ],
+   [
+    "Barbarian Barrel + Vines",
+    2
+   ],
+   [
+    "Fireball + The Log",
+    1
+   ],
+   [
+    "Royal Delivery",
+    1
+   ],
+   [
+    "Giant Snowball",
+    1
+   ],
+   [
+    "Lightning + The Log",
+    1
+   ],
+   [
+    "Fireball + Zap",
+    1
+   ]
+  ],
+  "card": [
+   [
+    "Fireball",
+    6
+   ],
+   [
+    "Barbarian Barrel",
+    6
+   ],
+   [
+    "Giant Snowball",
+    5
+   ],
+   [
+    "Poison",
+    4
+   ],
+   [
+    "The Log",
+    3
+   ],
+   [
+    "Vines",
+    2
+   ],
+   [
+    "Royal Delivery",
+    1
+   ],
+   [
+    "Lightning",
+    1
+   ],
+   [
+    "Zap",
+    1
+   ],
+   [
+    "Tornado",
+    1
+   ]
+  ],
+  "trans": [
+   [
+    "Barbarian Barrel + Fireball",
+    "Giant Snowball + Poison",
+    2
+   ],
+   [
+    "Giant Snowball + Poison",
+    "Barbarian Barrel + Vines",
+    1
+   ],
+   [
+    "Giant Snowball + Poison",
+    "Barbarian Barrel + Fireball",
+    1
+   ],
+   [
+    "Fireball + Zap",
+    "The Log + Tornado",
+    1
+   ],
+   [
+    "Fireball + The Log",
+    "Barbarian Barrel + Vines",
+    1
+   ],
+   [
+    "Barbarian Barrel + Fireball",
+    "Giant Snowball",
+    1
+   ]
+  ],
+  "g3": [
+   [
+    "Barbarian Barrel + Fireball + Giant Snowball + Poison",
+    "Royal Delivery",
+    1
+   ],
+   [
+    "Barbarian Barrel + Fireball + Giant Snowball + Poison",
+    "Lightning + The Log",
+    1
+   ]
+  ]
+ },
+ {
+  "label": "Finals window (Aug 16+) \u2014 Official CRL only",
+  "n_duels": 7,
+  "n_games": 16,
+  "n_pkgs": 9,
+  "conc": 0.625,
+  "pct": null,
+  "pkg": [
+   [
+    "Barbarian Barrel + Fireball",
+    4
+   ],
+   [
+    "Giant Snowball + Poison",
+    4
+   ],
+   [
+    "Barbarian Barrel + Vines",
+    2
+   ],
+   [
+    "Fireball + The Log",
+    1
+   ],
+   [
+    "Royal Delivery",
+    1
+   ],
+   [
+    "Giant Snowball",
+    1
+   ],
+   [
+    "Lightning + The Log",
+    1
+   ],
+   [
+    "Fireball + Zap",
+    1
+   ]
+  ],
+  "card": [
+   [
+    "Fireball",
+    6
+   ],
+   [
+    "Barbarian Barrel",
+    6
+   ],
+   [
+    "Giant Snowball",
+    5
+   ],
+   [
+    "Poison",
+    4
+   ],
+   [
+    "The Log",
+    3
+   ],
+   [
+    "Vines",
+    2
+   ],
+   [
+    "Royal Delivery",
+    1
+   ],
+   [
+    "Lightning",
+    1
+   ],
+   [
+    "Zap",
+    1
+   ],
+   [
+    "Tornado",
+    1
+   ]
+  ],
+  "trans": [
+   [
+    "Barbarian Barrel + Fireball",
+    "Giant Snowball + Poison",
+    2
+   ],
+   [
+    "Giant Snowball + Poison",
+    "Barbarian Barrel + Vines",
+    1
+   ],
+   [
+    "Giant Snowball + Poison",
+    "Barbarian Barrel + Fireball",
+    1
+   ],
+   [
+    "Fireball + Zap",
+    "The Log + Tornado",
+    1
+   ],
+   [
+    "Fireball + The Log",
+    "Barbarian Barrel + Vines",
+    1
+   ],
+   [
+    "Barbarian Barrel + Fireball",
+    "Giant Snowball",
+    1
+   ]
+  ],
+  "g3": [
+   [
+    "Barbarian Barrel + Fireball + Giant Snowball + Poison",
+    "Royal Delivery",
+    1
+   ],
+   [
+    "Barbarian Barrel + Fireball + Giant Snowball + Poison",
+    "Lightning + The Log",
+    1
+   ]
+  ]
+ },
+ {
   "label": "Post-patch (Aug 5+) \u2014 CRL + practice",
   "n_duels": 35,
   "n_games": 94,
-  "n_pkgs": 27,
-  "conc": 0.3617021276595745,
-  "pct": 79.71014492753623,
+  "n_pkgs": 28,
+  "conc": 0.3404255319148936,
+  "pct": 76.81159420289855,
   "pkg": [
    [
     "Barbarian Barrel + Fireball",
@@ -16,10 +272,6 @@
     11
    ],
    [
-    "(no spells)",
-    10
-   ],
-   [
     "Arrows",
     8
    ],
@@ -28,7 +280,11 @@
     8
    ],
    [
-    "Barbarian Barrel",
+    "Vines",
+    7
+   ],
+   [
+    "Barbarian Barrel + Vines",
     6
    ],
    [
@@ -62,6 +318,10 @@
     14
    ],
    [
+    "Vines",
+    13
+   ],
+   [
     "Zap",
     12
    ],
@@ -76,10 +336,6 @@
    [
     "Goblin Curse",
     8
-   ],
-   [
-    "Tornado",
-    5
    ]
   ],
   "trans": [
@@ -87,6 +343,11 @@
     "Barbarian Barrel + Fireball",
     "Giant Snowball + Poison",
     4
+   ],
+   [
+    "Barbarian Barrel + Vines",
+    "Giant Snowball + Poison",
+    2
    ],
    [
     "Barbarian Barrel + Fireball",
@@ -99,9 +360,14 @@
     2
    ],
    [
-    "Barbarian Barrel",
-    "Giant Snowball + Poison",
-    2
+    "Vines",
+    "Earthquake + The Log",
+    1
+   ],
+   [
+    "Vines",
+    "(no spells)",
+    1
    ],
    [
     "Royal Delivery",
@@ -122,16 +388,6 @@
     "Goblin Curse + Zap",
     "Arrows",
     1
-   ],
-   [
-    "Giant Snowball + Rocket",
-    "Goblin Curse + Zap",
-    1
-   ],
-   [
-    "Giant Snowball + Poison",
-    "Fireball + Zap",
-    1
    ]
   ],
   "g3": [
@@ -151,18 +407,18 @@
     1
    ],
    [
-    "Earthquake + The Log",
+    "Earthquake + The Log + Vines",
     "Arrows",
     1
    ],
    [
-    "Barbarian Barrel + Poison + The Log",
-    "Earthquake + Giant Snowball",
+    "Barbarian Barrel + Poison + Vines",
+    "Lightning + Tornado",
     1
    ],
    [
-    "Barbarian Barrel + Poison",
-    "Lightning + Tornado",
+    "Barbarian Barrel + Poison + The Log + Vines",
+    "Earthquake + Giant Snowball",
     1
    ],
    [
@@ -171,7 +427,7 @@
     1
    ],
    [
-    "Barbarian Barrel + Goblin Curse + Zap",
+    "Barbarian Barrel + Goblin Curse + Vines + Zap",
     "The Log + Tornado",
     1
    ]
@@ -181,9 +437,9 @@
   "label": "Post-patch (Aug 5+) \u2014 Official CRL only",
   "n_duels": 16,
   "n_games": 38,
-  "n_pkgs": 14,
+  "n_pkgs": 15,
   "conc": 0.5,
-  "pct": 77.5,
+  "pct": 82.5,
   "pkg": [
    [
     "Giant Snowball + Poison",
@@ -194,12 +450,8 @@
     7
    ],
    [
-    "Barbarian Barrel",
+    "Barbarian Barrel + Vines",
     5
-   ],
-   [
-    "(no spells)",
-    3
    ],
    [
     "Goblin Curse + Zap",
@@ -207,6 +459,10 @@
    ],
    [
     "Fireball + The Log",
+    2
+   ],
+   [
+    "Vines",
     2
    ],
    [
@@ -236,6 +492,10 @@
     8
    ],
    [
+    "Vines",
+    7
+   ],
+   [
     "The Log",
     7
    ],
@@ -254,10 +514,6 @@
    [
     "Lightning",
     2
-   ],
-   [
-    "Tornado",
-    2
    ]
   ],
   "trans": [
@@ -265,6 +521,11 @@
     "Barbarian Barrel + Fireball",
     "Giant Snowball + Poison",
     3
+   ],
+   [
+    "Vines",
+    "(no spells)",
+    1
    ],
    [
     "Royal Delivery",
@@ -278,12 +539,12 @@
    ],
    [
     "Giant Snowball + Poison",
-    "Barbarian Barrel + Fireball",
+    "Barbarian Barrel + Vines",
     1
    ],
    [
     "Giant Snowball + Poison",
-    "Barbarian Barrel",
+    "Barbarian Barrel + Fireball",
     1
    ],
    [
@@ -293,7 +554,7 @@
    ],
    [
     "Fireball + The Log",
-    "Barbarian Barrel",
+    "Barbarian Barrel + Vines",
     1
    ],
    [
@@ -302,29 +563,24 @@
     1
    ],
    [
-    "Barbarian Barrel + Fireball",
-    "Lightning + The Log",
-    1
-   ],
-   [
-    "Barbarian Barrel + Fireball",
-    "Giant Snowball",
+    "Barbarian Barrel + Vines",
+    "Poison + The Log",
     1
    ]
   ],
   "g3": [
    [
-    "Barbarian Barrel + Poison + The Log",
+    "Barbarian Barrel + Poison + The Log + Vines",
     "Earthquake + Giant Snowball",
     1
    ],
    [
-    "Barbarian Barrel + Goblin Curse + Zap",
+    "Barbarian Barrel + Goblin Curse + Vines + Zap",
     "The Log + Tornado",
     1
    ],
    [
-    "Barbarian Barrel + Giant Snowball + Poison",
+    "Barbarian Barrel + Giant Snowball + Poison + Vines",
     "Goblin Curse + Zap",
     1
    ],
@@ -340,7 +596,7 @@
    ],
    [
     "Arrows + Fireball + The Log",
-    "(no spells)",
+    "Vines",
     1
    ]
   ]
@@ -349,9 +605,9 @@
   "label": "All time \u2014 CRL + practice",
   "n_duels": 74,
   "n_games": 199,
-  "n_pkgs": 43,
+  "n_pkgs": 45,
   "conc": 0.3417085427135678,
-  "pct": 70.11494252873563,
+  "pct": 71.26436781609195,
   "pkg": [
    [
     "Giant Snowball + Poison",
@@ -370,15 +626,15 @@
     16
    ],
    [
-    "(no spells)",
-    13
-   ],
-   [
     "Arrows",
-    13
+    11
    ],
    [
     "Barbarian Barrel + Lightning",
+    10
+   ],
+   [
+    "Vines",
     10
    ],
    [
@@ -416,16 +672,16 @@
     26
    ],
    [
+    "Vines",
+    19
+   ],
+   [
     "Arrows",
     17
    ],
    [
     "Zap",
     16
-   ],
-   [
-    "Rocket",
-    8
    ]
   ],
   "trans": [
@@ -465,6 +721,11 @@
     2
    ],
    [
+    "Barbarian Barrel + Vines",
+    "Giant Snowball + Poison",
+    2
+   ],
+   [
     "Barbarian Barrel + Lightning",
     "Royal Delivery",
     2
@@ -473,16 +734,11 @@
     "Barbarian Barrel + Fireball",
     "Lightning + The Log",
     2
-   ],
-   [
-    "Barbarian Barrel + Fireball",
-    "Giant Snowball",
-    2
    ]
   ],
   "g3": [
    [
-    "Royal Delivery",
+    "Royal Delivery + Vines",
     "Lightning + The Log",
     1
    ],
@@ -527,9 +783,9 @@
   "label": "All time \u2014 Official CRL only",
   "n_duels": 38,
   "n_games": 93,
-  "n_pkgs": 24,
+  "n_pkgs": 26,
   "conc": 0.44086021505376344,
-  "pct": 75.30864197530865,
+  "pct": 77.77777777777777,
   "pkg": [
    [
     "Giant Snowball + Poison",
@@ -548,12 +804,12 @@
     9
    ],
    [
-    "(no spells)",
+    "Barbarian Barrel + Vines",
     5
    ],
    [
-    "Barbarian Barrel",
-    5
+    "Vines",
+    4
    ],
    [
     "Fireball + Zap",
@@ -594,16 +850,16 @@
     11
    ],
    [
+    "Vines",
+    10
+   ],
+   [
     "Arrows",
     5
    ],
    [
     "Zap",
     5
-   ],
-   [
-    "Rocket",
-    3
    ]
   ],
   "trans": [
@@ -633,6 +889,16 @@
     2
    ],
    [
+    "Vines",
+    "(no spells)",
+    1
+   ],
+   [
+    "Royal Delivery",
+    "Vines",
+    1
+   ],
+   [
     "Royal Delivery",
     "Lightning + The Log",
     1
@@ -646,21 +912,11 @@
     "Royal Delivery",
     "Fireball",
     1
-   ],
-   [
-    "Royal Delivery",
-    "Barbarian Barrel + Giant Snowball + Poison",
-    1
-   ],
-   [
-    "Royal Delivery",
-    "Arrows",
-    1
    ]
   ],
   "g3": [
    [
-    "Royal Delivery",
+    "Royal Delivery + Vines",
     "Lightning + The Log",
     1
    ],
@@ -681,7 +937,7 @@
    ],
    [
     "Giant Snowball + Lightning + Poison + The Log",
-    "(no spells)",
+    "Vines",
     1
    ],
    [
@@ -690,7 +946,7 @@
     1
    ],
    [
-    "Barbarian Barrel + Poison + The Log",
+    "Barbarian Barrel + Poison + The Log + Vines",
     "Earthquake + Giant Snowball",
     1
    ],

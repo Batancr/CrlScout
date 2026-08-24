@@ -2578,6 +2578,7 @@ html = """<!DOCTYPE html>
     <h1>CRL Opponent Scout</h1>
     <p class="subtitle">Search a player to see their decks, win rates, and go-to win conditions. Data snapshot from CRL_Duel_Decks.xlsx.</p>
     <a href="monthly_finals_opponents.html" style="display:inline-block;margin-bottom:10px;padding:6px 12px;background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📋 Monthly Finals Opponents (Day 2 deck ratings + Day 3 scouting) &rarr;</a>
+    <a href="matchup_database.html" style="display:inline-block;margin:0 0 10px 8px;padding:6px 12px;background:#E3F2FD;color:#0D47A1;border:1px solid #90CAF9;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">&#128202; Finalist Matchup Database (win-con matchups, spell layer, coverage optimizer) &rarr;</a>
     <div class="icon-legend">
       <span><span class="dot" style="background:var(--series-yellow);"></span>&#9819; Champion / Hero card</span>
       <span><span class="dot" style="background:var(--series-violet);"></span>&#9733; Sometimes played as an Evolution</span>
@@ -4947,3 +4948,20 @@ with open("crl_opponent_scout.html", "w", encoding="utf-8") as f:
     f.write(html)
 
 print("wrote", len(html), "bytes")
+
+
+# ---------------------------------------------------------------------------
+# Auto-build the Finalist Matchup Database page so it refreshes with every
+# dashboard rebuild (multi-select win-cons, spell layer, Coverage Optimizer,
+# per-player filter). Wrapped so it can never break the main dashboard build.
+# ---------------------------------------------------------------------------
+try:
+    import glob as _glob, subprocess as _sp, sys as _sys
+    _nm = len(_glob.glob("master_*.json"))
+    print("matchup DB: refreshing post_rows_0.jsonl over", _nm, "masters ...")
+    _sp.run([_sys.executable, "extract_post.py", "0", str(_nm)], check=True)
+    import importlib as _il, build_matchup_db_page as _bmp
+    _il.reload(_bmp)
+    _bmp.main()
+except Exception as _e:
+    print("matchup DB page build skipped:", _e)

@@ -27,15 +27,18 @@ REPO = os.environ.get("CRL_REPO", os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, REPO)
 os.environ.setdefault("CRL_HOME", REPO)
 import build_duel_workbook as B  # noqa: E402
-from spell_sequences import SPELLS, fmt, PATCH  # noqa: E402
+from spell_sequences import SPELLS, fmt, PATCH, FINALS  # noqa: E402
 
 MIN_DUELS_FOR_PEER = 12
 
+# (label, floor_datetime_or_None, category_or_None)
 FRAMINGS = [
-    ("Post-patch (Aug 5+) — CRL + practice", True, None),
-    ("Post-patch (Aug 5+) — Official CRL only", True, "Official CRL"),
-    ("All time — CRL + practice", False, None),
-    ("All time — Official CRL only", False, "Official CRL"),
+    ("Finals window (Aug 16+) — CRL + practice", FINALS, None),
+    ("Finals window (Aug 16+) — Official CRL only", FINALS, "Official CRL"),
+    ("Post-patch (Aug 5+) — CRL + practice", PATCH, None),
+    ("Post-patch (Aug 5+) — Official CRL only", PATCH, "Official CRL"),
+    ("All time — CRL + practice", None, None),
+    ("All time — Official CRL only", None, "Official CRL"),
 ]
 
 
@@ -68,9 +71,10 @@ def load_by_player():
     return out
 
 
-def subset(duels, post, cat):
+def subset(duels, floor, cat):
     return [d for d in duels
-            if not (post and d["time"] < PATCH) and not (cat and d["category"] != cat)]
+            if not (floor is not None and d["time"] < floor)
+            and not (cat and d["category"] != cat)]
 
 
 def profile(duels):
@@ -119,13 +123,13 @@ def main():
          f"at least {MIN_DUELS_FOR_PEER} duels in the same framing.\n"]
 
     payload = []
-    for label, post, cat in FRAMINGS:
-        me = profile(subset(allp[target], post, cat))
+    for label, floor, cat in FRAMINGS:
+        me = profile(subset(allp[target], floor, cat))
         peers = []
         for name, duels in allp.items():
             if name == target:
                 continue
-            p = profile(subset(duels, post, cat))
+            p = profile(subset(duels, floor, cat))
             if p["n_duels"] >= MIN_DUELS_FOR_PEER:
                 peers.append(p["conc"])
         pct = (100.0 * sum(1 for x in peers if x < me["conc"]) / len(peers)) if peers else None

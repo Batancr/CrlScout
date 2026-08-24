@@ -36,6 +36,10 @@ os.environ.setdefault("CRL_HOME", REPO)
 import build_duel_workbook as B  # noqa: E402
 
 PATCH = datetime.datetime(2026, 8, 5, tzinfo=datetime.timezone.utc)
+# Day-2 CRL of the July Monthly Finals cycle. Everything from here is either a real CRL
+# bracket game or top-16 prep for next week's finals -- a much higher-quality population
+# than the roster at large, at the cost of ~85% of the sample.
+FINALS = datetime.datetime(2026, 8, 16, tzinfo=datetime.timezone.utc)
 
 # The damage/utility spell slots. Deliberately EXCLUDES Graveyard and Goblin Barrel: both are
 # spells in-game but function as win conditions and are already handled by classify_deck().
@@ -43,7 +47,18 @@ SPELLS = {
     "Arrows", "Barbarian Barrel", "Earthquake", "Fireball", "Freeze", "Giant Snowball",
     "Goblin Curse", "Lightning", "Poison", "Rage", "Rocket", "Royal Delivery", "The Log",
     "Tornado", "Void", "Zap", "Clone", "Mirror",
+    # Vines added 2026-08-19 (flagged by Alexander). It appears in 1,444 decks -- 6.7%, more
+    # common than Void, Rage, Freeze or Goblin Curse -- so every Vines deck previously had an
+    # incomplete spell package recorded. All spell results before this date are superseded.
+    "Vines",
 }
+
+# NOT classified as spells here, and why:
+#   Graveyard, Goblin Barrel -- spells in-game, but they function as win conditions and are
+#     already handled by classify_deck(). Counting them twice would double-count the slot.
+#   Suspicious Bush -- UNCERTAIN. Present in 425 decks (2.0%). I am not confident whether it
+#     belongs in the damage/utility spell slot the way Alexander means it. Left out pending
+#     confirmation; add it here if it should count.
 
 MIN_CTX = 20
 MIN_CELL = 5
@@ -101,7 +116,8 @@ def load(post_patch=True, category=None, since=None):
         if len(rows) < 2:
             continue
         rows.sort(key=lambda r: (r["game_num"], r["battle_time"]))
-        if post_patch and rows[0]["battle_time"] < PATCH:
+        floor = since if since is not None else (PATCH if post_patch else None)
+        if floor is not None and rows[0]["battle_time"] < floor:
             continue
         cat = rows[0].get("match_category") or "Practice"
         if category and cat != category:
@@ -296,18 +312,28 @@ def main():
              f"\n_Generated {datetime.datetime.now(datetime.timezone.utc):%Y-%m-%d %H:%M} UTC_\n",
              "\nSpells are a ~18-card space and most decks run two, so sequence signal that "
              "is invisible at deck level may be readable here.\n",
+             "\n**Scopes.** The *finals window* (Aug 16+) starts at Day-2 CRL: every game in it "
+             "is either a real bracket game or top-16 prep for the monthly finals. It is the "
+             "highest-quality population available, but it is ~646 duels against 4,242 "
+             "post-patch, so far fewer cells clear significance. Post-patch is kept alongside "
+             "it for comparison, not because it is more relevant.\n",
              "\n> **Method note.** Cards cannot repeat inside a duel set, so game-1 spells are "
              "mechanically absent from game 2. Every baseline below is renormalised over only "
              "the packages still legal, so the lift column measures preference rather than "
              "re-deriving the no-repeat rule.\n"]
 
     payload = {}
-    for label, cat in [("Post-patch (Aug 5+) — CRL + practice", None),
-                       ("Post-patch (Aug 5+) — Official CRL only", "Official CRL")]:
-        duels = load(post_patch=True, category=cat)
+    SCOPES = [
+        # label, category, since, min_ctx
+        ("Finals window (Aug 16+, Day-2 CRL onward) — CRL + practice", None, FINALS, 10),
+        ("Finals window (Aug 16+, Day-2 CRL onward) — Official CRL only", "Official CRL", FINALS, 8),
+        ("Post-patch (Aug 5+) — CRL + practice", None, None, MIN_CTX),
+        ("Post-patch (Aug 5+) — Official CRL only", "Official CRL", None, 12),
+    ]
+    for label, cat, since, mc in SCOPES:
+        duels = load(post_patch=True, category=cat, since=since)
         print(f"{label}: {len(duels)} duels")
-        payload[label] = analyse(duels, label, lines,
-                                 min_ctx=MIN_CTX if cat is None else 12)
+        payload[label] = analyse(duels, label, lines, min_ctx=mc)
 
     os.makedirs(os.path.join(REPO, "reports"), exist_ok=True)
     p = os.path.join(REPO, "reports", "spell_sequences.md")
