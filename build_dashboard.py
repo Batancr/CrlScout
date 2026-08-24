@@ -1580,6 +1580,16 @@ try:
 except Exception as _dre:
     print('set-aware recs skipped:', _dre)
 
+# ---- Finalist Matchup Database data for the in-dashboard 'Matchup DB' tab (2026-08-24) ----
+try:
+    _mdb_fin = [gg['tag'] for gg in group_a]  # all 16 finalists incl Batan
+    DATA_matchup_db = duel_recommender.build_matchup_db_data(
+        combined_duel_log, _mdb_fin, classify_deck, SEQ_SPELL_CARDS)
+    print('matchup DB tab:', DATA_matchup_db['n_all'], 'games,', len(DATA_matchup_db['players']), 'players')
+except Exception as _mde:
+    DATA_matchup_db = None
+    print('matchup DB tab skipped:', _mde)
+
 def compute_group_a_sequencing(duel_log, target_tag):
     player_games = [r for r in duel_log if r["player_tag"] == target_tag and _day2_ok(r, target_tag) and r["deck"] and len(r["deck"]) == 8]
 
@@ -1853,6 +1863,7 @@ data = {
     # normalize each player's notes to a list (a single string still works as one note)
     "player_notes": {k: (v if isinstance(v, list) else [v]) for k, v in PLAYER_NOTES.items()},
     "group_a_recommendations": group_a_recommendations,
+    "matchup_db": DATA_matchup_db,
     "group_a_matchup_prep": group_a_matchup_prep,
     "group_a_sequencing": group_a_sequencing,
     "group_a_duel_set_record": group_a_duel_set_record,
@@ -2582,6 +2593,48 @@ html = """<!DOCTYPE html>
   .ov-warn { font-size: 11px; font-weight: 700; color: var(--serious); background: rgba(236,131,90,0.12); border-radius: 5px; padding: 2px 7px; }
   .ov-ok { font-size: 11px; font-weight: 700; color: var(--good); background: rgba(12,163,12,0.10); border-radius: 5px; padding: 2px 7px; }
   .reco-method { font-size: 11px; color: var(--text-muted); margin: 8px 0 0; line-height: 1.45; }
+  /* Finalist Matchup Database tab (added 2026-08-24) */
+  .md-wrap{max-width:920px}
+  .md-ctl{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:10px 0 6px}
+  .md-lab{font-size:10.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:3px}
+  .md-seg{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .md-seg button{background:var(--surface-1);color:var(--text-secondary);border:none;padding:6px 11px;font-size:12px;cursor:pointer}
+  .md-seg button.on{background:var(--series-blue);color:#fff}
+  .md-seg.disabled{opacity:.45;pointer-events:none}
+  .md-psel{background:var(--surface-1);color:var(--text-primary);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12.5px;cursor:pointer}
+  .md-sl2{display:flex;align-items:center;gap:8px;font-size:12px}.md-sl2 input{width:120px;accent-color:var(--series-blue)}.md-sl2 b{color:var(--series-green);font-weight:700}
+  .md-tf{position:relative;min-width:260px;flex:1;margin-top:3px}
+  .md-tfbox{display:flex;flex-wrap:wrap;gap:4px;align-items:center;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;padding:5px 7px;min-height:36px;cursor:text}
+  .md-chips{display:flex;flex-wrap:wrap;gap:4px}
+  .md-chip{display:inline-flex;align-items:center;gap:3px;background:var(--page-plane);border:1px solid var(--border);border-radius:6px;padding:2px 5px;font-size:12px}
+  .md-rk{background:var(--series-blue);color:#fff;border-radius:50%;width:15px;height:15px;font-size:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;margin-right:1px}
+  .md-chip b{cursor:pointer;color:var(--text-muted);margin-left:3px}.md-chip b:hover{color:var(--series-red)}
+  .md-tfin{flex:1;min-width:90px;background:transparent;border:none;outline:none;color:var(--text-primary);font-size:13px;padding:2px}
+  .md-tfdrop{display:none;position:absolute;left:0;right:0;top:100%;margin-top:3px;background:var(--surface-1);border:1px solid var(--border);border-radius:8px;max-height:240px;overflow:auto;z-index:30;box-shadow:0 8px 22px rgba(0,0,0,.25)}
+  .md-opt{display:flex;align-items:center;gap:6px;padding:6px 9px;font-size:13px;cursor:pointer}.md-opt:hover{background:var(--page-plane)}
+  .md-cs,.md-csS{display:inline-block;background-size:contain;background-repeat:no-repeat;background-position:center;vertical-align:middle}.md-csS{width:20px;height:24px;margin-right:5px}
+  .md-csT{display:inline-block;width:15px;height:18px;background-size:contain;background-repeat:no-repeat;background-position:center;vertical-align:middle;margin-right:2px}
+  .md-noi{border:1px solid var(--border);border-radius:3px;font-size:7px;color:var(--text-muted);text-align:center;overflow:hidden;line-height:1}.md-csS.md-noi{width:20px;height:24px;line-height:24px}.md-csT.md-noi{width:15px;height:18px;line-height:18px}
+  .md-tabs{display:flex;gap:6px;margin-top:6px}
+  .md-tabs button{background:var(--surface-1);color:var(--text-secondary);border:1px solid var(--border);border-bottom:none;border-radius:9px 9px 0 0;padding:9px 16px;font-size:14px;font-weight:700;cursor:pointer}
+  .md-tabs button.on{background:var(--series-blue);color:#fff;border-color:var(--series-blue)}
+  .md-tabpage{background:var(--page-plane);border:1px solid var(--border);border-radius:0 10px 10px 10px;padding:14px}
+  .md-mh{font-size:13px;color:var(--text-secondary);margin:14px 2px 8px}
+  .md-pnote{background:rgba(42,120,214,.08);border:1px solid rgba(42,120,214,.3);border-radius:8px;padding:8px 11px;font-size:12px;color:var(--text-secondary);margin:10px 0 4px}
+  .md-mrow{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;margin:0 0 7px;overflow:hidden}.md-mrow.open{border-color:var(--series-blue)}
+  .md-mtop{display:grid;grid-template-columns:150px 1fr 78px 20px;gap:10px;align-items:center;padding:9px 12px;cursor:pointer}
+  .md-ml{display:flex;align-items:center;font-size:14px}
+  .md-mtrack{position:relative;background:var(--page-plane);border-radius:6px;height:22px;overflow:hidden;border:1px solid var(--border)}.md-mfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;opacity:.9}
+  .md-mpct{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}.md-mg{font-size:11px;color:var(--text-muted);text-align:right}.md-exp{color:var(--text-muted);text-align:center}
+  .md-sub{background:var(--page-plane);border-top:1px solid var(--border);padding:10px 12px}.md-subh{font-size:11.5px;color:var(--text-muted);margin-bottom:8px}
+  .md-srow{display:grid;grid-template-columns:150px 1fr 78px;gap:10px;align-items:center;padding:3px 0}.md-sl{display:flex;align-items:center;font-size:12.5px}
+  .md-strack{position:relative;background:var(--surface-1);border-radius:5px;height:18px;overflow:hidden;border:1px solid var(--border)}.md-sfill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;opacity:.85}.md-spct{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:#fff}.md-sg{font-size:10.5px;color:var(--text-muted);text-align:right}
+  .md-covbox{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin:6px 0 4px}.md-whead{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em;margin-bottom:6px}.md-wrow{font-size:12.5px;display:flex;flex-wrap:wrap;gap:2px;align-items:center}.md-wv{color:var(--series-green);font-weight:700;font-size:11px}
+  .md-cov{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:0 0 8px}.md-cov.top{border-color:var(--series-green);box-shadow:0 0 0 1px rgba(0,131,0,.2)}
+  .md-covh{display:flex;align-items:center;gap:6px;font-size:15px;flex-wrap:wrap}.md-withsp{font-size:11.5px;color:var(--series-blue);background:rgba(42,120,214,.12);border-radius:5px;padding:1px 8px;display:inline-flex;align-items:center}.md-withsp.arch{color:var(--text-muted);background:var(--page-plane)}
+  .md-covscore{margin-left:auto;font-weight:800;font-size:18px}.md-covscore .md-cl{display:block;font-size:9px;color:var(--text-muted);font-weight:400;text-align:right}
+  .md-perT{display:flex;flex-wrap:wrap;gap:9px;margin-top:8px;font-size:12px}.md-perT .md-pt{font-weight:700}.md-miss{color:var(--text-muted);font-size:11px;font-style:italic}
+  .md-hint{color:var(--text-muted);font-size:13px;padding:10px 2px}.md-foot{color:var(--text-muted);font-size:11.5px;margin-top:16px;border-top:1px solid var(--border);padding-top:12px}
   .reco-section {
     border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px 14px;
     margin-bottom: 6px; background: var(--page-plane);
@@ -2614,7 +2667,6 @@ html = """<!DOCTYPE html>
     <h1>CRL Opponent Scout</h1>
     <p class="subtitle">Search a player to see their decks, win rates, and go-to win conditions. Data snapshot from CRL_Duel_Decks.xlsx.</p>
     <a href="monthly_finals_opponents.html" style="display:inline-block;margin-bottom:10px;padding:6px 12px;background:#E8F5E9;color:#1B5E20;border:1px solid #A5D6A7;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">📋 Monthly Finals Opponents (Day 2 deck ratings + Day 3 scouting) &rarr;</a>
-    <a href="matchup_database.html" style="display:inline-block;margin:0 0 10px 8px;padding:6px 12px;background:#E3F2FD;color:#0D47A1;border:1px solid #90CAF9;border-radius:6px;font-size:13px;font-weight:700;text-decoration:none;">&#128202; Finalist Matchup Database (win-con matchups, spell layer, coverage optimizer) &rarr;</a>
     <div class="icon-legend">
       <span><span class="dot" style="background:var(--series-yellow);"></span>&#9819; Champion / Hero card</span>
       <span><span class="dot" style="background:var(--series-violet);"></span>&#9733; Sometimes played as an Evolution</span>
@@ -2624,6 +2676,28 @@ html = """<!DOCTYPE html>
   <div class="page-nav" id="pageNav">
     <button class="page-nav-btn active" data-page="pageScout">Scout Tools</button>
     <button class="page-nav-btn" data-page="pageStats">Best Picks &amp; Stats</button>
+    <button class="page-nav-btn" data-page="pageMatchup">Matchup DB</button>
+  </div>
+
+    <div class="page" id="pageMatchup" style="display:none">
+    <div class="md-wrap">
+    <h3 class="table-title" style="margin:0 0 4px;">Finalist Matchup Database <span class="table-note">win-con matchups mined from the top-16 finalists' games, with the spell layer</span></h3>
+    <div class="md-ctl">
+      <div><span class="md-lab">Data</span><div class="md-seg"><button data-s="all" class="on">All (prac+CRL)</button><button data-s="crl">CRL only</button></div></div>
+      <div><span class="md-lab">Player filter</span><select id="mdPsel" class="md-psel"></select></div>
+      <div class="md-sl2"><span class="md-lab" style="margin:0">min games</span><input type="range" id="mdMg" min="3" max="30" value="8"><b id="mdMgv">8</b></div>
+    </div>
+    <div class="md-tabs"><button data-t="exp" id="mdTbExp" class="on">Matchup explorer</button><button data-t="cov" id="mdTbCov">Coverage optimizer</button></div>
+    <div id="mdTabExp" class="md-tabpage">
+      <span class="md-lab">Win condition(s) &mdash; combine for multi-win-con decks</span><div id="mdFMy"></div>
+      <div id="mdOutExp"></div>
+    </div>
+    <div id="mdTabCov" class="md-tabpage" style="display:none">
+      <span class="md-lab">Opponent win conditions to cover &mdash; add in priority order (first = most important)</span><div id="mdFCov"></div>
+      <div id="mdOutCov"></div>
+    </div>
+    <p class="md-foot" id="mdFoot"></p>
+    </div>
   </div>
 
   <div class="page" id="pageScout">
@@ -4325,6 +4399,150 @@ document.querySelectorAll('.page-nav-btn').forEach(btn => {
     document.getElementById(btn.dataset.page).style.display = '';
   });
 });
+
+// ===== Finalist Matchup Database tab (added 2026-08-24) =====
+// Self-contained IIFE. Reads DATA.matchup_db, reuses the dashboard's cardIcons map
+// (no base64 / Pillow needed). All ids/classes are md-prefixed to avoid clashes.
+(function(){
+  var MD = (typeof DATA !== 'undefined' && DATA.matchup_db) ? DATA.matchup_db : null;
+  if (!MD) return;
+  var WCL = MD.wincons || [], SPL = MD.spells || [], BYP = MD.by_player || {}, PLAYERS = MD.players || [];
+  function esc(s){ return (s+'').replace(/[&<>"]/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function ci(n, cls){
+    cls = cls || 'md-cs';
+    var u = (typeof cardIcons !== 'undefined') ? cardIcons[n] : null;
+    return u ? '<span class="'+cls+'" style="background-image:url(\''+u+'\')" title="'+esc(n)+'"></span>'
+             : '<span class="'+cls+' md-noi" title="'+esc(n)+'">'+esc(n.slice(0,3))+'</span>';
+  }
+  var src = 'all', minG = 8, player = '', expanded = {};
+  function m1(){ if(player) return (BYP[player]||{}).m1||{}; return MD['m1_'+src]||{}; }
+  function m2(){ if(player) return (BYP[player]||{}).m2||{}; return MD['m2_'+src]||{}; }
+  function colr(p){ if(p==null) return 'var(--text-muted)'; if(p>=60) return 'var(--series-green)'; if(p>=55) return 'var(--series-aqua)'; if(p>=50) return 'var(--series-yellow)'; if(p>=45) return 'var(--series-orange)'; return 'var(--series-red)'; }
+  function conf(g){ return g>=25 ? ['&#9679;&#9679;&#9679;','var(--series-green)'] : (g>=12 ? ['&#9679;&#9679;&#9675;','var(--series-orange)'] : ['&#9679;&#9675;&#9675;','var(--series-red)']); }
+
+  function Field(id, opts, o){
+    this.el = document.getElementById(id); this.opts = opts; this.ph = o.placeholder||''; this.onChange = o.onChange||function(){}; this.sel = []; this.rank = false;
+    var self = this;
+    this.el.classList.add('md-tf');
+    this.el.innerHTML = '<div class="md-tfbox"><span class="md-chips"></span><input class="md-tfin" placeholder="'+esc(this.ph)+'"></div><div class="md-tfdrop"></div>';
+    this.box = this.el.querySelector('.md-tfbox'); this.chips = this.el.querySelector('.md-chips'); this.input = this.el.querySelector('.md-tfin'); this.drop = this.el.querySelector('.md-tfdrop');
+    this.input.addEventListener('input', function(){ self.open(); });
+    this.input.addEventListener('focus', function(){ self.open(); });
+    this.input.addEventListener('keydown', function(e){
+      if(e.key==='Enter'){ var f=self.drop.querySelector('.md-opt'); if(f){ self.pick(f.dataset.v); e.preventDefault(); } }
+      else if(e.key==='Backspace' && !self.input.value && self.sel.length){ self.sel.pop(); self.render(); self.onChange(); }
+      else if(e.key==='Escape') self.close();
+    });
+    document.addEventListener('click', function(e){ if(!self.el.contains(e.target)) self.close(); });
+    this.render();
+  }
+  Field.prototype.pick = function(v){ if(this.sel.indexOf(v)<0) this.sel.push(v); this.input.value=''; this.close(); this.render(); this.onChange(); };
+  Field.prototype.remove = function(v){ this.sel = this.sel.filter(function(x){return x!==v;}); this.render(); this.onChange(); };
+  Field.prototype.render = function(){
+    var self = this;
+    this.chips.innerHTML = this.sel.map(function(v,i){ return '<span class="md-chip">'+(self.rank?('<span class="md-rk">'+(i+1)+'</span>'):'')+ci(v,'md-csT')+esc(v)+'<b data-rm="'+esc(v)+'">&times;</b></span>'; }).join('');
+    this.chips.querySelectorAll('b[data-rm]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation(); self.remove(b.dataset.rm); }; });
+    this.input.placeholder = this.sel.length ? '' : this.ph;
+    this.box.onclick = function(){ self.input.focus(); };
+  };
+  Field.prototype.open = function(){
+    var self = this, q = this.input.value.toLowerCase();
+    var l = this.opts.filter(function(o){ return self.sel.indexOf(o)<0 && (!q || o.toLowerCase().indexOf(q)>=0); }).slice(0,14);
+    if(!l.length){ this.close(); return; }
+    this.drop.innerHTML = l.map(function(o){ return '<div class="md-opt" data-v="'+esc(o)+'">'+ci(o,'md-csT')+esc(o)+'</div>'; }).join('');
+    this.drop.querySelectorAll('.md-opt').forEach(function(d){ d.onclick = function(){ self.pick(d.dataset.v); }; });
+    this.drop.style.display = 'block';
+  };
+  Field.prototype.close = function(){ this.drop.style.display = 'none'; };
+
+  var F = {};
+  function comboRate(wcs, B){ var tg=0,tw=0; wcs.forEach(function(A){ var c=m1()[A]&&m1()[A][B]; if(c&&c[0]>0){ tg+=c[0]; tw+=c[1]*c[0]; } }); return tg?[tw/tg,tg]:[null,0]; }
+  function comboSpell(wcs, B, s){ var tg=0,tw=0; wcs.forEach(function(A){ var c=m2()[A]&&m2()[A][s]&&m2()[A][s][B]; if(c&&c[0]>0){ tg+=c[0]; tw+=c[1]*c[0]; } }); return tg?[tw/tg,tg]:[null,0]; }
+  function allOpp(wcs){ var set={}; wcs.forEach(function(A){ for(var b in (m1()[A]||{})) set[b]=1; }); return Object.keys(set); }
+
+  function scopeNote(){
+    if(player){ var n=(BYP[player]||{}).n||0; return '<div class="md-pnote">Showing <b>'+esc(player)+'</b> only &mdash; '+n+' games. Per-player samples are thin, so many cells are empty; drop the min-games slider to see more. The All/CRL toggle is ignored while a player is selected.</div>'; }
+    return '';
+  }
+  function renderExplorer(){
+    var wcs = F.my.sel, host = document.getElementById('mdOutExp'), note = scopeNote();
+    if(!wcs.length){ host.innerHTML = note+'<div class="md-hint">Pick one or more win conditions (combine e.g. Mortar + Elite Barbarians for a two-win-con deck). Combined matchups are the games-weighted average of each.</div>'; return; }
+    var opps = allOpp(wcs).map(function(b){ var r=comboRate(wcs,b); return [b,r[0],r[1]]; }).filter(function(x){ return x[1]!=null && x[2]>=minG; }).sort(function(a,b){ return b[1]-a[1]; });
+    var h = note+'<div class="md-mh">'+wcs.map(function(w){ return ci(w,'md-csS')+esc(w); }).join(' + ')+' &mdash; win rate vs each opponent win condition'+(player?(' ('+esc(player)+')'):'')+'. Click a row for the spell breakdown.</div>';
+    if(!opps.length) h += '<div class="md-hint">No matchups with &ge;'+minG+' games. Lower the min-games slider'+(player?'':' or switch data source')+'.</div>';
+    opps.forEach(function(row){
+      var b=row[0], r=row[1], g=row[2], cd=conf(g), open=expanded[b];
+      h += '<div class="md-mrow'+(open?' open':'')+'" data-b="'+esc(b)+'"><div class="md-mtop"><div class="md-ml">'+ci(b,'md-csS')+'<b>'+esc(b)+'</b></div>'
+         + '<div class="md-mtrack"><div class="md-mfill" style="width:'+r+'%;background:'+colr(r)+'"></div><span class="md-mpct">'+Math.round(r)+'%</span></div>'
+         + '<div class="md-mg">'+g+'g <span style="color:'+cd[1]+'">'+cd[0]+'</span></div><div class="md-exp">'+(open?'&#9662;':'&#9656;')+'</div></div>';
+      if(open){
+        var rows2=[]; SPL.forEach(function(s){ var wr=comboSpell(wcs,b,s); if(wr[0]!=null && wr[1]>=Math.max(3,minG-2)) rows2.push([s,wr[0],wr[1]]); });
+        rows2.sort(function(a,b){ return b[1]-a[1]; });
+        h += '<div class="md-sub">'+(rows2.length?('<div class="md-subh">by the spell in your deck:</div>'+rows2.map(function(x){ var s=x[0],wr=x[1],gg=x[2],c2=conf(gg); return '<div class="md-srow"><div class="md-sl">'+ci(s,'md-csS')+esc(s)+'</div><div class="md-strack"><div class="md-sfill" style="width:'+wr+'%;background:'+colr(wr)+'"></div><span class="md-spct">'+Math.round(wr)+'%</span></div><div class="md-sg">'+gg+'g <span style="color:'+c2[1]+'">'+c2[0]+'</span></div></div>'; }).join('')):'<div class="md-hint" style="padding:6px 2px">Not enough spell-level games here.</div>')+'</div>';
+      }
+      h += '</div>';
+    });
+    host.innerHTML = h;
+    document.querySelectorAll('#mdOutExp .md-mtop').forEach(function(el){ el.onclick = function(){ var b=el.parentElement.dataset.b; expanded[b]=!expanded[b]; renderExplorer(); }; });
+  }
+
+  function weights(n){ var decay=Math.max(0.5,0.95-0.05*(n-1)), w=[], s=0, i; for(i=0;i<n;i++){ w.push(Math.pow(decay,i)); s+=w[i]; } return w.map(function(x){ return x/s; }); }
+  function coverage(A, targets, w){
+    var sw=0, sm=0, parts=[], i;
+    for(i=0;i<targets.length;i++){ var c=m1()[A]&&m1()[A][targets[i]]; if(c&&c[0]>=minG){ sm+=w[i]*c[1]; sw+=w[i]; parts.push([targets[i],c[1],c[0],w[i]]); } }
+    var arch = sw ? sm/sw : null;
+    var bestS=null, bestC=null, bestParts=null, mm=m2()[A]||{};
+    for(var s in mm){ var ssw=0, ssm=0, cnt=0, pp=[]; for(i=0;i<targets.length;i++){ var cc=mm[s][targets[i]]; if(cc&&cc[0]>=Math.max(3,minG-2)){ ssm+=w[i]*cc[1]; ssw+=w[i]; cnt++; pp.push([targets[i],cc[1],cc[0],w[i]]); } }
+      if(cnt>=Math.ceil(targets.length*0.5)&&ssw>0){ var cov=ssm/ssw; if(bestC==null||cov>bestC){ bestC=cov; bestS=s; bestParts=pp; } } }
+    return {arch:arch, parts:parts, bestS:bestS, bestC:bestC, bestParts:bestParts, covered:parts.length};
+  }
+  function renderCoverage(){
+    var targets = F.cov.sel, host = document.getElementById('mdOutCov'), note = scopeNote();
+    if(targets.length<1){ host.innerHTML = note+'<div class="md-hint">Enter the opponent win conditions you want to cover &mdash; in priority order (first = you most expect it / most want to beat it).</div>'; return; }
+    var w = weights(targets.length);
+    var wtxt = '<div class="md-whead">Priority weighting ('+targets.length+' inputs &rarr; '+(targets.length>=6?'front-loaded':'fairly even')+'):</div><div class="md-wrow">'+targets.map(function(t,i){ return ci(t,'md-csT')+esc(t)+' <span class="md-wv">'+Math.round(100*w[i])+'%</span>'; }).join('  &middot;  ')+'</div>';
+    var cands = [];
+    WCL.forEach(function(A){ var c=coverage(A,targets,w); var best=(c.bestC!=null?c.bestC:c.arch); if(best==null) return; c.A=A; c.best=best; cands.push(c); });
+    cands.sort(function(a,b){ return b.best-a.best; });
+    var h = note+'<div class="md-covbox">'+wtxt+'</div>';
+    h += '<div class="md-mh">Best win conditions to cover your inputs (weighted). Each shows its best spell.</div>';
+    cands.slice(0,8).forEach(function(c,i){
+      var useS=c.bestC!=null, val=useS?c.bestC:c.arch, parts=useS?c.bestParts:c.parts;
+      var perT = parts.slice().sort(function(a,b){ return b[3]-a[3]; }).map(function(p){ return '<span class="md-pt"><span style="color:'+colr(p[1])+'">'+ci(p[0],'md-csT')+esc(p[0])+' '+Math.round(p[1])+'%</span></span>'; }).join('');
+      var miss = targets.filter(function(t){ return !parts.some(function(p){ return p[0]===t; }); });
+      h += '<div class="md-cov'+(i===0?' top':'')+'"><div class="md-covh">'+ci(c.A,'md-csS')+'<b>'+esc(c.A)+'</b>'
+         + (useS?('<span class="md-withsp">with '+ci(c.bestS,'md-csT')+esc(c.bestS)+'</span>'):'<span class="md-withsp arch">archetype avg</span>')
+         + '<span class="md-covscore" style="color:'+colr(val)+'">'+Math.round(val)+'%<span class="md-cl">weighted coverage</span></span></div>'
+         + '<div class="md-perT">'+perT+(miss.length?'<span class="md-miss">no data vs: '+miss.map(esc).join(', ')+'</span>':'')+'</div></div>';
+    });
+    host.innerHTML = h;
+  }
+
+  function showTab(t){
+    document.querySelectorAll('#pageMatchup .md-tabpage').forEach(function(p){ p.style.display='none'; });
+    document.querySelectorAll('#pageMatchup .md-tabs button').forEach(function(b){ b.classList.remove('on'); });
+    document.getElementById('mdTab'+(t==='exp'?'Exp':'Cov')).style.display='block';
+    document.getElementById('mdTb'+(t==='exp'?'Exp':'Cov')).classList.add('on');
+  }
+  function syncSrcUI(){ document.querySelectorAll('#pageMatchup .md-seg').forEach(function(s){ s.classList.toggle('disabled', !!player); }); }
+
+  function build(){
+    if(!document.getElementById('mdFMy')) return;
+    F.my = new Field('mdFMy', WCL, {placeholder:'win condition(s)…', onChange:function(){ expanded={}; renderExplorer(); }});
+    F.cov = new Field('mdFCov', WCL, {placeholder:'win conditions to cover, priority order…', onChange:renderCoverage}); F.cov.rank = true;
+    var sl = document.getElementById('mdMg');
+    document.querySelectorAll('#pageMatchup .md-seg button').forEach(function(b){ b.onclick = function(){ if(player) return; src=b.dataset.s; document.querySelectorAll('#pageMatchup .md-seg button').forEach(function(x){ x.classList.remove('on'); }); b.classList.add('on'); renderExplorer(); renderCoverage(); }; });
+    var psel = document.getElementById('mdPsel');
+    psel.innerHTML = '<option value="">All finalists</option>'+PLAYERS.map(function(p){ return '<option value="'+esc(p)+'">'+esc(p)+'</option>'; }).join('');
+    psel.onchange = function(){ player=psel.value; expanded={}; if(player&&minG>4){ minG=4; sl.value=4; document.getElementById('mdMgv').textContent=4; } syncSrcUI(); renderExplorer(); renderCoverage(); };
+    sl.oninput = function(e){ minG=+e.target.value; document.getElementById('mdMgv').textContent=minG; renderExplorer(); renderCoverage(); };
+    document.querySelectorAll('#pageMatchup .md-tabs button').forEach(function(b){ b.onclick = function(){ showTab(b.dataset.t); }; });
+    var foot = document.getElementById('mdFoot');
+    if(foot){ foot.innerHTML = 'Built from <b>'+MD.n_all+'</b> finalist games (<b>'+MD.n_crl+'</b> CRL). Combined matchups average each selected win condition\'s cell (games-weighted) &mdash; an approximation of a true multi-win-con deck. Player filter narrows to one finalist\'s own games. Coverage Optimizer weights fall off by input position (more inputs &rarr; steeper). Confidence dots track game count; &#9679;&#9675;&#9675; = small sample. CRL-only is a much smaller pool.'; }
+    showTab('exp'); renderExplorer(); renderCoverage();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', build); else build();
+})();
 
 // ---------- What Might Follow? predictor ----------
 // transitions.wincon[fromWincon] = [[toWincon, count], ...]  (single-card fallback, top 8, roster-wide)

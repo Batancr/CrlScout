@@ -278,3 +278,80 @@ if __name__ == "__main__":
             print(f"  -> Set {sd['set']} counter: [{'/'.join(d['wcs'])}] +{','.join(d['spells']) or '-'} "
                   f"cov {sd['coverage']:.0f}% (covers {sd['covered']*100:.0f}% of pool, overlap {sd['overlap']}, {d['games']}g)")
             print(f"       deck: {', '.join(d['cards'])}")
+
+
+# ==========================================================================
+# Finalist Matchup Database data (for the in-dashboard "Matchup DB" tab).
+# Mirrors the standalone build_matchup_db.py: win-con vs win-con (m1) and
+# win-con+spell vs win-con (m2), split all / CRL, plus per-player matrices.
+# ==========================================================================
+def build_matchup_db_data(rows, finalist_tags, classify_deck, SPELLS):
+    from collections import Counter, defaultdict as dd
+    FIN = set(finalist_tags)
+
+    def sp(d):
+        return [c for c in d if c in SPELLS]
+
+    def build(pred):
+        M1 = dd(lambda: [0, 0]); M2 = dd(lambda: [0, 0]); n = 0
+        for r in rows:
+            if r.get("player_tag") not in FIN or not pred(r):
+                continue
+            if _date8(r.get("battle_time")) < POST_PATCH or not _eligible(r):
+                continue
+            if not r.get("deck") or not r.get("opponent_deck"):
+                continue
+            w = _won(r)
+            if w is None:
+                continue
+            aw = classify_deck(r["deck"]) or []; bw = classify_deck(r["opponent_deck"]) or []
+            if not aw or not bw:
+                continue
+            asp = sp(r["deck"]); wv = 1 if w else 0; n += 1
+            for a in aw:
+                for b in bw:
+                    c = M1[(a, b)]; c[0] += 1; c[1] += wv
+                    for s in asp:
+                        c2 = M2[(a, s, b)]; c2[0] += 1; c2[1] += wv
+        return M1, M2, n
+
+    def pack(M1, M2, minc1=4, minc2=4):
+        m1 = dd(dict); m2 = dd(lambda: dd(dict))
+        for (a, b), v in M1.items():
+            if v[0] >= minc1:
+                m1[a][b] = [v[0], round(100 * v[1] / v[0], 1)]
+        for (a, s, b), v in M2.items():
+            if v[0] >= minc2:
+                m2[a][s][b] = [v[0], round(100 * v[1] / v[0], 1)]
+        return {k: dict(v) for k, v in m1.items()}, {k: {s: dict(bb) for s, bb in v.items()} for k, v in m2.items()}
+
+    M1a, M2a, na = build(lambda r: True)
+    M1c, M2c, nc = build(lambda r: r.get("match_category") == "Official CRL")
+    m1_all, m2_all = pack(M1a, M2a)
+    m1_crl, m2_crl = pack(M1c, M2c)
+
+    by_player = {}
+    tag2name = {}
+    for tag in FIN:
+        M1p, M2p, npg = build(lambda r, t=tag: r.get("player_tag") == t)
+        m1p, m2p = pack(M1p, M2p, minc1=3, minc2=3)
+        # player display name from any of their rows
+        nm = next((r.get("player_name") for r in rows if r.get("player_tag") == tag and r.get("player_name")), tag)
+        tag2name[tag] = nm
+        if m1p:
+            by_player[nm] = {"m1": m1p, "m2": m2p, "n": npg}
+
+    freq = Counter()
+    for (a, b), v in M1a.items():
+        freq[a] += v[0]
+    wc_order = [w for w, _ in freq.most_common()]
+    spf = Counter()
+    for (a, s, b), v in M2a.items():
+        spf[s] += v[0]
+    sp_order = [s for s, _ in spf.most_common()]
+    players_with_data = [tag2name[t] for t in FIN if tag2name.get(t) in by_player]
+
+    return {"wincons": wc_order, "spells": sp_order,
+            "m1_all": m1_all, "m2_all": m2_all, "m1_crl": m1_crl, "m2_crl": m2_crl,
+            "by_player": by_player, "players": players_with_data,
+            "n_all": na, "n_crl": nc}
