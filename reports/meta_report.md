@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-08-26 00:44 UTC · latest battle 2026-08-25 22:45 UTC
+Generated 2026-08-26 03:50 UTC · latest battle 2026-08-26 02:46 UTC
 
-**14,615 eligible games** · Practice 12,074 · Official CRL 2,541
+**14,633 eligible games** · Practice 12,092 · Official CRL 2,541
 
 ## Top win conditions
 
-Share is of the 14,520 games with a classified win condition.
+Share is of the 14,538 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
 | Mortar | 1,326 | 9.1% | **61%** |
-| Battle Ram | 1,764 | 12.1% | **60%** |
-| Elite Barbarians | 2,609 | 18.0% | **58%** |
+| Battle Ram | 1,766 | 12.1% | **60%** |
+| Elite Barbarians | 2,612 | 18.0% | **58%** |
 | Three Musketeers | 151 | 1.0% | **57%** |
-| Royal Hogs | 1,774 | 12.2% | **56%** |
+| Royal Hogs | 1,775 | 12.2% | **56%** |
 | Giant | 354 | 2.4% | **55%** |
-| Hog Rider | 1,295 | 8.9% | **54%** |
-| Skeleton Barrel | 849 | 5.8% | **54%** |
+| Hog Rider | 1,297 | 8.9% | **54%** |
+| Skeleton Barrel | 850 | 5.8% | **54%** |
 | Rune Giant | 914 | 6.3% | **53%** |
-| Graveyard | 1,132 | 7.8% | **52%** |
-| Golem | 577 | 4.0% | **52%** |
-| Goblin Barrel | 956 | 6.6% | **51%** |
+| Graveyard | 1,133 | 7.8% | **53%** |
+| Golem | 579 | 4.0% | **53%** |
+| Goblin Barrel | 958 | 6.6% | **51%** |
 
 ## Best decks (30+ games)
 
@@ -37,8 +37,8 @@ Share is of the 14,520 games with a classified win condition.
 | **66%** | 226 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
 | **66%** | 32 | noise | Arrows, Bandit, Battle Ram, Electro Wizard, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons |
 | **64%** | 42 | noise | Berserker, Cannon Cart, Electro Spirit, Fireball, Minions, Mortar, Rascals, Skeleton Barrel |
-| **64%** | 66 | thin | Cannon, Earthquake, Electro Spirit, Firecracker, Hog Rider, Mighty Miner, Skeletons, The Log |
 | **63%** | 35 | noise | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log |
+| **63%** | 67 | thin | Cannon, Earthquake, Electro Spirit, Firecracker, Hog Rider, Mighty Miner, Skeletons, The Log |
 | **62%** | 91 | thin | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies |
 | **61%** | 332 | solid | Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies |
 
