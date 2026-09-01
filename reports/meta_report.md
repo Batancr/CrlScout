@@ -1,39 +1,39 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-01 08:12 UTC · latest battle 2026-09-01 05:52 UTC
+Generated 2026-09-01 13:54 UTC · latest battle 2026-09-01 11:40 UTC
 
-**16,106 eligible games** · Practice 13,565 · Official CRL 2,541
+**16,121 eligible games** · Practice 13,580 · Official CRL 2,541
 
 ## Top win conditions
 
-Share is of the 16,000 games with a classified win condition.
+Share is of the 16,015 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,453 | 9.1% | **61%** |
-| Battle Ram | 1,926 | 12.0% | **60%** |
-| Elite Barbarians | 2,849 | 17.8% | **58%** |
+| Mortar | 1,455 | 9.1% | **61%** |
+| Battle Ram | 1,929 | 12.0% | **60%** |
+| Elite Barbarians | 2,851 | 17.8% | **58%** |
+| Giant | 409 | 2.6% | **56%** |
 | Three Musketeers | 159 | 1.0% | **56%** |
-| Giant | 408 | 2.5% | **56%** |
-| Royal Hogs | 1,952 | 12.2% | **56%** |
+| Royal Hogs | 1,954 | 12.2% | **56%** |
 | Electro Giant | 222 | 1.4% | **55%** |
 | Skeleton Barrel | 921 | 5.8% | **53%** |
+| Golem | 634 | 4.0% | **53%** |
 | Rune Giant | 958 | 6.0% | **53%** |
-| Golem | 633 | 4.0% | **53%** |
-| Hog Rider | 1,473 | 9.2% | **53%** |
-| Graveyard | 1,278 | 8.0% | **52%** |
+| Hog Rider | 1,474 | 9.2% | **53%** |
+| Graveyard | 1,279 | 8.0% | **52%** |
 
 ## Best decks (30+ games)
 
-62 decks qualify. **Confidence** flags sample size — treat *noise* rows as unproven no matter how high the win rate looks.
+63 decks qualify. **Confidence** flags sample size — treat *noise* rows as unproven no matter how high the win rate looks.
 
 | Win rate | Games | Confidence | Deck |
 |---|---|---|---|
 | **80%** | 44 | noise | Arrows, Bandit, Battle Ram, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons, Zappies |
+| **77%** | 52 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **77%** | 30 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
-| **76%** | 51 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
-| **71%** | 104 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
-| **71%** | 183 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
+| **71%** | 105 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
+| **71%** | 184 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **67%** | 33 | noise | Electro Spirit, Elite Barbarians, Fireball, Hog Rider, Musketeer, Skeletons, Tesla, The Log |
 | **66%** | 231 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
@@ -46,7 +46,7 @@ Share is of the 16,000 games with a classified win condition.
 
 Grouped on the win conditions of the duel's **first two** games. Winning those two ends the set, so this measures the opener rather than the whole trio — and pairing on two decks instead of three roughly doubles the usable sample.
 
-72 pairs have 15+ duels.
+73 pairs have 15+ duels.
 
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
@@ -59,7 +59,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **64%** | 41% | 29 | thin | Hog Rider + Mortar |
 | **62%** | 33% | 21 | thin | Hog Rider + Mortar + Skeleton Barrel |
 | **62%** | 32% | 38 | thin | Battle Ram + Elite Barbarians + Mortar |
-| **61%** | 36% | 119 | solid | Battle Ram + Elite Barbarians + Royal Hogs |
+| **61%** | 37% | 120 | solid | Battle Ram + Elite Barbarians + Royal Hogs |
 
 ### Most-used decks in the top pairs
 
@@ -80,20 +80,20 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-13 lists, 817 games, 58% combined.
+13 lists, 818 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **70%** | 20 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
 | **63%** | 35 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
-| **61%** | 104 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
+| **61%** | 105 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
 | **60%** | 152 | solid | — | Barbarian Barrel, Berserker, Electro Spirit, Fireball, Furnace, Goblin Hut, Royal Ghost, Royal Hogs | ぐりてゃん, Steeef |
 | **59%** | 22 | noise | — | Barbarian Barrel, Berserker, Electro Spirit, Furnace, Lightning, Royal Hogs, Skeletons, Tesla | Clown, Ryley |
 | **59%** | 284 | solid | — | Archers, Barbarian Barrel, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Hogs, Skeletons | Coco, ぐりてゃん |
 
 ## Miner decks (15+ games)
 
-19 lists, 637 games, 54% combined.
+19 lists, 639 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
