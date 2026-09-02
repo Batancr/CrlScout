@@ -1,12 +1,12 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-02 01:56 UTC · latest battle 2026-09-01 23:54 UTC
+Generated 2026-09-02 07:32 UTC · latest battle 2026-09-02 00:01 UTC
 
-**16,415 eligible games** · Practice 13,874 · Official CRL 2,541
+**16,418 eligible games** · Practice 13,877 · Official CRL 2,541
 
 ## Top win conditions
 
-Share is of the 16,309 games with a classified win condition.
+Share is of the 16,311 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
@@ -21,7 +21,7 @@ Share is of the 16,309 games with a classified win condition.
 | Golem | 641 | 3.9% | **53%** |
 | Rune Giant | 967 | 5.9% | **53%** |
 | Graveyard | 1,308 | 8.0% | **53%** |
-| Hog Rider | 1,508 | 9.2% | **52%** |
+| Hog Rider | 1,509 | 9.3% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -55,10 +55,10 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **67%** | 47% | 15 | noise | Battle Ram + Hog Rider |
 | **66%** | 45% | 22 | thin | Battle Ram + Elite Barbarians + Skeleton Barrel |
 | **66%** | 31% | 16 | noise | Royal Giant + Skeleton Barrel |
-| **65%** | 42% | 33 | thin | Hog Rider + Royal Giant |
 | **65%** | 41% | 17 | noise | Goblin Drill + Mortar + Skeleton Barrel |
 | **65%** | 29% | 17 | noise | Battle Ram + Royal Giant |
 | **64%** | 41% | 29 | thin | Hog Rider + Mortar |
+| **63%** | 41% | 34 | thin | Hog Rider + Royal Giant |
 | **61%** | 32% | 22 | thin | Hog Rider + Mortar + Skeleton Barrel |
 
 ### Most-used decks in the top pairs
