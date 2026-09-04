@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-04 07:38 UTC · latest battle 2026-09-04 02:13 UTC
+Generated 2026-09-04 13:08 UTC · latest battle 2026-09-04 11:11 UTC
 
-**17,337 eligible games** · Practice 14,796 · Official CRL 2,541
+**17,370 eligible games** · Practice 14,829 · Official CRL 2,541
 
 ## Top win conditions
 
-Share is of the 17,226 games with a classified win condition.
+Share is of the 17,259 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,567 | 9.1% | **61%** |
-| Battle Ram | 2,073 | 12.0% | **59%** |
-| Elite Barbarians | 2,995 | 17.4% | **57%** |
-| Royal Hogs | 2,112 | 12.3% | **56%** |
+| Mortar | 1,569 | 9.1% | **61%** |
+| Battle Ram | 2,076 | 12.0% | **59%** |
+| Elite Barbarians | 2,996 | 17.4% | **57%** |
+| Royal Hogs | 2,116 | 12.3% | **56%** |
 | Three Musketeers | 168 | 1.0% | **55%** |
-| Giant | 437 | 2.5% | **55%** |
+| Giant | 438 | 2.5% | **55%** |
 | Electro Giant | 279 | 1.6% | **54%** |
-| Golem | 674 | 3.9% | **53%** |
+| Golem | 676 | 3.9% | **53%** |
 | Rune Giant | 1,005 | 5.8% | **53%** |
 | Skeleton Barrel | 972 | 5.6% | **53%** |
-| Graveyard | 1,402 | 8.1% | **52%** |
-| Hog Rider | 1,634 | 9.5% | **52%** |
+| Graveyard | 1,404 | 8.1% | **52%** |
+| Hog Rider | 1,640 | 9.5% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -31,8 +31,8 @@ Share is of the 17,226 games with a classified win condition.
 |---|---|---|---|
 | **76%** | 49 | noise | Arrows, Bandit, Battle Ram, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons, Zappies |
 | **74%** | 31 | noise | Goblin Curse, Goblin Demolisher, Inferno Dragon, Little Prince, Mega Knight, Miner, Rune Giant, Zap |
+| **71%** | 76 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **71%** | 38 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
-| **71%** | 75 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **71%** | 190 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **68%** | 135 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
@@ -58,8 +58,8 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **64%** | 44% | 18 | noise | Elite Barbarians + Golem + Royal Hogs |
 | **63%** | 42% | 19 | noise | Battle Ram + Hog Rider |
 | **62%** | 38% | 24 | thin | Electro Giant + Hog Rider |
+| **62%** | 39% | 33 | thin | Hog Rider + Mortar |
 | **62%** | 41% | 34 | thin | Golem + Royal Hogs |
-| **61%** | 38% | 32 | thin | Hog Rider + Mortar |
 
 ### Most-used decks in the top pairs
 
@@ -80,11 +80,11 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-15 lists, 895 games, 58% combined.
+15 lists, 898 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
-| **72%** | 18 | noise | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, Ian77 |
+| **68%** | 19 | noise | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
 | **63%** | 35 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
 | **61%** | 113 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
@@ -93,7 +93,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Miner decks (15+ games)
 
-20 lists, 696 games, 54% combined.
+20 lists, 697 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
