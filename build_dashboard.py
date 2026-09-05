@@ -4411,7 +4411,7 @@ document.querySelectorAll('.page-nav-btn').forEach(btn => {
   function ci(n, cls){
     cls = cls || 'md-cs';
     var u = (typeof cardIcons !== 'undefined') ? cardIcons[n] : null;
-    return u ? '<span class="'+cls+'" style="background-image:url(\''+u+'\')" title="'+esc(n)+'"></span>'
+    return u ? '<span class="'+cls+'" style="background-image:url(\\''+u+'\\')" title="'+esc(n)+'"></span>'
              : '<span class="'+cls+' md-noi" title="'+esc(n)+'">'+esc(n.slice(0,3))+'</span>';
   }
   var src = 'all', minG = 8, player = '', expanded = {};
@@ -4538,7 +4538,7 @@ document.querySelectorAll('.page-nav-btn').forEach(btn => {
     sl.oninput = function(e){ minG=+e.target.value; document.getElementById('mdMgv').textContent=minG; renderExplorer(); renderCoverage(); };
     document.querySelectorAll('#pageMatchup .md-tabs button').forEach(function(b){ b.onclick = function(){ showTab(b.dataset.t); }; });
     var foot = document.getElementById('mdFoot');
-    if(foot){ foot.innerHTML = 'Built from <b>'+MD.n_all+'</b> finalist games (<b>'+MD.n_crl+'</b> CRL). Combined matchups average each selected win condition\'s cell (games-weighted) &mdash; an approximation of a true multi-win-con deck. Player filter narrows to one finalist\'s own games. Coverage Optimizer weights fall off by input position (more inputs &rarr; steeper). Confidence dots track game count; &#9679;&#9675;&#9675; = small sample. CRL-only is a much smaller pool.'; }
+    if(foot){ foot.innerHTML = 'Built from <b>'+MD.n_all+'</b> finalist games (<b>'+MD.n_crl+'</b> CRL). Combined matchups average each selected win condition\\'s cell (games-weighted) &mdash; an approximation of a true multi-win-con deck. Player filter narrows to one finalist\\'s own games. Coverage Optimizer weights fall off by input position (more inputs &rarr; steeper). Confidence dots track game count; &#9679;&#9675;&#9675; = small sample. CRL-only is a much smaller pool.'; }
     showTab('exp'); renderExplorer(); renderCoverage();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', build); else build();
