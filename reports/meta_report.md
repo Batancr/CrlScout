@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-05 12:18 UTC · latest battle 2026-09-05 10:37 UTC
+Generated 2026-09-05 17:15 UTC · latest battle 2026-09-05 13:46 UTC
 
-**17,747 eligible games** · Practice 15,206 · Official CRL 2,541
+**17,804 eligible games** · Practice 15,263 · Official CRL 2,541
 
 ## Top win conditions
 
-Share is of the 17,635 games with a classified win condition.
+Share is of the 17,692 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,603 | 9.1% | **60%** |
-| Battle Ram | 2,117 | 12.0% | **60%** |
-| Elite Barbarians | 3,049 | 17.3% | **57%** |
-| Royal Hogs | 2,158 | 12.2% | **56%** |
-| Three Musketeers | 169 | 1.0% | **56%** |
-| Giant | 442 | 2.5% | **55%** |
-| Electro Giant | 299 | 1.7% | **55%** |
-| Golem | 698 | 4.0% | **53%** |
-| Rune Giant | 1,017 | 5.8% | **53%** |
-| Skeleton Barrel | 988 | 5.6% | **52%** |
-| Hog Rider | 1,694 | 9.6% | **52%** |
-| Graveyard | 1,439 | 8.2% | **52%** |
+| Mortar | 1,610 | 9.1% | **60%** |
+| Battle Ram | 2,126 | 12.0% | **60%** |
+| Elite Barbarians | 3,058 | 17.3% | **57%** |
+| Three Musketeers | 170 | 1.0% | **56%** |
+| Royal Hogs | 2,164 | 12.2% | **56%** |
+| Giant | 444 | 2.5% | **55%** |
+| Electro Giant | 300 | 1.7% | **54%** |
+| Rune Giant | 1,018 | 5.8% | **53%** |
+| Golem | 700 | 4.0% | **53%** |
+| Skeleton Barrel | 991 | 5.6% | **52%** |
+| Hog Rider | 1,699 | 9.6% | **52%** |
+| Graveyard | 1,445 | 8.2% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -29,8 +29,8 @@ Share is of the 17,635 games with a classified win condition.
 
 | Win rate | Games | Confidence | Deck |
 |---|---|---|---|
-| **76%** | 50 | thin | Arrows, Bandit, Battle Ram, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons, Zappies |
 | **75%** | 32 | noise | Goblin Curse, Goblin Demolisher, Inferno Dragon, Little Prince, Mega Knight, Miner, Rune Giant, Zap |
+| **73%** | 52 | thin | Arrows, Bandit, Battle Ram, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons, Zappies |
 | **70%** | 191 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 30 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
@@ -80,7 +80,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-16 lists, 930 games, 58% combined.
+16 lists, 934 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -88,12 +88,12 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
 | **62%** | 117 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
 | **61%** | 36 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
-| **60%** | 154 | solid | — | Barbarian Barrel, Berserker, Electro Spirit, Fireball, Furnace, Goblin Hut, Royal Ghost, Royal Hogs | ぐりてゃん, RUBIZALEZ |
+| **60%** | 155 | solid | — | Barbarian Barrel, Berserker, Electro Spirit, Fireball, Furnace, Goblin Hut, Royal Ghost, Royal Hogs | ぐりてゃん, RUBIZALEZ |
 | **59%** | 22 | noise | — | Barbarian Barrel, Berserker, Electro Spirit, Furnace, Lightning, Royal Hogs, Skeletons, Tesla | Clown, Ryley |
 
 ## Miner decks (15+ games)
 
-20 lists, 704 games, 54% combined.
+20 lists, 707 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -119,7 +119,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Rune Giant decks (15+ games)
 
-15 lists, 523 games, 54% combined.
+15 lists, 524 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -127,8 +127,8 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **71%** | 21 | noise | Lava Hound, Miner | Berserker, Goblin Curse, Guards, Inferno Dragon, Lava Hound, Miner, Rune Giant, Zap | NK Tanjiro, Ian77 |
 | **70%** | 43 | thin | Miner | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log | ぐりてゃん, Kitashiyan |
 | **58%** | 36 | thin | Lava Hound | Fireball, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Tombstone, Valkyrie, Zap | たぁ, Ian77 |
-| **58%** | 19 | noise | Lava Hound, Miner | Berserker, Fireball, Inferno Dragon, Lava Hound, Miner, Rune Giant, Skeleton Dragons, Zap | SK Dominik, Coco |
 | **57%** | 28 | thin | Lava Hound, Miner | Goblin Curse, Inferno Dragon, Lava Hound, Miner, Minions, Rune Giant, Tombstone, Zap | Coco, TTK:MrAwesomeCR |
+| **55%** | 20 | noise | Lava Hound, Miner | Berserker, Fireball, Inferno Dragon, Lava Hound, Miner, Rune Giant, Skeleton Dragons, Zap | SK Dominik, Coco |
 
 ---
 
