@@ -545,6 +545,39 @@ CRL_MATCH_OVERRIDES = [
     ("20260726", frozenset({"#RUQ0JU2P", "#8LJ92G8UG"}), None),   # Asaf vs Vitor75      (LB QF)
     ("20260726", frozenset({"#Y022GRCJQ", "#RUQ0JU2P"}), None),   # SandBox vs Asaf      (LB SF)
     ("20260726", frozenset({"#G9YV9GR8R", "#RUQ0JU2P"}), None),   # Mohamed Light vs Asaf (LB Final)
+    # --- LCQ (Last Chance Qualifier) 2026-09-05/06 -- confirmed by user from the official bracket,
+    #     cross-checked vs the archive (per-pair game counts match the reported scores). Games arrived
+    #     as clanMate/Friendly. Non-bracket practice between these same players stays Practice; the only
+    #     same-day practice overlap was Ian77/Wallace, which is windowed to the UB R1 cluster.
+    ("20260905", frozenset({"#C88VYCJC", "#V8CPG02JU"}), None),  # EGW 2-0 Rin (UB R1)
+    ("20260905", frozenset({"#Y9R22RQ2", "#YJPPGL00"}), ("20260905T142000.000Z", "20260905T143700.000Z")),  # Ian77 2-0 Wallace (UB R1; windowed - pair also practiced later that day)
+    ("20260905", frozenset({"#C88VYCJC", "#Y9R22RQ2"}), None),  # Ian77 2-1 EGW (UB QF)
+    ("20260905", frozenset({"#UJYRYCU9", "#2LQ2YP98"}), None),  # Niuzi 2-0 xopxsam (UB R1)
+    ("20260905", frozenset({"#9RQ8YRYQL", "#U2YVYGGV2"}), None),  # Woo 2-1 Batan (UB R1)
+    ("20260905", frozenset({"#UJYRYCU9", "#U2YVYGGV2"}), None),  # Woo 2-1 Niuzi (UB SF)
+    ("20260905", frozenset({"#LPRR9P", "#2VGG29RJ2"}), None),  # RUBIZALEZ 2-0 Coco (UB R1)
+    ("20260905", frozenset({"#9G28ULYR", "#PCUP9YLVG"}), None),  # Kimchi 2-1 Lucas (UB R1)
+    ("20260905", frozenset({"#LPRR9P", "#PCUP9YLVG"}), None),  # RUBIZALEZ 2-0 Kimchi (UB QF)
+    ("20260905", frozenset({"#LP8PLVJCU", "#80ULUJLYY"}), None),  # ElMollejas 2-0 Taa (UB R1)
+    ("20260905", frozenset({"#J0VU9CGP", "#22LC8JG02"}), None),  # JorZ 2-1 Dominik (UB R1)
+    ("20260905", frozenset({"#80ULUJLYY", "#22LC8JG02"}), None),  # JorZ 2-0 ElMollejas (UB SF)
+    ("20260905", frozenset({"#V8CPG02JU", "#YJPPGL00"}), None),  # Wallace 2-0 Rin (LB R1)
+    ("20260905", frozenset({"#2LQ2YP98", "#9RQ8YRYQL"}), None),  # Batan 2-0 xopxsam (LB R1)
+    ("20260905", frozenset({"#2VGG29RJ2", "#9G28ULYR"}), None),  # Coco 2-0 Lucas (LB R1)
+    ("20260905", frozenset({"#LP8PLVJCU", "#J0VU9CGP"}), None),  # Taa 2-1 Dominik (LB R2)
+    ("20260906", frozenset({"#Y9R22RQ2", "#U2YVYGGV2"}), None),  # Woo 2-0 Ian77 (UB SF)
+    ("20260906", frozenset({"#LPRR9P", "#22LC8JG02"}), None),  # JorZ 2-1 RUBIZALEZ (UB SF)
+    ("20260906", frozenset({"#U2YVYGGV2", "#22LC8JG02"}), None),  # Woo (UB Final) + Woo 3-0 JorZ (Grand Final)
+    ("20260906", frozenset({"#80ULUJLYY", "#YJPPGL00"}), None),  # Wallace 2-1 ElMollejas (LB R2)
+    ("20260906", frozenset({"#PCUP9YLVG", "#9RQ8YRYQL"}), None),  # Kimchi 2-0 Batan (LB R2)
+    ("20260906", frozenset({"#YJPPGL00", "#PCUP9YLVG"}), None),  # Kimchi 2-0 Wallace (LB R3)
+    ("20260906", frozenset({"#Y9R22RQ2", "#PCUP9YLVG"}), None),  # Kimchi 2-1 Ian77 (LB QF)
+    ("20260906", frozenset({"#UJYRYCU9", "#2VGG29RJ2"}), None),  # Niuzi 2-0 Coco (LB R3)
+    ("20260906", frozenset({"#C88VYCJC", "#LP8PLVJCU"}), None),  # Taa 2-0 EGW (LB R3)
+    ("20260906", frozenset({"#UJYRYCU9", "#LP8PLVJCU"}), None),  # Taa 2-1 Niuzi (LB QF)
+    ("20260906", frozenset({"#LPRR9P", "#LP8PLVJCU"}), None),  # Taa 2-1 RUBIZALEZ (LB SF)
+    ("20260906", frozenset({"#PCUP9YLVG", "#LP8PLVJCU"}), None),  # Taa 2-0 Kimchi (LB SF)
+    ("20260906", frozenset({"#22LC8JG02", "#LP8PLVJCU"}), None),  # JorZ 3-2 Taa (LB Final)
 ]
 
 
