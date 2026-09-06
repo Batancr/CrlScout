@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-06 07:32 UTC · latest battle 2026-09-06 00:26 UTC
+Generated 2026-09-06 12:35 UTC · latest battle 2026-09-06 09:39 UTC
 
-**17,847 eligible games** · Practice 15,306 · Official CRL 2,541
+**17,860 eligible games** · Practice 15,319 · Official CRL 2,541
 
 ## Top win conditions
 
-Share is of the 17,735 games with a classified win condition.
+Share is of the 17,748 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,614 | 9.1% | **60%** |
-| Battle Ram | 2,132 | 12.0% | **60%** |
-| Elite Barbarians | 3,064 | 17.3% | **57%** |
+| Mortar | 1,615 | 9.1% | **60%** |
+| Battle Ram | 2,134 | 12.0% | **60%** |
+| Elite Barbarians | 3,066 | 17.3% | **57%** |
 | Three Musketeers | 170 | 1.0% | **56%** |
-| Royal Hogs | 2,168 | 12.2% | **56%** |
+| Royal Hogs | 2,170 | 12.2% | **56%** |
 | Giant | 445 | 2.5% | **55%** |
 | Electro Giant | 303 | 1.7% | **54%** |
 | Rune Giant | 1,022 | 5.8% | **53%** |
-| Golem | 701 | 4.0% | **53%** |
-| Skeleton Barrel | 994 | 5.6% | **52%** |
-| Hog Rider | 1,703 | 9.6% | **52%** |
-| Graveyard | 1,449 | 8.2% | **52%** |
+| Golem | 701 | 3.9% | **53%** |
+| Skeleton Barrel | 996 | 5.6% | **52%** |
+| Hog Rider | 1,704 | 9.6% | **52%** |
+| Graveyard | 1,450 | 8.2% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -93,7 +93,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Miner decks (15+ games)
 
-20 lists, 709 games, 53% combined.
+20 lists, 710 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -106,11 +106,11 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Goblin Drill decks (15+ games)
 
-11 lists, 431 games, 42% combined.
+11 lists, 432 games, 42% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
-| **59%** | 17 | noise | — | Berserker, Cannon, Fire Spirit, Giant Snowball, Goblin Demolisher, Goblin Drill, Poison, Skeletons | Coco, RUBIZALEZ |
+| **61%** | 18 | noise | — | Berserker, Cannon, Fire Spirit, Giant Snowball, Goblin Demolisher, Goblin Drill, Poison, Skeletons | Coco, RUBIZALEZ |
 | **54%** | 24 | noise | — | Archer Queen, Bomb Tower, Fire Spirit, Giant Snowball, Goblin Drill, Poison, Ronin, Skeletons | Coco, Turan✨ |
 | **47%** | 53 | thin | — | Berserker, Bomb Tower, Goblin Demolisher, Goblin Drill, Magic Archer, Skeletons, The Log, Tornado | Wallace, CAL Sub ™️✨Kun |
 | **43%** | 61 | solid | — | Berserker, Bomber, Cannon, Fire Spirit, Giant Snowball, Goblin Drill, Poison, Skeletons | Ian77, Lucas✨杰克 |
