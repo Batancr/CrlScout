@@ -567,7 +567,6 @@ CRL_MATCH_OVERRIDES = [
     ("20260905", frozenset({"#LP8PLVJCU", "#J0VU9CGP"}), None),  # Taa 2-1 Dominik (LB R2)
     ("20260906", frozenset({"#Y9R22RQ2", "#U2YVYGGV2"}), None),  # Woo 2-0 Ian77 (UB SF)
     ("20260906", frozenset({"#LPRR9P", "#22LC8JG02"}), None),  # JorZ 2-1 RUBIZALEZ (UB SF)
-    ("20260906", frozenset({"#U2YVYGGV2", "#22LC8JG02"}), None),  # Woo (UB Final) + Woo 3-0 JorZ (Grand Final)
     ("20260906", frozenset({"#80ULUJLYY", "#YJPPGL00"}), None),  # Wallace 2-1 ElMollejas (LB R2)
     ("20260906", frozenset({"#PCUP9YLVG", "#9RQ8YRYQL"}), None),  # Kimchi 2-0 Batan (LB R2)
     ("20260906", frozenset({"#YJPPGL00", "#PCUP9YLVG"}), None),  # Kimchi 2-0 Wallace (LB R3)
@@ -577,7 +576,6 @@ CRL_MATCH_OVERRIDES = [
     ("20260906", frozenset({"#UJYRYCU9", "#LP8PLVJCU"}), None),  # Taa 2-1 Niuzi (LB QF)
     ("20260906", frozenset({"#LPRR9P", "#LP8PLVJCU"}), None),  # Taa 2-1 RUBIZALEZ (LB SF)
     ("20260906", frozenset({"#PCUP9YLVG", "#LP8PLVJCU"}), None),  # Taa 2-0 Kimchi (LB SF)
-    ("20260906", frozenset({"#22LC8JG02", "#LP8PLVJCU"}), None),  # JorZ 3-2 Taa (LB Final)
 ]
 
 
@@ -604,6 +602,9 @@ BO5_FINALS_OVERRIDES = [
     ("20260823", frozenset({"#9CPCC890", "#J0VU9CGP"}), ("20260823T181952.000Z","20260823T184127.000Z")),   # Adriel vs SKDominik
     ("20260823", frozenset({"#2CLV2RP0", "#J0VU9CGP"}), ("20260823T185002.000Z","20260823T192427.000Z")),   # Mugi vs SKDominik
     ("20260726", frozenset({"#G9YV9GR8R", "#GPPYR9JYR"}), None),   # MohLight vs Clown
+    # LCQ 2026-09-06 Bo5 finals (both ended with a 3, so best-of-5): excluded from the Bo3 pool.
+    ("20260906", frozenset({"#U2YVYGGV2", "#22LC8JG02"}), None),   # Woo 3-0 JorZ  (UB Final + Grand Final, both Bo5)
+    ("20260906", frozenset({"#22LC8JG02", "#LP8PLVJCU"}), None),   # JorZ 3-2 Taa  (LB Final, Bo5)
 ]
 def _is_bo5_final(p_tag, o_tag, battle_time):
     pair = frozenset({p_tag, o_tag}); day = battle_time.strftime("%Y%m%d")
