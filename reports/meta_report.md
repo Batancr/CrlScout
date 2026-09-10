@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-10 13:19 UTC · latest battle 2026-09-09 22:40 UTC
+Generated 2026-09-10 18:10 UTC · latest battle 2026-09-10 14:49 UTC
 
-**18,095 eligible games** · Practice 15,402 · Official CRL 2,693
+**18,107 eligible games** · Practice 15,414 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 17,975 games with a classified win condition.
+Share is of the 17,984 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,637 | 9.1% | **60%** |
-| Battle Ram | 2,154 | 12.0% | **59%** |
-| Elite Barbarians | 3,094 | 17.2% | **57%** |
+| Mortar | 1,639 | 9.1% | **60%** |
+| Battle Ram | 2,155 | 12.0% | **59%** |
+| Elite Barbarians | 3,095 | 17.2% | **57%** |
 | Three Musketeers | 172 | 1.0% | **56%** |
 | Royal Hogs | 2,211 | 12.3% | **56%** |
-| Giant | 451 | 2.5% | **55%** |
+| Giant | 452 | 2.5% | **55%** |
 | Electro Giant | 307 | 1.7% | **54%** |
 | Golem | 711 | 4.0% | **53%** |
 | Rune Giant | 1,025 | 5.7% | **53%** |
 | Skeleton Barrel | 1,001 | 5.6% | **52%** |
-| Ram Rider | 208 | 1.2% | **52%** |
-| Graveyard | 1,472 | 8.2% | **52%** |
+| Ram Rider | 209 | 1.2% | **52%** |
+| Hog Rider | 1,740 | 9.7% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -31,8 +31,8 @@ Share is of the 17,975 games with a classified win condition.
 |---|---|---|---|
 | **75%** | 32 | noise | Goblin Curse, Goblin Demolisher, Inferno Dragon, Little Prince, Mega Knight, Miner, Rune Giant, Zap |
 | **73%** | 52 | thin | Arrows, Bandit, Battle Ram, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons, Zappies |
-| **70%** | 195 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 30 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
+| **70%** | 196 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **69%** | 39 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
 | **68%** | 145 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
