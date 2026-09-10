@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-09 22:59 UTC · latest battle 2026-09-07 22:53 UTC
+Generated 2026-09-10 02:04 UTC · latest battle 2026-09-09 22:40 UTC
 
-**18,063 eligible games** · Practice 15,370 · Official CRL 2,693
+**18,095 eligible games** · Practice 15,402 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 17,948 games with a classified win condition.
+Share is of the 17,975 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,635 | 9.1% | **60%** |
-| Battle Ram | 2,152 | 12.0% | **59%** |
+| Mortar | 1,637 | 9.1% | **60%** |
+| Battle Ram | 2,154 | 12.0% | **59%** |
 | Elite Barbarians | 3,094 | 17.2% | **57%** |
 | Three Musketeers | 172 | 1.0% | **56%** |
-| Royal Hogs | 2,208 | 12.3% | **56%** |
-| Giant | 447 | 2.5% | **55%** |
-| Electro Giant | 306 | 1.7% | **55%** |
+| Royal Hogs | 2,211 | 12.3% | **56%** |
+| Giant | 451 | 2.5% | **55%** |
+| Electro Giant | 307 | 1.7% | **54%** |
 | Golem | 711 | 4.0% | **53%** |
-| Rune Giant | 1,024 | 5.7% | **53%** |
+| Rune Giant | 1,025 | 5.7% | **53%** |
 | Skeleton Barrel | 1,001 | 5.6% | **52%** |
-| Hog Rider | 1,733 | 9.7% | **52%** |
 | Ram Rider | 208 | 1.2% | **52%** |
+| Graveyard | 1,472 | 8.2% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -35,8 +35,8 @@ Share is of the 17,948 games with a classified win condition.
 | **70%** | 30 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **69%** | 39 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
+| **68%** | 145 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
 | **68%** | 85 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
-| **68%** | 144 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
 | **67%** | 33 | noise | Arrows, Bandit, Battle Ram, Electro Wizard, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons |
 | **66%** | 236 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
 | **66%** | 32 | noise | Baby Dragon, Barbarian Barrel, Golem, Ice Wizard, Lightning, Tombstone, Tornado, Valkyrie |
@@ -80,16 +80,16 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-16 lists, 953 games, 58% combined.
+16 lists, 955 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **70%** | 23 | noise | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
 | **62%** | 126 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
+| **62%** | 21 | noise | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | Rin✨安之, Coco |
 | **61%** | 36 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
 | **60%** | 156 | solid | — | Barbarian Barrel, Berserker, Electro Spirit, Fireball, Furnace, Goblin Hut, Royal Ghost, Royal Hogs | ぐりてゃん, RUBIZALEZ |
-| **59%** | 22 | noise | — | Barbarian Barrel, Berserker, Electro Spirit, Furnace, Lightning, Royal Hogs, Skeletons, Tesla | Clown, Ryley |
 
 ## Miner decks (15+ games)
 
