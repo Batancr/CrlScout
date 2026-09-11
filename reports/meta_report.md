@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-11 18:06 UTC · latest battle 2026-09-11 15:25 UTC
+Generated 2026-09-11 20:35 UTC · latest battle 2026-09-11 19:00 UTC
 
-**18,169 eligible games** · Practice 15,476 · Official CRL 2,693
+**18,189 eligible games** · Practice 15,496 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 18,034 games with a classified win condition.
+Share is of the 18,050 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,645 | 9.1% | **60%** |
-| Battle Ram | 2,158 | 12.0% | **59%** |
+| Mortar | 1,646 | 9.1% | **60%** |
+| Battle Ram | 2,159 | 12.0% | **59%** |
 | Elite Barbarians | 3,099 | 17.2% | **57%** |
 | Three Musketeers | 172 | 1.0% | **56%** |
-| Royal Hogs | 2,219 | 12.3% | **56%** |
-| Giant | 455 | 2.5% | **55%** |
+| Royal Hogs | 2,223 | 12.3% | **56%** |
+| Giant | 456 | 2.5% | **55%** |
 | Electro Giant | 309 | 1.7% | **54%** |
-| Golem | 714 | 4.0% | **53%** |
+| Golem | 715 | 4.0% | **53%** |
 | Rune Giant | 1,028 | 5.7% | **53%** |
-| Skeleton Barrel | 1,001 | 5.6% | **52%** |
+| Skeleton Barrel | 1,001 | 5.5% | **52%** |
 | Ram Rider | 211 | 1.2% | **52%** |
-| Hog Rider | 1,741 | 9.7% | **52%** |
+| Hog Rider | 1,742 | 9.7% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -80,13 +80,13 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-16 lists, 955 games, 58% combined.
+16 lists, 957 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **70%** | 23 | noise | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
-| **62%** | 126 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
+| **62%** | 127 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
 | **62%** | 21 | noise | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | Rin✨安之, Coco |
 | **61%** | 36 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
 | **60%** | 156 | solid | — | Barbarian Barrel, Berserker, Electro Spirit, Fireball, Furnace, Goblin Hut, Royal Ghost, Royal Hogs | ぐりてゃん, RUBIZALEZ |
