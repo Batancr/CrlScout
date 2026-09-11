@@ -1,24 +1,24 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-11 02:03 UTC · latest battle 2026-09-10 15:49 UTC
+Generated 2026-09-11 07:43 UTC · latest battle 2026-09-11 05:01 UTC
 
-**18,125 eligible games** · Practice 15,432 · Official CRL 2,693
+**18,133 eligible games** · Practice 15,440 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 17,999 games with a classified win condition.
+Share is of the 18,007 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,640 | 9.1% | **60%** |
-| Battle Ram | 2,155 | 12.0% | **59%** |
+| Mortar | 1,642 | 9.1% | **60%** |
+| Battle Ram | 2,157 | 12.0% | **59%** |
 | Elite Barbarians | 3,095 | 17.2% | **57%** |
 | Three Musketeers | 172 | 1.0% | **56%** |
-| Royal Hogs | 2,213 | 12.3% | **56%** |
+| Royal Hogs | 2,214 | 12.3% | **56%** |
 | Giant | 453 | 2.5% | **55%** |
 | Electro Giant | 308 | 1.7% | **54%** |
-| Golem | 711 | 4.0% | **53%** |
-| Rune Giant | 1,026 | 5.7% | **53%** |
+| Golem | 711 | 3.9% | **53%** |
+| Rune Giant | 1,028 | 5.7% | **53%** |
 | Ram Rider | 210 | 1.2% | **52%** |
 | Skeleton Barrel | 1,001 | 5.6% | **52%** |
 | Hog Rider | 1,740 | 9.7% | **52%** |
@@ -35,8 +35,8 @@ Share is of the 17,999 games with a classified win condition.
 | **70%** | 196 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **69%** | 39 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
+| **69%** | 86 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **68%** | 145 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
-| **68%** | 85 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **67%** | 33 | noise | Arrows, Bandit, Battle Ram, Electro Wizard, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons |
 | **66%** | 236 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
 | **66%** | 32 | noise | Baby Dragon, Barbarian Barrel, Golem, Ice Wizard, Lightning, Tombstone, Tornado, Valkyrie |
