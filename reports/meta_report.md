@@ -1,26 +1,26 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-13 17:56 UTC · latest battle 2026-09-13 14:59 UTC
+Generated 2026-09-13 20:06 UTC · latest battle 2026-09-13 15:52 UTC
 
-**18,258 eligible games** · Practice 15,565 · Official CRL 2,693
+**18,276 eligible games** · Practice 15,583 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 18,108 games with a classified win condition.
+Share is of the 18,125 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,653 | 9.1% | **60%** |
-| Battle Ram | 2,165 | 12.0% | **59%** |
-| Elite Barbarians | 3,104 | 17.1% | **57%** |
+| Mortar | 1,655 | 9.1% | **60%** |
+| Battle Ram | 2,167 | 12.0% | **59%** |
+| Elite Barbarians | 3,106 | 17.1% | **57%** |
 | Royal Hogs | 2,227 | 12.3% | **56%** |
 | Three Musketeers | 173 | 1.0% | **55%** |
 | Giant | 457 | 2.5% | **55%** |
 | Electro Giant | 312 | 1.7% | **54%** |
 | Golem | 717 | 4.0% | **53%** |
-| Rune Giant | 1,030 | 5.7% | **53%** |
-| Skeleton Barrel | 1,007 | 5.6% | **52%** |
-| Hog Rider | 1,745 | 9.6% | **52%** |
+| Rune Giant | 1,032 | 5.7% | **53%** |
+| Skeleton Barrel | 1,008 | 5.6% | **52%** |
+| Hog Rider | 1,748 | 9.6% | **52%** |
 | Ram Rider | 212 | 1.2% | **52%** |
 
 ## Best decks (30+ games)
@@ -34,8 +34,8 @@ Share is of the 18,108 games with a classified win condition.
 | **70%** | 30 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
 | **70%** | 196 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
+| **69%** | 88 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **69%** | 39 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
-| **69%** | 87 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **68%** | 145 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
 | **67%** | 33 | noise | Arrows, Bandit, Battle Ram, Electro Wizard, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons |
 | **66%** | 236 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
