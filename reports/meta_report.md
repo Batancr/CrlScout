@@ -1,25 +1,25 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-13 13:40 UTC · latest battle 2026-09-12 18:34 UTC
+Generated 2026-09-13 17:56 UTC · latest battle 2026-09-13 14:59 UTC
 
-**18,240 eligible games** · Practice 15,547 · Official CRL 2,693
+**18,258 eligible games** · Practice 15,565 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 18,094 games with a classified win condition.
+Share is of the 18,108 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,649 | 9.1% | **60%** |
-| Battle Ram | 2,162 | 11.9% | **59%** |
-| Elite Barbarians | 3,104 | 17.2% | **57%** |
-| Royal Hogs | 2,225 | 12.3% | **56%** |
+| Mortar | 1,653 | 9.1% | **60%** |
+| Battle Ram | 2,165 | 12.0% | **59%** |
+| Elite Barbarians | 3,104 | 17.1% | **57%** |
+| Royal Hogs | 2,227 | 12.3% | **56%** |
 | Three Musketeers | 173 | 1.0% | **55%** |
 | Giant | 457 | 2.5% | **55%** |
 | Electro Giant | 312 | 1.7% | **54%** |
 | Golem | 717 | 4.0% | **53%** |
 | Rune Giant | 1,030 | 5.7% | **53%** |
-| Skeleton Barrel | 1,004 | 5.5% | **52%** |
+| Skeleton Barrel | 1,007 | 5.6% | **52%** |
 | Hog Rider | 1,745 | 9.6% | **52%** |
 | Ram Rider | 212 | 1.2% | **52%** |
 
