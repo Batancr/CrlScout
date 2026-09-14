@@ -1,26 +1,26 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-14 08:24 UTC · latest battle 2026-09-13 15:52 UTC
+Generated 2026-09-14 15:33 UTC · latest battle 2026-09-14 13:25 UTC
 
-**18,276 eligible games** · Practice 15,583 · Official CRL 2,693
+**18,288 eligible games** · Practice 15,595 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 18,125 games with a classified win condition.
+Share is of the 18,134 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
 | Mortar | 1,655 | 9.1% | **60%** |
-| Battle Ram | 2,167 | 12.0% | **59%** |
+| Battle Ram | 2,167 | 11.9% | **59%** |
 | Elite Barbarians | 3,106 | 17.1% | **57%** |
-| Royal Hogs | 2,227 | 12.3% | **56%** |
+| Royal Hogs | 2,228 | 12.3% | **56%** |
 | Three Musketeers | 173 | 1.0% | **55%** |
 | Giant | 457 | 2.5% | **55%** |
-| Electro Giant | 312 | 1.7% | **54%** |
-| Golem | 717 | 4.0% | **53%** |
-| Rune Giant | 1,032 | 5.7% | **53%** |
+| Electro Giant | 313 | 1.7% | **54%** |
+| Golem | 718 | 4.0% | **53%** |
+| Rune Giant | 1,033 | 5.7% | **53%** |
 | Skeleton Barrel | 1,008 | 5.6% | **52%** |
-| Hog Rider | 1,748 | 9.6% | **52%** |
+| Hog Rider | 1,750 | 9.7% | **52%** |
 | Ram Rider | 212 | 1.2% | **52%** |
 
 ## Best decks (30+ games)
@@ -57,8 +57,8 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **64%** | 28% | 18 | noise | Battle Ram + Royal Giant |
 | **63%** | 42% | 19 | noise | Battle Ram + Hog Rider |
 | **63%** | 42% | 19 | noise | Elite Barbarians + Golem + Royal Hogs |
-| **62%** | 38% | 39 | thin | Hog Rider + Royal Giant |
 | **62%** | 38% | 26 | thin | Electro Giant + Hog Rider |
+| **61%** | 38% | 40 | solid | Hog Rider + Royal Giant |
 | **61%** | 30% | 23 | thin | Hog Rider + Mortar + Skeleton Barrel |
 
 ### Most-used decks in the top pairs
@@ -106,7 +106,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Goblin Drill decks (15+ games)
 
-11 lists, 433 games, 42% combined.
+11 lists, 434 games, 42% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -115,7 +115,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **47%** | 53 | thin | — | Berserker, Bomb Tower, Goblin Demolisher, Goblin Drill, Magic Archer, Skeletons, The Log, Tornado | Wallace, CAL Sub ™️✨Kun |
 | **42%** | 26 | thin | — | Berserker, Fire Spirit, Giant Snowball, Goblin Demolisher, Goblin Drill, Poison, Skeletons, Tesla | Coco, むぎったん |
 | **42%** | 62 | solid | — | Berserker, Bomber, Cannon, Fire Spirit, Giant Snowball, Goblin Drill, Poison, Skeletons | Lucas✨杰克, Ian77 |
-| **41%** | 78 | solid | — | Berserker, Bomber, Fire Spirit, Giant Snowball, Goblin Drill, Poison, Skeletons, Tesla | CAL Sub ™️✨Kun, たぁ |
+| **42%** | 53 | thin | — | Berserker, Bomber, Cannon, Fire Spirit, Giant Snowball, Goblin Drill, Rocket, Skeletons | Clown, たぁ |
 
 ## Rune Giant decks (15+ games)
 
