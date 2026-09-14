@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-14 15:33 UTC · latest battle 2026-09-14 13:25 UTC
+Generated 2026-09-14 21:19 UTC · latest battle 2026-09-14 18:25 UTC
 
-**18,288 eligible games** · Practice 15,595 · Official CRL 2,693
+**18,348 eligible games** · Practice 15,655 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 18,134 games with a classified win condition.
+Share is of the 18,183 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,655 | 9.1% | **60%** |
-| Battle Ram | 2,167 | 11.9% | **59%** |
-| Elite Barbarians | 3,106 | 17.1% | **57%** |
-| Royal Hogs | 2,228 | 12.3% | **56%** |
+| Mortar | 1,660 | 9.1% | **60%** |
+| Battle Ram | 2,172 | 11.9% | **59%** |
+| Elite Barbarians | 3,109 | 17.1% | **57%** |
+| Royal Hogs | 2,233 | 12.3% | **56%** |
 | Three Musketeers | 173 | 1.0% | **55%** |
-| Giant | 457 | 2.5% | **55%** |
-| Electro Giant | 313 | 1.7% | **54%** |
-| Golem | 718 | 4.0% | **53%** |
-| Rune Giant | 1,033 | 5.7% | **53%** |
-| Skeleton Barrel | 1,008 | 5.6% | **52%** |
-| Hog Rider | 1,750 | 9.7% | **52%** |
-| Ram Rider | 212 | 1.2% | **52%** |
+| Giant | 459 | 2.5% | **55%** |
+| Electro Giant | 314 | 1.7% | **54%** |
+| Golem | 722 | 4.0% | **53%** |
+| Rune Giant | 1,037 | 5.7% | **53%** |
+| Skeleton Barrel | 1,008 | 5.5% | **52%** |
+| Hog Rider | 1,758 | 9.7% | **52%** |
+| Graveyard | 1,495 | 8.2% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -46,7 +46,7 @@ Share is of the 18,134 games with a classified win condition.
 
 Grouped on the win conditions of the duel's **first two** games. Winning those two ends the set, so this measures the opener rather than the whole trio — and pairing on two decks instead of three roughly doubles the usable sample.
 
-86 pairs have 15+ duels.
+87 pairs have 15+ duels.
 
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
@@ -119,7 +119,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Rune Giant decks (15+ games)
 
-15 lists, 530 games, 54% combined.
+15 lists, 531 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -128,7 +128,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **70%** | 43 | thin | Miner | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log | ぐりてゃん, Kitashiyan |
 | **58%** | 36 | thin | Lava Hound | Fireball, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Tombstone, Valkyrie, Zap | たぁ, Ian77 |
 | **57%** | 28 | thin | Lava Hound, Miner | Goblin Curse, Inferno Dragon, Lava Hound, Miner, Minions, Rune Giant, Tombstone, Zap | Coco, TTK:MrAwesomeCR |
-| **53%** | 62 | solid | Lava Hound | Berserker, Fireball, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Tombstone, Zap | ぐりてゃん, JorZ |
+| **54%** | 24 | noise | Lava Hound | Berserker, Fireball, Goblin Cage, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Zap | Ian77, Ryley |
 
 ---
 
