@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-16 14:00 UTC · latest battle 2026-09-15 22:48 UTC
+Generated 2026-09-16 18:42 UTC · latest battle 2026-09-16 17:17 UTC
 
-**18,546 eligible games** · Practice 15,853 · Official CRL 2,693
+**18,594 eligible games** · Practice 15,901 · Official CRL 2,693
 
 ## Top win conditions
 
-Share is of the 18,345 games with a classified win condition.
+Share is of the 18,386 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,668 | 9.1% | **60%** |
-| Battle Ram | 2,186 | 11.9% | **59%** |
-| Elite Barbarians | 3,115 | 17.0% | **57%** |
-| Royal Hogs | 2,248 | 12.3% | **56%** |
+| Mortar | 1,670 | 9.1% | **60%** |
+| Battle Ram | 2,190 | 11.9% | **59%** |
+| Elite Barbarians | 3,119 | 17.0% | **57%** |
+| Royal Hogs | 2,251 | 12.2% | **56%** |
 | Three Musketeers | 173 | 0.9% | **55%** |
-| Giant | 471 | 2.6% | **55%** |
-| Rune Giant | 1,052 | 5.7% | **53%** |
-| Golem | 735 | 4.0% | **53%** |
-| Electro Giant | 319 | 1.7% | **53%** |
-| Skeleton Barrel | 1,012 | 5.5% | **52%** |
-| Hog Rider | 1,775 | 9.7% | **52%** |
-| Graveyard | 1,514 | 8.3% | **52%** |
+| Giant | 473 | 2.6% | **55%** |
+| Rune Giant | 1,056 | 5.7% | **54%** |
+| Golem | 738 | 4.0% | **53%** |
+| Electro Giant | 320 | 1.7% | **53%** |
+| Skeleton Barrel | 1,013 | 5.5% | **52%** |
+| Graveyard | 1,518 | 8.3% | **52%** |
+| Hog Rider | 1,781 | 9.7% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -46,11 +46,12 @@ Share is of the 18,345 games with a classified win condition.
 
 Grouped on the win conditions of the duel's **first two** games. Winning those two ends the set, so this measures the opener rather than the whole trio — and pairing on two decks instead of three roughly doubles the usable sample.
 
-87 pairs have 15+ duels.
+88 pairs have 15+ duels.
 
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
 | **75%** | 56% | 18 | noise | Electro Giant + Royal Giant |
+| **67%** | 47% | 15 | noise | Giant + Graveyard + Hog Rider |
 | **66%** | 32% | 19 | noise | Royal Giant + Skeleton Barrel |
 | **65%** | 43% | 23 | thin | Battle Ram + Elite Barbarians + Skeleton Barrel |
 | **65%** | 45% | 20 | thin | Elite Barbarians + Golem + Royal Hogs |
@@ -59,7 +60,6 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **61%** | 38% | 40 | solid | Hog Rider + Royal Giant |
 | **61%** | 30% | 23 | thin | Hog Rider + Mortar + Skeleton Barrel |
 | **61%** | 26% | 19 | noise | Battle Ram + Royal Giant |
-| **60%** | 35% | 131 | solid | Battle Ram + Elite Barbarians + Royal Hogs |
 
 ### Most-used decks in the top pairs
 
@@ -68,15 +68,15 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 - 6× `Baby Dragon, Barbarian Barrel, Berserker, Bowler, Electro Giant, Goblin Hut, Lightning, Tornado`
 - 5× `Fireball, Fisherman, Monk, Mother Witch, Royal Giant, Skeleton Dragons, The Log, Tombstone`
 
+**Giant + Graveyard + Hog Rider** — 15 duels, 67% first-2
+- usual full set (3×): Balloon + Giant + Graveyard + Hog Rider + Miner
+- 11× `Arrows, Berserker, Bowler, Giant, Giant Snowball, Graveyard, Witch, Zappies`
+- 2× `Arrows, Bowler, Giant, Giant Snowball, Graveyard, Guards, Minions, Witch`
+
 **Royal Giant + Skeleton Barrel** — 19 duels, 66% first-2
 - usual full set (4×): Goblin Drill + Royal Giant + Skeleton Barrel
 - 6× `Cannon, Dart Goblin, Rascals, Skeleton Army, Skeleton Barrel, Skeleton King, Suspicious Bush, Vines`
 - 5× `Berserker, Bomb Tower, Dart Goblin, Rascals, Royal Ghost, Skeleton Barrel, Suspicious Bush, Vines`
-
-**Battle Ram + Elite Barbarians + Skeleton Barrel** — 23 duels, 65% first-2
-- usual full set (4×): Battle Ram + Elite Barbarians + Graveyard + Skeleton Barrel
-- 14× `Arrows, Bandit, Battle Ram, Elite Barbarians, Heal Spirit, Mother Witch, Valkyrie, Zappies`
-- 12× `Berserker, Bomb Tower, Dart Goblin, Rascals, Royal Ghost, Skeleton Barrel, Suspicious Bush, Vines`
 
 ## Royal Hogs decks (15+ games)
 
