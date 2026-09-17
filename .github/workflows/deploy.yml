@@ -23,6 +23,8 @@ name: Redeploy dashboard (fast)
 
 on:
   workflow_dispatch: {}
+  schedule:
+    - cron: '17 */6 * * *'   # auto-redeploy the site every 6h so it stays current without a manual trigger
 
 # Read-only: this job builds a gitignored HTML file and pushes it to Netlify. It must
 # never write to the repo -- that's update.yml's and fetch.yml's job (see the ownership
