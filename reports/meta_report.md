@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-17 18:50 UTC · latest battle 2026-09-17 16:04 UTC
+Generated 2026-09-17 23:23 UTC · latest battle 2026-09-17 19:56 UTC
 
-**18,706 eligible games** · Practice 16,013 · Official CRL 2,693
+**18,705 eligible games** · Practice 16,034 · Official CRL 2,671
 
 ## Top win conditions
 
-Share is of the 18,489 games with a classified win condition.
+Share is of the 18,484 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,676 | 9.1% | **60%** |
-| Battle Ram | 2,202 | 11.9% | **59%** |
-| Elite Barbarians | 3,122 | 16.9% | **57%** |
-| Royal Hogs | 2,262 | 12.2% | **56%** |
+| Mortar | 1,675 | 9.1% | **60%** |
+| Battle Ram | 2,201 | 11.9% | **59%** |
+| Elite Barbarians | 3,121 | 16.9% | **57%** |
+| Royal Hogs | 2,259 | 12.2% | **56%** |
 | Three Musketeers | 173 | 0.9% | **55%** |
-| Giant | 477 | 2.6% | **55%** |
-| Rune Giant | 1,067 | 5.8% | **54%** |
+| Giant | 478 | 2.6% | **55%** |
+| Rune Giant | 1,068 | 5.8% | **53%** |
 | Golem | 743 | 4.0% | **53%** |
-| Electro Giant | 321 | 1.7% | **53%** |
-| Skeleton Barrel | 1,018 | 5.5% | **52%** |
-| Ram Rider | 227 | 1.2% | **52%** |
-| Graveyard | 1,526 | 8.3% | **52%** |
+| Electro Giant | 322 | 1.7% | **53%** |
+| Skeleton Barrel | 1,016 | 5.5% | **52%** |
+| Ram Rider | 229 | 1.2% | **52%** |
+| Graveyard | 1,525 | 8.3% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -31,12 +31,12 @@ Share is of the 18,489 games with a classified win condition.
 |---|---|---|---|
 | **75%** | 32 | noise | Goblin Curse, Goblin Demolisher, Inferno Dragon, Little Prince, Mega Knight, Miner, Rune Giant, Zap |
 | **73%** | 52 | thin | Arrows, Bandit, Battle Ram, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons, Zappies |
-| **70%** | 30 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
 | **70%** | 196 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **69%** | 39 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
 | **69%** | 90 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **68%** | 146 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
+| **68%** | 31 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
 | **67%** | 33 | noise | Arrows, Bandit, Battle Ram, Electro Wizard, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons |
 | **66%** | 236 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
 | **66%** | 32 | noise | Baby Dragon, Barbarian Barrel, Golem, Ice Wizard, Lightning, Tombstone, Tornado, Valkyrie |
@@ -80,14 +80,14 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-17 lists, 976 games, 58% combined.
+17 lists, 975 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **73%** | 15 | noise | — | Archers, Bomb Tower, Goblinstein, Ice Spirit, Lightning, Royal Hogs, Skeletons, The Log | Kimchi77✨小小罗, SandBox |
 | **70%** | 23 | noise | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
-| **62%** | 128 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
+| **63%** | 127 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
 | **61%** | 36 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
 | **61%** | 23 | noise | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | Rin✨安之, Coco |
 
