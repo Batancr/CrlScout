@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-18 20:25 UTC · latest battle 2026-09-18 18:02 UTC
+Generated 2026-09-18 23:02 UTC · latest battle 2026-09-18 20:48 UTC
 
-**18,866 eligible games** · Practice 16,195 · Official CRL 2,671
+**18,884 eligible games** · Practice 16,213 · Official CRL 2,671
 
 ## Top win conditions
 
-Share is of the 18,624 games with a classified win condition.
+Share is of the 18,639 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,683 | 9.0% | **60%** |
-| Battle Ram | 2,218 | 11.9% | **59%** |
+| Mortar | 1,684 | 9.0% | **60%** |
+| Battle Ram | 2,221 | 11.9% | **59%** |
 | Elite Barbarians | 3,127 | 16.8% | **57%** |
-| Royal Hogs | 2,273 | 12.2% | **56%** |
+| Royal Hogs | 2,275 | 12.2% | **56%** |
 | Three Musketeers | 175 | 0.9% | **55%** |
 | Giant | 480 | 2.6% | **55%** |
 | Rune Giant | 1,072 | 5.8% | **53%** |
 | Golem | 748 | 4.0% | **53%** |
 | Electro Giant | 324 | 1.7% | **52%** |
-| Skeleton Barrel | 1,024 | 5.5% | **52%** |
-| Hog Rider | 1,810 | 9.7% | **52%** |
-| Graveyard | 1,538 | 8.3% | **52%** |
+| Skeleton Barrel | 1,026 | 5.5% | **52%** |
+| Hog Rider | 1,811 | 9.7% | **52%** |
+| Graveyard | 1,539 | 8.3% | **52%** |
 
 ## Best decks (30+ games)
 
