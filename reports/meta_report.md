@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-19 17:43 UTC · latest battle 2026-09-19 12:00 UTC
+Generated 2026-09-19 19:52 UTC · latest battle 2026-09-19 17:40 UTC
 
-**18,890 eligible games** · Practice 16,219 · Official CRL 2,671
+**18,908 eligible games** · Practice 16,237 · Official CRL 2,671
 
 ## Top win conditions
 
-Share is of the 18,644 games with a classified win condition.
+Share is of the 18,660 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,685 | 9.0% | **60%** |
-| Battle Ram | 2,223 | 11.9% | **59%** |
-| Elite Barbarians | 3,128 | 16.8% | **57%** |
-| Royal Hogs | 2,275 | 12.2% | **56%** |
+| Mortar | 1,687 | 9.0% | **60%** |
+| Battle Ram | 2,225 | 11.9% | **59%** |
+| Elite Barbarians | 3,129 | 16.8% | **57%** |
+| Royal Hogs | 2,278 | 12.2% | **56%** |
 | Giant | 480 | 2.6% | **55%** |
 | Three Musketeers | 176 | 0.9% | **55%** |
 | Rune Giant | 1,072 | 5.7% | **53%** |
-| Golem | 748 | 4.0% | **53%** |
+| Golem | 749 | 4.0% | **53%** |
 | Electro Giant | 324 | 1.7% | **52%** |
-| Skeleton Barrel | 1,026 | 5.5% | **52%** |
-| Hog Rider | 1,812 | 9.7% | **52%** |
-| Graveyard | 1,539 | 8.3% | **52%** |
+| Skeleton Barrel | 1,028 | 5.5% | **52%** |
+| Hog Rider | 1,814 | 9.7% | **52%** |
+| Graveyard | 1,540 | 8.3% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -46,7 +46,7 @@ Share is of the 18,644 games with a classified win condition.
 
 Grouped on the win conditions of the duel's **first two** games. Winning those two ends the set, so this measures the opener rather than the whole trio — and pairing on two decks instead of three roughly doubles the usable sample.
 
-91 pairs have 15+ duels.
+92 pairs have 15+ duels.
 
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
@@ -80,7 +80,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-17 lists, 977 games, 58% combined.
+17 lists, 978 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -88,12 +88,12 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **70%** | 23 | noise | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
 | **63%** | 129 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
+| **62%** | 24 | noise | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | Rin✨安之, Coco |
 | **61%** | 36 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
-| **61%** | 23 | noise | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | Rin✨安之, Coco |
 
 ## Miner decks (15+ games)
 
-22 lists, 750 games, 53% combined.
+22 lists, 751 games, 53% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -101,8 +101,8 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **71%** | 21 | noise | Lava Hound, Rune Giant | Berserker, Goblin Curse, Guards, Inferno Dragon, Lava Hound, Miner, Rune Giant, Zap | NK Tanjiro, Ian77 |
 | **70%** | 43 | thin | Rune Giant | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log | ぐりてゃん, Kitashiyan |
 | **69%** | 39 | thin | Balloon | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies | Clown, Coco |
-| **63%** | 19 | noise | — | Barbarian Barrel, Bats, Goblin Hut, Goblinstein, Ice Wizard, Miner, Poison, Skeletons | Vitor75, CAL Sub ™️✨Kun |
 | **62%** | 16 | noise | Mortar | Arrows, Bats, Cannon Cart, Goblin Gang, Goblinstein, Miner, Mortar, Spear Goblins | SK Dominik, CAL Sub ™️✨Kun |
+| **62%** | 26 | thin | Elite Barbarians | Elite Barbarians, Goblin Hut, Goblinstein, Miner, Poison, Royal Ghost, Skeletons, The Log | Ryley, Mohamed Light |
 
 ## Goblin Drill decks (15+ games)
 
