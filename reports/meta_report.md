@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-19 19:52 UTC · latest battle 2026-09-19 17:40 UTC
+Generated 2026-09-19 22:44 UTC · latest battle 2026-09-19 20:21 UTC
 
-**18,908 eligible games** · Practice 16,237 · Official CRL 2,671
+**18,946 eligible games** · Practice 16,275 · Official CRL 2,671
 
 ## Top win conditions
 
-Share is of the 18,660 games with a classified win condition.
+Share is of the 18,695 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,687 | 9.0% | **60%** |
-| Battle Ram | 2,225 | 11.9% | **59%** |
-| Elite Barbarians | 3,129 | 16.8% | **57%** |
-| Royal Hogs | 2,278 | 12.2% | **56%** |
-| Giant | 480 | 2.6% | **55%** |
+| Mortar | 1,690 | 9.0% | **60%** |
+| Battle Ram | 2,231 | 11.9% | **59%** |
+| Elite Barbarians | 3,129 | 16.7% | **57%** |
+| Royal Hogs | 2,280 | 12.2% | **56%** |
+| Giant | 485 | 2.6% | **55%** |
 | Three Musketeers | 176 | 0.9% | **55%** |
 | Rune Giant | 1,072 | 5.7% | **53%** |
 | Golem | 749 | 4.0% | **53%** |
 | Electro Giant | 324 | 1.7% | **52%** |
-| Skeleton Barrel | 1,028 | 5.5% | **52%** |
-| Hog Rider | 1,814 | 9.7% | **52%** |
-| Graveyard | 1,540 | 8.3% | **52%** |
+| Skeleton Barrel | 1,030 | 5.5% | **52%** |
+| Hog Rider | 1,818 | 9.7% | **52%** |
+| Graveyard | 1,549 | 8.3% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -38,7 +38,7 @@ Share is of the 18,660 games with a classified win condition.
 | **68%** | 93 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **68%** | 31 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
 | **67%** | 33 | noise | Arrows, Bandit, Battle Ram, Electro Wizard, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons |
-| **66%** | 236 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
+| **66%** | 237 | solid | Barbarian Barrel, Cannon Cart, Goblinstein, Lightning, Minions, Mortar, Royal Ghost, Skeletons |
 | **66%** | 32 | noise | Baby Dragon, Barbarian Barrel, Golem, Ice Wizard, Lightning, Tombstone, Tornado, Valkyrie |
 | **65%** | 34 | noise | Electro Spirit, Elite Barbarians, Fireball, Hog Rider, Musketeer, Skeletons, Tesla, The Log |
 
@@ -55,7 +55,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **65%** | 43% | 23 | thin | Battle Ram + Elite Barbarians + Skeleton Barrel |
 | **65%** | 30% | 20 | thin | Royal Giant + Skeleton Barrel |
 | **65%** | 45% | 20 | thin | Elite Barbarians + Golem + Royal Hogs |
-| **62%** | 38% | 42 | solid | Hog Rider + Royal Giant |
+| **62%** | 37% | 43 | solid | Hog Rider + Royal Giant |
 | **62%** | 38% | 26 | thin | Electro Giant + Hog Rider |
 | **61%** | 39% | 18 | noise | Goblin Drill + Mortar + Skeleton Barrel |
 | **61%** | 30% | 23 | thin | Hog Rider + Mortar + Skeleton Barrel |
@@ -80,20 +80,20 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Royal Hogs decks (15+ games)
 
-17 lists, 978 games, 58% combined.
+17 lists, 979 games, 58% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **73%** | 15 | noise | — | Archers, Bomb Tower, Goblinstein, Ice Spirit, Lightning, Royal Hogs, Skeletons, The Log | Kimchi77✨小小罗, SandBox |
 | **70%** | 23 | noise | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
+| **64%** | 25 | thin | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | Rin✨安之, Coco |
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
 | **63%** | 129 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
-| **62%** | 24 | noise | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | Rin✨安之, Coco |
 | **61%** | 36 | thin | — | Baby Dragon, Berserker, Cannon, Electro Spirit, Lightning, Royal Hogs, Skeletons, The Log | INA.BenZerRidel, Rin✨安之 |
 
 ## Miner decks (15+ games)
 
-22 lists, 751 games, 53% combined.
+22 lists, 752 games, 53% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -102,7 +102,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **70%** | 43 | thin | Rune Giant | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log | ぐりてゃん, Kitashiyan |
 | **69%** | 39 | thin | Balloon | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies | Clown, Coco |
 | **62%** | 16 | noise | Mortar | Arrows, Bats, Cannon Cart, Goblin Gang, Goblinstein, Miner, Mortar, Spear Goblins | SK Dominik, CAL Sub ™️✨Kun |
-| **62%** | 26 | thin | Elite Barbarians | Elite Barbarians, Goblin Hut, Goblinstein, Miner, Poison, Royal Ghost, Skeletons, The Log | Ryley, Mohamed Light |
+| **62%** | 21 | noise | — | Barbarian Barrel, Bats, Goblin Hut, Goblinstein, Ice Wizard, Miner, Poison, Skeletons | Vitor75, SandBox |
 
 ## Goblin Drill decks (15+ games)
 
