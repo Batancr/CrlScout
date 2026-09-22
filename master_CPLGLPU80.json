@@ -381164,5 +381164,67 @@
     ],
     "isHostedMatch": false,
     "leagueNumber": 1
+  },
+  {
+    "type": "trail",
+    "battleTime": "20260922T074443.000Z",
+    "isLadderTournament": false,
+    "eventTag": "#2C9J9YRL",
+    "arena": {
+      "id": 54000139,
+      "name": "Legendary Arena",
+      "rawName": "Arena_AllRandom_Princess"
+    },
+    "gameMode": {
+      "id": 72000519,
+      "name": "All_Random_Princess_Friendly"
+    },
+    "deckSelection": "unknown",
+    "team": [
+      {
+        "tag": "#CPLGLPU80",
+        "name": "Sosaa1of1",
+        "startingTrophies": 10,
+        "trophyChange": 1,
+        "crowns": 1,
+        "kingTowerHitPoints": 0,
+        "princessTowersHitPoints": [
+          2836,
+          2186
+        ],
+        "clan": {
+          "tag": "#R2PJVCJ8",
+          "name": "ICECUP",
+          "badgeId": 16000168
+        },
+        "cards": [],
+        "supportCards": [],
+        "globalRank": null,
+        "elixirLeaked": 0.77
+      }
+    ],
+    "opponent": [
+      {
+        "tag": "#9RVV8JRV9",
+        "name": "Bandi \u0295\u1d52\u1d25\u1d52\u0294",
+        "startingTrophies": 10,
+        "crowns": 0,
+        "kingTowerHitPoints": 0,
+        "princessTowersHitPoints": [
+          1110
+        ],
+        "clan": {
+          "tag": "#J2Y88V0C",
+          "name": "Betongolyok",
+          "badgeId": 16000004
+        },
+        "cards": [],
+        "supportCards": [],
+        "globalRank": null,
+        "elixirLeaked": 0.0
+      }
+    ],
+    "isHostedMatch": false,
+    "leagueNumber": 1
   }
 ]
