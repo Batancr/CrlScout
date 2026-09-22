@@ -625956,5 +625956,57 @@
     ],
     "isHostedMatch": false,
     "leagueNumber": 7
+  },
+  {
+    "type": "trail",
+    "battleTime": "20260922T180016.000Z",
+    "isLadderTournament": false,
+    "eventTag": "#2C9J9YRL",
+    "arena": {
+      "id": 54000139,
+      "name": "Legendary Arena",
+      "rawName": "Arena_AllRandom_Princess"
+    },
+    "gameMode": {
+      "id": 72000519,
+      "name": "All_Random_Princess_Friendly"
+    },
+    "deckSelection": "unknown",
+    "team": [
+      {
+        "tag": "#Y9R22RQ2",
+        "name": "Ian77",
+        "startingTrophies": 24,
+        "crowns": 0,
+        "kingTowerHitPoints": 0,
+        "princessTowersHitPoints": [
+          801
+        ],
+        "cards": [],
+        "supportCards": [],
+        "globalRank": 136,
+        "elixirLeaked": 0.0
+      }
+    ],
+    "opponent": [
+      {
+        "tag": "#202VGQL0UQ",
+        "name": "Chlozevry",
+        "startingTrophies": 25,
+        "trophyChange": 1,
+        "crowns": 1,
+        "kingTowerHitPoints": 0,
+        "princessTowersHitPoints": [
+          298,
+          801
+        ],
+        "cards": [],
+        "supportCards": [],
+        "globalRank": null,
+        "elixirLeaked": 2.93
+      }
+    ],
+    "isHostedMatch": false,
+    "leagueNumber": 1
   }
 ]
