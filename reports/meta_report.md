@@ -1,26 +1,26 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-23 14:08 UTC · latest battle 2026-09-22 21:32 UTC
+Generated 2026-09-23 18:52 UTC · latest battle 2026-09-23 16:52 UTC
 
-**19,245 eligible games** · Practice 16,574 · Official CRL 2,671
+**19,293 eligible games** · Practice 16,622 · Official CRL 2,671
 
 ## Top win conditions
 
-Share is of the 18,953 games with a classified win condition.
+Share is of the 18,992 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,715 | 9.0% | **60%** |
-| Battle Ram | 2,263 | 11.9% | **59%** |
-| Elite Barbarians | 3,136 | 16.5% | **57%** |
-| Royal Hogs | 2,314 | 12.2% | **56%** |
-| Giant | 495 | 2.6% | **55%** |
+| Mortar | 1,718 | 9.0% | **60%** |
+| Battle Ram | 2,269 | 11.9% | **59%** |
+| Elite Barbarians | 3,140 | 16.5% | **57%** |
+| Royal Hogs | 2,318 | 12.2% | **56%** |
+| Giant | 496 | 2.6% | **55%** |
 | Three Musketeers | 177 | 0.9% | **54%** |
-| Golem | 762 | 4.0% | **54%** |
-| Rune Giant | 1,093 | 5.8% | **53%** |
+| Golem | 767 | 4.0% | **54%** |
+| Rune Giant | 1,096 | 5.8% | **53%** |
 | Electro Giant | 331 | 1.7% | **52%** |
-| Skeleton Barrel | 1,046 | 5.5% | **52%** |
-| Graveyard | 1,575 | 8.3% | **52%** |
+| Skeleton Barrel | 1,047 | 5.5% | **52%** |
+| Graveyard | 1,578 | 8.3% | **52%** |
 | Ram Rider | 236 | 1.2% | **52%** |
 
 ## Best decks (30+ games)
@@ -51,13 +51,13 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
 | **75%** | 56% | 18 | noise | Electro Giant + Royal Giant |
-| **67%** | 50% | 18 | noise | Battle Ram |
 | **67%** | 47% | 15 | noise | Giant + Graveyard + Hog Rider |
-| **67%** | 48% | 21 | thin | Elite Barbarians + Golem + Royal Hogs |
+| **66%** | 45% | 22 | thin | Elite Barbarians + Golem + Royal Hogs |
 | **65%** | 43% | 23 | thin | Battle Ram + Elite Barbarians + Skeleton Barrel |
 | **65%** | 30% | 20 | thin | Royal Giant + Skeleton Barrel |
+| **65%** | 50% | 20 | thin | Battle Ram |
+| **65%** | 47% | 17 | noise | Hog Rider |
 | **64%** | 39% | 18 | noise | Royal Hogs |
-| **62%** | 44% | 16 | noise | Hog Rider |
 | **62%** | 37% | 43 | solid | Hog Rider + Royal Giant |
 | **62%** | 38% | 26 | thin | Electro Giant + Hog Rider |
 
@@ -68,25 +68,25 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 - 6× `Baby Dragon, Barbarian Barrel, Berserker, Bowler, Electro Giant, Goblin Hut, Lightning, Tornado`
 - 5× `Fireball, Fisherman, Monk, Mother Witch, Royal Giant, Skeleton Dragons, The Log, Tombstone`
 
-**Battle Ram** — 18 duels, 67% first-2
-- usual full set (3×): Battle Ram + Hog Rider
-- 3× `Arrows, Bandit, Battle Ram, Electro Wizard, Furnace, Golden Knight, Ronin, Royal Ghost`
-- 3× `Bandit, Battle Ram, Electro Wizard, Giant Skeleton, Golden Knight, Heal Spirit, Mother Witch, Royal Ghost`
-
 **Giant + Graveyard + Hog Rider** — 15 duels, 67% first-2
 - usual full set (3×): Balloon + Giant + Graveyard + Hog Rider + Miner
 - 11× `Arrows, Berserker, Bowler, Giant, Giant Snowball, Graveyard, Witch, Zappies`
 - 2× `Arrows, Bowler, Giant, Giant Snowball, Graveyard, Guards, Minions, Witch`
 
+**Elite Barbarians + Golem + Royal Hogs** — 22 duels, 66% first-2
+- usual full set (6×): Elite Barbarians + Golem + Hog Rider + Royal Hogs
+- 7× `Arrows, Bomber, Elite Barbarians, Golem, Mini P.E.K.K.A, Night Witch, Phoenix, Zap`
+- 4× `Barbarian Barrel, Berserker, Electro Dragon, Elite Barbarians, Elixir Collector, Golem, Skeleton Dragons, Tornado`
+
 ## Royal Hogs decks (15+ games)
 
-18 lists, 1007 games, 59% combined.
+18 lists, 1009 games, 59% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **73%** | 15 | noise | — | Archers, Bomb Tower, Goblinstein, Ice Spirit, Lightning, Royal Hogs, Skeletons, The Log | Kimchi77✨小小罗, SandBox |
 | **71%** | 17 | noise | — | Barbarian Barrel, Electro Spirit, Goblin Hut, Ice Wizard, Lightning, Royal Ghost, Royal Hogs, Skeletons | Clown, SandBox |
-| **70%** | 27 | thin | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
+| **69%** | 29 | thin | — | Archer Queen, Barbarian Barrel, Electro Spirit, Fireball, Goblin Hut, Royal Ghost, Royal Hogs, Skeletons | Coco, RUBIZALEZ |
 | **67%** | 30 | thin | — | Archer Queen, Cannon, Earthquake, Ice Spirit, Royal Delivery, Royal Hogs, Skeletons, The Log | JorZ, Rin✨安之 |
 | **64%** | 22 | noise | — | Archers, Bomb Tower, Electro Spirit, Goblinstein, Lightning, Royal Delivery, Royal Hogs, Skeletons | Mohamed Light, むぎったん |
 | **62%** | 131 | solid | — | Arrows, Bowler, Fisherman, Giant Skeleton, Mother Witch, Royal Ghost, Royal Hogs, Zappies | Coco, RUBIZALEZ |
@@ -119,7 +119,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Rune Giant decks (15+ games)
 
-15 lists, 539 games, 54% combined.
+15 lists, 540 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
@@ -127,8 +127,8 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **71%** | 21 | noise | Lava Hound, Miner | Berserker, Goblin Curse, Guards, Inferno Dragon, Lava Hound, Miner, Rune Giant, Zap | NK Tanjiro, Ian77 |
 | **70%** | 43 | thin | Miner | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log | ぐりてゃん, Kitashiyan |
 | **57%** | 28 | thin | Lava Hound, Miner | Goblin Curse, Inferno Dragon, Lava Hound, Miner, Minions, Rune Giant, Tombstone, Zap | Coco, TTK:MrAwesomeCR |
+| **57%** | 28 | thin | Lava Hound | Berserker, Fireball, Goblin Cage, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Zap | Clown, Ian77 |
 | **57%** | 37 | thin | Lava Hound | Fireball, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Tombstone, Valkyrie, Zap | たぁ, Ian77 |
-| **56%** | 27 | thin | Lava Hound | Berserker, Fireball, Goblin Cage, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Zap | Clown, Ian77 |
 
 ---
 
