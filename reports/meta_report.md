@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-23 23:28 UTC · latest battle 2026-09-23 21:08 UTC
+Generated 2026-09-24 02:12 UTC · latest battle 2026-09-23 22:56 UTC
 
-**19,364 eligible games** · Practice 16,693 · Official CRL 2,671
+**19,394 eligible games** · Practice 16,723 · Official CRL 2,671
 
 ## Top win conditions
 
-Share is of the 19,051 games with a classified win condition.
+Share is of the 19,078 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,720 | 9.0% | **60%** |
-| Battle Ram | 2,279 | 12.0% | **59%** |
-| Elite Barbarians | 3,141 | 16.5% | **57%** |
-| Royal Hogs | 2,328 | 12.2% | **56%** |
-| Giant | 501 | 2.6% | **55%** |
+| Mortar | 1,722 | 9.0% | **60%** |
+| Battle Ram | 2,282 | 12.0% | **59%** |
+| Elite Barbarians | 3,142 | 16.5% | **57%** |
+| Royal Hogs | 2,331 | 12.2% | **56%** |
+| Giant | 502 | 2.6% | **55%** |
 | Three Musketeers | 177 | 0.9% | **54%** |
-| Golem | 769 | 4.0% | **54%** |
-| Rune Giant | 1,103 | 5.8% | **53%** |
-| Electro Giant | 331 | 1.7% | **52%** |
+| Golem | 770 | 4.0% | **54%** |
+| Rune Giant | 1,105 | 5.8% | **53%** |
+| Electro Giant | 332 | 1.7% | **52%** |
+| Ram Rider | 238 | 1.2% | **52%** |
 | Skeleton Barrel | 1,047 | 5.5% | **52%** |
-| Graveyard | 1,586 | 8.3% | **52%** |
-| Ram Rider | 236 | 1.2% | **52%** |
+| Graveyard | 1,589 | 8.3% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -35,7 +35,7 @@ Share is of the 19,051 games with a classified win condition.
 | **70%** | 196 | solid | Barbarian Barrel, Cannon Cart, Elite Barbarians, Fireball, Goblinstein, Minions, Mortar, Skeletons |
 | **70%** | 43 | noise | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log |
 | **69%** | 39 | noise | Balloon, Executioner, Giant Skeleton, Miner, Tombstone, Tornado, Zap, Zappies |
-| **68%** | 95 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
+| **69%** | 96 | thin | Barbarian Barrel, Cannon Cart, Fireball, Goblinstein, Minion Horde, Mortar, Mother Witch, Skeletons |
 | **68%** | 31 | noise | Fireball, Fisherman, Monk, Mother Witch, Royal Giant, The Log, Tombstone, Zappies |
 | **67%** | 147 | solid | Barbarian Barrel, Battle Ram, Giant Skeleton, Mother Witch, Royal Ghost, Vines, Wizard, Zappies |
 | **67%** | 33 | noise | Arrows, Bandit, Battle Ram, Electro Wizard, Golden Knight, Mega Knight, Mother Witch, Skeleton Dragons |
@@ -51,13 +51,13 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | First-2 win | 2-0 rate | Duels | Confidence | Pair |
 |---|---|---|---|---|
 | **75%** | 56% | 18 | noise | Electro Giant + Royal Giant |
-| **67%** | 52% | 23 | thin | Battle Ram |
-| **67%** | 50% | 18 | noise | Hog Rider |
+| **68%** | 52% | 25 | thin | Battle Ram |
 | **67%** | 47% | 15 | noise | Giant + Graveyard + Hog Rider |
 | **66%** | 45% | 22 | thin | Elite Barbarians + Golem + Royal Hogs |
 | **65%** | 43% | 23 | thin | Battle Ram + Elite Barbarians + Skeleton Barrel |
 | **65%** | 30% | 20 | thin | Royal Giant + Skeleton Barrel |
 | **64%** | 39% | 18 | noise | Royal Hogs |
+| **63%** | 47% | 19 | noise | Hog Rider |
 | **62%** | 38% | 26 | thin | Electro Giant + Hog Rider |
 | **61%** | 36% | 44 | solid | Hog Rider + Royal Giant |
 
@@ -68,15 +68,15 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 - 6× `Baby Dragon, Barbarian Barrel, Berserker, Bowler, Electro Giant, Goblin Hut, Lightning, Tornado`
 - 5× `Fireball, Fisherman, Monk, Mother Witch, Royal Giant, Skeleton Dragons, The Log, Tombstone`
 
-**Battle Ram** — 23 duels, 67% first-2
+**Battle Ram** — 25 duels, 68% first-2
 - usual full set (5×): Battle Ram + Hog Rider
-- 4× `Arrows, Bandit, Battle Ram, Electro Wizard, Furnace, Golden Knight, Ronin, Royal Ghost`
+- 6× `Arrows, Bandit, Battle Ram, Electro Wizard, Furnace, Golden Knight, Ronin, Royal Ghost`
 - 4× `Bandit, Battle Ram, Electro Wizard, Giant Skeleton, Golden Knight, Heal Spirit, Mother Witch, Royal Ghost`
 
-**Hog Rider** — 18 duels, 67% first-2
-- usual full set (3×): Hog Rider + Royal Hogs
-- 5× `Arrows, Bats, Giant Skeleton, Golden Knight, Minion Giant, Musketeer, Zap, Zappies`
-- 3× `Barbarian Barrel, Earthquake, Electro Spirit, Firecracker, Hog Rider, Mighty Miner, Skeletons, Tesla`
+**Giant + Graveyard + Hog Rider** — 15 duels, 67% first-2
+- usual full set (3×): Balloon + Giant + Graveyard + Hog Rider + Miner
+- 11× `Arrows, Berserker, Bowler, Giant, Giant Snowball, Graveyard, Witch, Zappies`
+- 2× `Arrows, Bowler, Giant, Giant Snowball, Graveyard, Guards, Minions, Witch`
 
 ## Royal Hogs decks (15+ games)
 
@@ -119,16 +119,16 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Rune Giant decks (15+ games)
 
-15 lists, 540 games, 54% combined.
+15 lists, 541 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
 | **75%** | 32 | thin | Miner | Goblin Curse, Goblin Demolisher, Inferno Dragon, Little Prince, Mega Knight, Miner, Rune Giant, Zap | たぁ, Kitashiyan |
 | **71%** | 21 | noise | Lava Hound, Miner | Berserker, Goblin Curse, Guards, Inferno Dragon, Lava Hound, Miner, Rune Giant, Zap | NK Tanjiro, Ian77 |
 | **70%** | 43 | thin | Miner | Bats, Berserker, Cannon, Little Prince, Miner, Poison, Rune Giant, The Log | ぐりてゃん, Kitashiyan |
+| **58%** | 38 | thin | Lava Hound | Fireball, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Tombstone, Valkyrie, Zap | たぁ, Ian77 |
 | **57%** | 28 | thin | Lava Hound, Miner | Goblin Curse, Inferno Dragon, Lava Hound, Miner, Minions, Rune Giant, Tombstone, Zap | Coco, TTK:MrAwesomeCR |
 | **57%** | 28 | thin | Lava Hound | Berserker, Fireball, Goblin Cage, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Zap | Clown, Ian77 |
-| **57%** | 37 | thin | Lava Hound | Fireball, Inferno Dragon, Lava Hound, Rune Giant, Skeleton Dragons, Tombstone, Valkyrie, Zap | たぁ, Ian77 |
 
 ---
 
