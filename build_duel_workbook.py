@@ -380,7 +380,10 @@ def parse_time(s):
 #   (#9RQ8YRYQL "老板 Ι Batan'宙斯") per explicit user request.
 # ---------------------------------------------------------------------------
 ALIAS_TAGS = {"#9RG0VPUVY": "#9RQ8YRYQL"}
-CANONICAL_NAMES = {"#9RQ8YRYQL": "老板 Ι Batan’宙斯"}
+CANONICAL_NAMES = {
+    "#9RQ8YRYQL": "老板 Ι Batan’宙斯",   # Batan (main + 2nd acct #9RG0VPUVY)
+    "#U890Q9UQ": "CAL Sub ™✨杰克",    # Sub -- one account; unify across its in-game renames
+}
 
 
 def canon_tag(tag):
@@ -390,9 +393,7 @@ def canon_tag(tag):
 
 def canon_name(tag, name):
     """If `tag` is an aliased alt-account, return the canonical display name; else `name`."""
-    if tag in ALIAS_TAGS:
-        return CANONICAL_NAMES.get(ALIAS_TAGS[tag], name)
-    return name
+    return CANONICAL_NAMES.get(ALIAS_TAGS.get(tag, tag), name)
 
 
 # ---------------------------------------------------------------------------
