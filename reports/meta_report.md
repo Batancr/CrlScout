@@ -1,27 +1,27 @@
 # CRL meta report — since Aug 5, 2026
 
-Generated 2026-09-24 23:47 UTC · latest battle 2026-09-24 22:02 UTC
+Generated 2026-09-25 02:29 UTC · latest battle 2026-09-24 22:22 UTC
 
-**19,595 eligible games** · Practice 16,924 · Official CRL 2,671
+**19,610 eligible games** · Practice 16,939 · Official CRL 2,671
 
 ## Top win conditions
 
-Share is of the 19,247 games with a classified win condition.
+Share is of the 19,258 games with a classified win condition.
 
 | Win con | Games | Share | Win rate |
 |---|---|---|---|
-| Mortar | 1,734 | 9.0% | **60%** |
+| Mortar | 1,735 | 9.0% | **60%** |
 | Battle Ram | 2,298 | 11.9% | **59%** |
 | Elite Barbarians | 3,145 | 16.3% | **57%** |
-| Royal Hogs | 2,355 | 12.2% | **56%** |
+| Royal Hogs | 2,357 | 12.2% | **56%** |
 | X-Bow | 82 | 0.4% | **55%** |
 | Giant | 510 | 2.6% | **55%** |
 | Three Musketeers | 178 | 0.9% | **54%** |
-| Golem | 776 | 4.0% | **54%** |
-| Rune Giant | 1,119 | 5.8% | **53%** |
+| Golem | 777 | 4.0% | **54%** |
+| Rune Giant | 1,121 | 5.8% | **53%** |
 | Electro Giant | 333 | 1.7% | **52%** |
 | Ram Rider | 242 | 1.3% | **52%** |
-| Skeleton Barrel | 1,055 | 5.5% | **52%** |
+| Skeleton Barrel | 1,056 | 5.5% | **52%** |
 
 ## Best decks (30+ games)
 
@@ -53,10 +53,10 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 | **75%** | 56% | 18 | noise | Electro Giant + Royal Giant |
 | **69%** | 50% | 18 | noise | Giant + Graveyard + Hog Rider |
 | **69%** | 54% | 26 | thin | Battle Ram |
+| **66%** | 41% | 22 | thin | Royal Hogs |
 | **66%** | 45% | 22 | thin | Elite Barbarians + Golem + Royal Hogs |
 | **65%** | 43% | 23 | thin | Battle Ram + Elite Barbarians + Skeleton Barrel |
 | **65%** | 30% | 20 | thin | Royal Giant + Skeleton Barrel |
-| **65%** | 40% | 20 | thin | Royal Hogs |
 | **62%** | 48% | 21 | thin | Hog Rider |
 | **62%** | 38% | 26 | thin | Electro Giant + Hog Rider |
 | **61%** | 36% | 44 | solid | Hog Rider + Royal Giant |
@@ -119,7 +119,7 @@ Grouped on the win conditions of the duel's **first two** games. Winning those t
 
 ## Rune Giant decks (15+ games)
 
-16 lists, 556 games, 54% combined.
+16 lists, 557 games, 54% combined.
 
 | Win | Games | Confidence | Other win cons | Deck | Played by |
 |---|---|---|---|---|---|
